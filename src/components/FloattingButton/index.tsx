@@ -1,4 +1,3 @@
-import { MaterialIcons } from "@expo/vector-icons";
 import React from "react";
 import {
   View,
@@ -7,18 +6,19 @@ import {
   TouchableOpacity,
   ViewStyle,
 } from "react-native";
-import { SIZES } from "_/constants/sizes";
+import Icon, { IIconProps } from "../Icon";
 
 import { styles } from "./styles";
 
 interface IFloattingButton extends ButtonProps {
-  name?: keyof typeof MaterialIcons.glyphMap;
+  iconName?: IIconProps["name"];
   isAbsolute?: boolean;
+  style?: ViewStyle;
 }
 
 const FloattingButton = ({
   title,
-  name,
+  iconName,
   isAbsolute,
   style,
   ...rest
@@ -27,13 +27,7 @@ const FloattingButton = ({
   return (
     <TouchableOpacity {...rest} style={[style, position, styles.buttonBody]}>
       <View style={styles.contentBox}>
-        {name && (
-          <MaterialIcons
-            name={name}
-            size={SIZES.ICON_REGULAR}
-            style={styles.icon}
-          />
-        )}
+        {iconName && <Icon name={iconName} style={styles.icon} />}
         <Text style={styles.title}>{title}</Text>
       </View>
     </TouchableOpacity>
