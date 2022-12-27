@@ -1,0 +1,16 @@
+export const FONTS = {
+  FONT_SIZE_X_SMALL: 10,
+  FONT_SIZE_SMALL: 12,
+  FONT_SIZE_REGULAR: 16,
+  FONT_SIZE_LARGE: 24,
+  FONT_SIZE_X_LARGE: 32,
+  INTER_REGULAR_FAMILY: "InterRegular",
+  INTER_BLACK: "InterBlack",
+  INTER_BOLD: "InterBold",
+  INTER_EXTRA_BLACK: "InterExtraBold",
+  INTER_EXTRA_LIGHT: "InterExtraLight",
+  INTER_MEDIUM: "InterMedium",
+  INTER_REGULAR: "InterRegular",
+  INTER_SEMI_BOLD: "InterSemiBold",
+  INTER_THIN: "InterThin",
+};
