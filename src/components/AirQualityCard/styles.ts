@@ -8,6 +8,14 @@ const styles = StyleSheet.create({
     borderRadius: SIZES.RADIUS_SMALL,
     paddingVertical: SIZES.PADDING_SMALL,
     backgroundColor: COLORS.WHITE,
+    shadowColor: COLORS.REAL_BLACK,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   titleBox: {
     flexDirection: "row",
