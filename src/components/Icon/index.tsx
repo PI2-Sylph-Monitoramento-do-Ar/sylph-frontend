@@ -1,6 +1,6 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import React from "react";
-import { ViewStyle } from "react-native";
+import { TextStyle } from "react-native";
 import { SIZES } from "_/constants/sizes";
 
 type iconSize = "small" | "regular" | "large";
@@ -9,12 +9,12 @@ export interface IIconProps {
   name: keyof typeof MaterialIcons.glyphMap;
   size?: iconSize;
   color?: string;
-  style?: ViewStyle;
+  style?: TextStyle;
 }
 
-const Icon = ({ name, size, style }: IIconProps) => {
+const Icon = ({ name, size, style, color }: IIconProps) => {
   const _size = getIconSize(size);
-  return <MaterialIcons style={style} name={name} size={_size} />;
+  return <MaterialIcons style={style} name={name} size={_size} color={color} />;
 };
 
 const getIconSize = (size?: iconSize) => {

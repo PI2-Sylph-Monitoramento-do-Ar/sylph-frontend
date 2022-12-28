@@ -27,7 +27,9 @@ const FloattingButton = ({
   return (
     <TouchableOpacity {...rest} style={[style, position, styles.buttonBody]}>
       <View style={styles.contentBox}>
-        {iconName && <Icon name={iconName} style={styles.icon} />}
+        {iconName && (
+          <Icon name={iconName} style={styles.icon} color={styles.icon.color} />
+        )}
         <Text style={styles.title}>{title}</Text>
       </View>
     </TouchableOpacity>
