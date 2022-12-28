@@ -3,5 +3,7 @@ export const COLORS = {
   GREY: "#EEF0FC",
   WHITE: "#FFFFFF",
   BLACK: "#1F1B24",
+  REAL_BLACK: "#000000",
+  BLACK_WITH_OPACITY: "rgba(31,27,36,40)",
   TRANPARENT: "transparent",
 };
