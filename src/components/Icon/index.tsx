@@ -5,14 +5,14 @@ import { SIZES } from "_/constants/sizes";
 
 type iconSize = "small" | "regular" | "large";
 
-export interface IIconProps {
+export interface IconProps {
   name: keyof typeof MaterialIcons.glyphMap;
   size?: iconSize;
   color?: string;
   style?: TextStyle;
 }
 
-const Icon = ({ name, size, style, color }: IIconProps) => {
+const Icon = ({ name, size, style, color }: IconProps) => {
   const _size = getIconSize(size);
   return <MaterialIcons style={style} name={name} size={_size} color={color} />;
 };
