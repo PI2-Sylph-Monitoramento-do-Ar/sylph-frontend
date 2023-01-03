@@ -1,3 +1,5 @@
+import { Dimensions } from "react-native";
+
 export const SIZES = {
   MARGING_X_SMALL: 4,
   MARGING_SMALL: 8,
@@ -17,4 +19,6 @@ export const SIZES = {
   ICON_SMALL: 16,
   ICON_REGULAR: 24,
   ICON_LARGE: 32,
+  SCREEN_WIDTH: Dimensions.get("screen").width,
+  SCREEN_HEIGHT: Dimensions.get("screen").height,
 };
