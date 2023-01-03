@@ -4,13 +4,13 @@ import { AuthRoute } from "./auth";
 import { MainRoute } from "./main";
 import { useLocation } from "_/hooks/useLocation";
 
-export const Routes = () => {
+export const Navigation = () => {
   const { position } = useLocation();
 
-  const isAuthed = position.latitude && position.longitude;
+  const isAuthed = true;
   return (
     <NavigationContainer>
-      {isAuthed ? <AuthRoute /> : <MainRoute />}
+      {!isAuthed ? <AuthRoute /> : <MainRoute />}
     </NavigationContainer>
   );
 };
