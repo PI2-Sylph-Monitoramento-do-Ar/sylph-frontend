@@ -7,13 +7,15 @@ interface IButtonProps extends ButtonProps {
   type?: "primary" | "secondary";
 }
 
-const Button = ({ type, title, ...rest }: IButtonProps) => {
+const Button = ({ type, title, disabled, ...rest }: IButtonProps) => {
   const buttonStyles = type === "secondary" ? secondaryStyles : primaryStyles;
+  const opacity = disabled ? 0.5 : 1;
 
   return (
     <TouchableOpacity
       {...rest}
-      style={[baseStyles.buttonBody, buttonStyles.buttonBody]}
+      disabled={disabled}
+      style={[baseStyles.buttonBody, buttonStyles.buttonBody, { opacity }]}
     >
       <Text style={[baseStyles.title, buttonStyles.title]}>{title}</Text>
     </TouchableOpacity>
