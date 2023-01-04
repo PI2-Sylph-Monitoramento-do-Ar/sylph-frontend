@@ -1,13 +1,14 @@
 import React from "react";
-import { View, Text, TouchableOpacity, ViewProps } from "react-native";
+import { View, TouchableOpacity, ViewProps } from "react-native";
 import { TEXTS } from "_/constants/texts";
-import Icon, { IIconProps } from "../Icon";
+import Icon, { IconProps } from "../Icon";
+import Text from "../Text";
 
 import styles from "./styles";
 
 type titleProps = {
   title: string;
-  iconName: IIconProps["name"];
+  iconName: IconProps["name"];
 };
 
 type minMaxValuesType = {

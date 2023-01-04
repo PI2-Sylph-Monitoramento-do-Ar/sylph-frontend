@@ -4,7 +4,7 @@ export const FONTS = {
   FONT_SIZE_REGULAR: 16,
   FONT_SIZE_LARGE: 24,
   FONT_SIZE_X_LARGE: 32,
-  INTER_REGULAR_FAMILY: "InterRegular",
+  FONT_SIZE_XX_LARGE: 48,
   INTER_BLACK: "InterBlack",
   INTER_BOLD: "InterBold",
   INTER_EXTRA_BLACK: "InterExtraBold",

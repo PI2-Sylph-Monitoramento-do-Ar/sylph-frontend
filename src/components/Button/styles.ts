@@ -17,11 +17,9 @@ export const baseStyles = StyleSheet.create<ButtonStyles>({
   },
   title: {
     alignSelf: "center",
-    fontWeight: "400",
     fontSize: FONTS.FONT_SIZE_REGULAR,
     paddingVertical: SIZES.PADDING_LARGE,
     paddingHorizontal: SIZES.PADDING_XX_LARGE,
-    fontFamily: FONTS.INTER_REGULAR_FAMILY,
   },
 });
 
@@ -36,7 +34,9 @@ export const primaryStyles = StyleSheet.create<ButtonStyles>({
 
 export const secondaryStyles = StyleSheet.create<ButtonStyles>({
   buttonBody: {
-    backgroundColor: COLORS.WHITE,
+    backgroundColor: COLORS.TRANPARENT,
+    borderWidth: 0.2,
+    borderColor: COLORS.BLACK,
   },
   title: {
     color: COLORS.BLACK,

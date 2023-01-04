@@ -1,13 +1,15 @@
 import React from "react";
-import { Text, ButtonProps, TouchableOpacity } from "react-native";
+import { ButtonProps, TouchableOpacity, ViewStyle } from "react-native";
+import Text from "../Text";
 
 import { baseStyles, primaryStyles, secondaryStyles } from "./styles";
 
 interface IButtonProps extends ButtonProps {
   type?: "primary" | "secondary";
+  style?: ViewStyle;
 }
 
-const Button = ({ type, title, disabled, ...rest }: IButtonProps) => {
+const Button = ({ style, type, title, disabled, ...rest }: IButtonProps) => {
   const buttonStyles = type === "secondary" ? secondaryStyles : primaryStyles;
   const opacity = disabled ? 0.5 : 1;
 
@@ -15,9 +17,16 @@ const Button = ({ type, title, disabled, ...rest }: IButtonProps) => {
     <TouchableOpacity
       {...rest}
       disabled={disabled}
-      style={[baseStyles.buttonBody, buttonStyles.buttonBody, { opacity }]}
+      style={[
+        style,
+        baseStyles.buttonBody,
+        buttonStyles.buttonBody,
+        { opacity },
+      ]}
     >
-      <Text style={[baseStyles.title, buttonStyles.title]}>{title}</Text>
+      <Text style={[baseStyles.title, buttonStyles.title]} family="InterBold">
+        {title}
+      </Text>
     </TouchableOpacity>
   );
 };

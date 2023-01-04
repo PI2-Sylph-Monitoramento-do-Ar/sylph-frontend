@@ -1,3 +1,4 @@
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import { LocationContextProvider } from "./contexts/LocationContext";
 import { useFonts } from "./hooks/useFonts";
 import { Navigation } from "./navigation";
@@ -7,8 +8,10 @@ export default function App() {
 
   if (isFontLoaded)
     return (
-      <LocationContextProvider>
-        <Navigation />
-      </LocationContextProvider>
+      <SafeAreaProvider>
+        <LocationContextProvider>
+          <Navigation />
+        </LocationContextProvider>
+      </SafeAreaProvider>
     );
 }

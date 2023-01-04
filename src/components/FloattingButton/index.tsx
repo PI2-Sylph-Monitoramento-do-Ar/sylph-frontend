@@ -1,17 +1,12 @@
 import React from "react";
-import {
-  View,
-  Text,
-  ButtonProps,
-  TouchableOpacity,
-  ViewStyle,
-} from "react-native";
-import Icon, { IIconProps } from "../Icon";
+import { View, ButtonProps, TouchableOpacity, ViewStyle } from "react-native";
+import Icon, { IconProps } from "../Icon";
+import Text from "../Text";
 
 import { styles } from "./styles";
 
 interface IFloattingButton extends ButtonProps {
-  iconName?: IIconProps["name"];
+  iconName?: IconProps["name"];
   isAbsolute?: boolean;
   style?: ViewStyle;
 }
