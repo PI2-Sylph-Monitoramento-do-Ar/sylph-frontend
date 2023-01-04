@@ -17,11 +17,9 @@ export const baseStyles = StyleSheet.create<ButtonStyles>({
   },
   title: {
     alignSelf: "center",
-    fontWeight: "400",
     fontSize: FONTS.FONT_SIZE_REGULAR,
     paddingVertical: SIZES.PADDING_LARGE,
     paddingHorizontal: SIZES.PADDING_XX_LARGE,
-    fontFamily: FONTS.INTER_REGULAR,
   },
 });
 

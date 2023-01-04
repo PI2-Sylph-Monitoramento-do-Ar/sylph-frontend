@@ -24,7 +24,9 @@ const Button = ({ style, type, title, disabled, ...rest }: IButtonProps) => {
         { opacity },
       ]}
     >
-      <Text style={[baseStyles.title, buttonStyles.title]}>{title}</Text>
+      <Text style={[baseStyles.title, buttonStyles.title]} family="InterBold">
+        {title}
+      </Text>
     </TouchableOpacity>
   );
 };
