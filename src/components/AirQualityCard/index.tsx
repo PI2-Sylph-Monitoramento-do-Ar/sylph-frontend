@@ -1,7 +1,9 @@
 import React from "react";
 import { View, TouchableOpacity, ViewProps } from "react-native";
+import { COLORS } from "_/constants/colors";
 import { TEXTS } from "_/constants/texts";
 import Icon, { IconProps } from "../Icon";
+import IconInfo from "../IconInfo";
 import Text from "../Text";
 
 import styles from "./styles";
@@ -21,7 +23,7 @@ interface IAirQualityCardProps extends ViewProps {
   dataCollected: number;
   minMaxValues: minMaxValuesType;
   dataType?: string;
-  onPressMoreInfo: () => void;
+  onPressMoreInfo?: () => void;
 }
 
 const AirQualityCard = ({
@@ -38,12 +40,11 @@ const AirQualityCard = ({
   return (
     <View {...rest} style={[style, styles.cardBody]}>
       <View style={styles.titleBox}>
-        <Icon
-          size="small"
-          name={titleProps.iconName}
-          style={styles.titleIcon}
+        <IconInfo
+          label={titleProps.title}
+          iconName={titleProps.iconName}
+          color={COLORS.BLACK_WITH_OPACITY}
         />
-        <Text style={styles.title}>{titleProps.title}</Text>
       </View>
       <Text style={styles.dataText}>
         {String(dataCollected)}
@@ -60,11 +61,12 @@ const AirQualityCard = ({
         </Text>
       </View>
       <TouchableOpacity style={styles.moreInfoBox} onPress={onPressMoreInfo}>
-        <Text style={styles.moreInfoText}>{TEXTS.MORE_INFO}</Text>
-        <Icon
-          size="small"
-          name="chevron-right"
-          color={styles.moreInfoIcon.color}
+        <IconInfo
+          label={TEXTS.MORE_INFO}
+          iconName={"chevron-right"}
+          style={styles.infoIcon}
+          color={COLORS.PRIMARY_COLOR}
+          iconPosition="right"
         />
       </TouchableOpacity>
     </View>

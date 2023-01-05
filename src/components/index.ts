@@ -4,5 +4,16 @@ import FloattingButton from "./FloattingButton";
 import Icon from "./Icon";
 import LineChart from "./LineChart";
 import Text from "./Text";
+import IconInfo from "./IconInfo";
+import TotemCard from "./TotemCard";
 
-export { Text, Button, AirQualityCard, FloattingButton, Icon, LineChart };
+export {
+  IconInfo,
+  Text,
+  Button,
+  AirQualityCard,
+  FloattingButton,
+  Icon,
+  LineChart,
+  TotemCard,
+};
