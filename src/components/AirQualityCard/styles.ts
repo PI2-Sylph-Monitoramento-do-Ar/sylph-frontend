@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
   },
   minMaxBox: {
     flexDirection: "row",
-    paddingHorizontal: SIZES.PADDING_SMALL,
+    marginHorizontal: SIZES.MARGING_SMALL,
     justifyContent: "space-between",
   },
   minMaxText: {
@@ -48,23 +48,13 @@ const styles = StyleSheet.create({
     fontSize: FONTS.FONT_SIZE_SMALL,
   },
   moreInfoBox: {
-    flexDirection: "row",
-    alignSelf: "center",
-    borderTopWidth: 0.2,
     marginTop: SIZES.MARGING_SMALL,
     paddingTop: SIZES.PADDING_SMALL,
+    borderTopWidth: 0.2,
     borderColor: COLORS.BLACK_WITH_OPACITY,
     paddingHorizontal: SIZES.PADDING_X_LARGE,
   },
-  moreInfoText: {
-    fontFamily: FONTS.INTER_BOLD,
-    fontSize: FONTS.FONT_SIZE_SMALL,
-    textAlign: "center",
-    color: COLORS.PRIMARY_COLOR,
-  },
-  moreInfoIcon: {
-    color: COLORS.PRIMARY_COLOR,
-  },
+  infoIcon: { right: -SIZES.PADDING_LARGE },
 });
 
 export default styles;

@@ -5,7 +5,13 @@ import { FontsAvailableType } from "_/hooks/useFonts";
 import { FONTS } from "_/constants/fonts";
 import { COLORS } from "_/constants/colors";
 
-type fontSize = "xSmall" | "small" | "regular" | "large" | "xLarge" | "xxLarge";
+export type fontSize =
+  | "xSmall"
+  | "small"
+  | "regular"
+  | "large"
+  | "xLarge"
+  | "xxLarge";
 
 interface ITextProps extends TextProps {
   family?: FontsAvailableType;

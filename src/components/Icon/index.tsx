@@ -3,7 +3,7 @@ import React from "react";
 import { TextStyle } from "react-native";
 import { SIZES } from "_/constants/sizes";
 
-type iconSize = "small" | "regular" | "large";
+type iconSize = "xSmall" | "small" | "regular" | "large";
 
 export interface IconProps {
   name: keyof typeof MaterialIcons.glyphMap;
@@ -23,6 +23,8 @@ const getIconSize = (size?: iconSize) => {
       return SIZES.ICON_LARGE;
     case "small":
       return SIZES.ICON_SMALL;
+    case "xSmall":
+      return SIZES.ICON_X_SMALL;
     default:
       return SIZES.ICON_REGULAR;
   }
