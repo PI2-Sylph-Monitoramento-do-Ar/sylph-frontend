@@ -7,4 +7,7 @@ export const COLORS = {
   REAL_BLACK: "#000000",
   BLACK_WITH_OPACITY: "rgba(31,27,36,0.40)",
   TRANPARENT: "transparent",
+  GOOD_AIR_COLOR: "#0EB529",
+  REGULAR_AIR_COLOR: "#EAA800",
+  BAD_AIR_COLOR: "#BB1D1D",
 };
