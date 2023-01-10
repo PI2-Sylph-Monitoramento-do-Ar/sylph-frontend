@@ -1,5 +1,6 @@
 import React from "react";
 import MapScreen from "_/screens/MapScreen";
+import TotemScreen from "_/screens/TotemScreen";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { TabBarIcon } from "../components/TabBarIcon";
 import { SIZES } from "_/constants/sizes";
