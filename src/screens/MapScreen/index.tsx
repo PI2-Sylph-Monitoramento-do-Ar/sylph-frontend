@@ -8,8 +8,8 @@ import { useLocation } from "_/hooks/useLocation";
 
 const MapScreen = () => {
   const { position } = useLocation();
-  console.log("🚀 ~ file: index.tsx:11 ~ Map ~ position", position);
 
+  if (!(position?.latitude && position?.longitude)) return <></>;
   return (
     <MapView
       style={styles.container}
