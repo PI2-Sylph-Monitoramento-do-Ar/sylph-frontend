@@ -2,19 +2,22 @@ import React from "react";
 import { TouchableOpacity, View, ViewStyle } from "react-native";
 import { COLORS } from "_/constants/colors";
 import { TEXTS } from "_/constants/texts";
+import { getQualityColor } from "_/helpers/getColor";
 import IconInfo from "../IconInfo";
 import Text from "../Text";
 
 import styles from "./styles";
 
+export interface TotemPropsType {
+  score: string | number;
+  locationName: string;
+  temperature: string | number;
+  humidity: string | number;
+}
+
 export interface TotemCardProps {
   title: string;
-  totemProps: {
-    score: string | number;
-    locationName: string;
-    temperature: string | number;
-    humidity: string | number;
-  };
+  totemProps: TotemPropsType;
   onPressMoreInfo?: () => void;
   style?: ViewStyle;
 }
@@ -25,7 +28,7 @@ const TotemCard = ({
   onPressMoreInfo,
   style,
 }: TotemCardProps) => {
-  const borderColor = getCircleColor(Number(totemProps.score));
+  const borderColor = getQualityColor(Number(totemProps.score));
 
   return (
     <View style={[styles.container, style]}>
@@ -81,12 +84,6 @@ const TotemCard = ({
       </TouchableOpacity>
     </View>
   );
-};
-
-const getCircleColor = (score: number) => {
-  if (score < 5) return COLORS.BAD_AIR_COLOR;
-  if (score < 8) return COLORS.REGULAR_AIR_COLOR;
-  return COLORS.GOOD_AIR_COLOR;
 };
 
 export default TotemCard;

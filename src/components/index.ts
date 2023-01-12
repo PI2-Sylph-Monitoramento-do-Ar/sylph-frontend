@@ -6,9 +6,11 @@ import LineChart from "./LineChart";
 import Text from "./Text";
 import IconInfo from "./IconInfo";
 import TotemCard from "./TotemCard";
+import AnimatedMarker from "./AnimatedMarker";
 
 export {
   IconInfo,
+  AnimatedMarker,
   Text,
   Button,
   AirQualityCard,
