@@ -5,6 +5,7 @@ import { MainRoute } from "./main";
 import { useLocation } from "_/hooks/useLocation";
 
 export const Navigation = () => {
+  useLocation();
   const isAuthed = true;
   return (
     <NavigationContainer>
