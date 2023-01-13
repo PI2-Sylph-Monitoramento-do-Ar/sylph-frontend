@@ -1,28 +1,37 @@
 import React from "react";
-import { TouchableOpacity, View } from "react-native";
+import { TouchableOpacity, View, ViewStyle } from "react-native";
 import { COLORS } from "_/constants/colors";
 import { TEXTS } from "_/constants/texts";
+import { getQualityColor } from "_/helpers/getColor";
 import IconInfo from "../IconInfo";
 import Text from "../Text";
 
 import styles from "./styles";
 
-interface ITotemCardProps {
-  title: string;
-  totemProps: {
-    score: string | number;
-    locationName: string;
-    temperature: string | number;
-    humidity: string | number;
-  };
-  onPressMoreInfo?: () => void;
+export interface TotemPropsType {
+  score: string | number;
+  locationName: string;
+  temperature: string | number;
+  humidity: string | number;
 }
 
-const TotemCard = ({ title, totemProps, onPressMoreInfo }: ITotemCardProps) => {
-  const borderColor = getCircleColor(Number(totemProps.score));
+export interface TotemCardProps {
+  title: string;
+  totemProps: TotemPropsType;
+  onPressMoreInfo?: () => void;
+  style?: ViewStyle;
+}
+
+const TotemCard = ({
+  title,
+  totemProps,
+  onPressMoreInfo,
+  style,
+}: TotemCardProps) => {
+  const borderColor = getQualityColor(Number(totemProps.score));
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, style]}>
       <View style={styles.mainContentBox}>
         <View style={[styles.circle, { borderColor }]}>
           <Text family="InterBold" style={styles.scoreText} size="large">
@@ -75,12 +84,6 @@ const TotemCard = ({ title, totemProps, onPressMoreInfo }: ITotemCardProps) => {
       </TouchableOpacity>
     </View>
   );
-};
-
-const getCircleColor = (score: number) => {
-  if (score < 5) return COLORS.BAD_AIR_COLOR;
-  if (score < 8) return COLORS.REGULAR_AIR_COLOR;
-  return COLORS.GOOD_AIR_COLOR;
 };
 
 export default TotemCard;

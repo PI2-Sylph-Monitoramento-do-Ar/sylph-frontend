@@ -11,6 +11,10 @@ export const styles = StyleSheet.create({
     width: CONTAINER_SIZE,
     borderRadius: CONTAINER_SIZE / 2,
     justifyContent: "center",
+    alignSelf: "center",
+  },
+  container: {
+    width: SIZES.SCREEN_WIDTH / 3,
   },
   icon: { alignSelf: "center" },
 });
