@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 
 import { useLocation } from "_/hooks/useLocation";
 import Carousel from "react-native-reanimated-carousel";
@@ -28,11 +28,14 @@ const MapScreen = () => {
   const { isLoading, totens } = useTotem();
   const [zoomValue, setZoomValue] = useState(ZOOM_DELTA_MIN);
 
-  const setZoom = (region: Region) => {
-    const { latitudeDelta } = region;
-    if (latitudeDelta < ZOOM_DELTA_MAX && latitudeDelta > ZOOM_DELTA_MIN)
-      setZoomValue(latitudeDelta);
-  };
+  const setZoom = useCallback(
+    (region: Region) => {
+      const { latitudeDelta } = region;
+      if (latitudeDelta < ZOOM_DELTA_MAX && latitudeDelta > ZOOM_DELTA_MIN)
+        setZoomValue(latitudeDelta);
+    },
+    [zoomValue]
+  );
 
   let mapView = React.createRef<any>();
 

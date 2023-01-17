@@ -9,64 +9,76 @@ import {
 } from "victory-native";
 import { SIZES } from "_/constants/sizes";
 import { COLORS } from "_/constants/colors";
+import { View, ViewStyle } from "react-native";
+import { styles } from "./styles";
+import Text from "../Text";
 
 const CHART_SIZE = 300;
 
-interface LineChartData {
+export interface LineChartData {
   data: DataType[];
   timeOfMeasures?: time;
+  style?: ViewStyle;
+  title: string;
 }
 
-type time = "hourly" | "daily" | "monthly";
+type time = "hourly" | "daily" | "weekly";
 
 interface DataType {
   x: number | string;
   y: number;
 }
 
-const LineChart = ({ timeOfMeasures, data }: LineChartData) => {
+const LineChart = ({ timeOfMeasures, data, title, style }: LineChartData) => {
   const interpolation =
     timeOfMeasures === "hourly" || !timeOfMeasures ? undefined : "natural";
 
   const edgeValues = getEdgeValues(data);
 
   return (
-    <VictoryChart
-      domain={{
-        x: [1, getXAxisMaxSize(timeOfMeasures)],
-        y: [edgeValues.min - 0.5, edgeValues.max + 0.5],
-      }}
-      theme={VictoryTheme.material}
-      containerComponent={
-        <VictoryZoomContainer
-          allowZoom={false}
-          zoomDimension="x"
-          zoomDomain={{
-            x: [1, 6],
+    <View style={style}>
+      <Text size="regular" family="InterBold" style={styles.title}>
+        {title}
+      </Text>
+      <View style={styles.container}>
+        <VictoryChart
+          domain={{
+            x: [1, getXAxisMaxSize(timeOfMeasures)],
+            y: [edgeValues.min - 0.5, edgeValues.max + 0.5],
           }}
-        />
-      }
-      width={SIZES.SCREEN_WIDTH * 0.9}
-      height={CHART_SIZE}
-    >
-      <VictoryLine
-        interpolation={interpolation}
-        style={{
-          data: { stroke: COLORS.GREY_PRIMARY },
-        }}
-        data={data}
-      />
-      <VictoryArea
-        interpolation={interpolation}
-        style={{ data: { fill: COLORS.GREY_SECONDARY } }}
-        data={data}
-      />
-      <VictoryScatter
-        data={data}
-        size={5}
-        style={{ data: { fill: COLORS.BLACK_WITH_OPACITY } }}
-      />
-    </VictoryChart>
+          theme={VictoryTheme.material}
+          containerComponent={
+            <VictoryZoomContainer
+              allowZoom={false}
+              zoomDimension="x"
+              zoomDomain={{
+                x: [1, 6],
+              }}
+            />
+          }
+          width={SIZES.SCREEN_WIDTH * 0.8}
+          height={CHART_SIZE}
+        >
+          <VictoryLine
+            interpolation={interpolation}
+            style={{
+              data: { stroke: COLORS.GREY_PRIMARY },
+            }}
+            data={data}
+          />
+          <VictoryArea
+            interpolation={interpolation}
+            style={{ data: { fill: COLORS.GREY_SECONDARY } }}
+            data={data}
+          />
+          <VictoryScatter
+            data={data}
+            size={5}
+            style={{ data: { fill: COLORS.BLACK_WITH_OPACITY } }}
+          />
+        </VictoryChart>
+      </View>
+    </View>
   );
 };
 
@@ -91,7 +103,7 @@ const getXAxisMaxSize = (timeOfMeasures?: time) => {
 
     return lastDay.getDate();
   }
-  return timeOfMeasures === "hourly" || !timeOfMeasures ? 23 : 12;
+  return timeOfMeasures === "hourly" || !timeOfMeasures ? 23 : 52;
 };
 
 export default LineChart;

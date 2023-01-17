@@ -5,6 +5,7 @@ import { Navigation } from "./navigation";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { TotemContextProvider } from "./contexts/TotemContext";
 import { TotemService } from "./services/TotemService";
+import ChartsScreen from "./screens/ChartsScreen";
 
 export default function App() {
   const isFontLoaded = useFonts();
@@ -17,7 +18,8 @@ export default function App() {
         <LocationContextProvider>
           <TotemContextProvider totemService={totemService}>
             <GestureHandlerRootView style={{ flex: 1 }}>
-              <Navigation />
+              {/* <Navigation /> */}
+              <ChartsScreen />
             </GestureHandlerRootView>
           </TotemContextProvider>
         </LocationContextProvider>
