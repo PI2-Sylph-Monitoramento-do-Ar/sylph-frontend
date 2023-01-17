@@ -18,8 +18,7 @@ export default function App() {
         <LocationContextProvider>
           <TotemContextProvider totemService={totemService}>
             <GestureHandlerRootView style={{ flex: 1 }}>
-              {/* <Navigation /> */}
-              <ChartsScreen />
+              <Navigation />
             </GestureHandlerRootView>
           </TotemContextProvider>
         </LocationContextProvider>
