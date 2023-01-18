@@ -21,27 +21,28 @@ const AnimatedMarker = ({
 }: AnimatedMarkerProps) => {
   return (
     <Marker {...rest}>
-      <Animated.View
-        style={[
-          styles.content,
-          {
-            justifyContent: "center",
-            backgroundColor: getQualityColorWithOpacity(
-              Number(totemProps.score)
-            ),
-            transform: [{ scaleY: zoomValue }, { scaleX: zoomValue }],
-          },
-        ]}
-      >
-        <View style={styles.markerLabelBox}>
-          <IconInfo
-            label={totemName}
-            size="small"
-            iconName="location-pin"
-            style={styles.iconInfo}
-          />
-        </View>
-      </Animated.View>
+      <View style={styles.transparentBox}>
+        <Animated.View
+          style={[
+            styles.content,
+            {
+              backgroundColor: getQualityColorWithOpacity(
+                Number(totemProps.score)
+              ),
+              transform: [{ scaleY: zoomValue }, { scaleX: zoomValue }],
+            },
+          ]}
+        >
+          <View style={styles.markerLabelBox}>
+            <IconInfo
+              label={totemName}
+              size="small"
+              iconName="location-pin"
+              style={styles.iconInfo}
+            />
+          </View>
+        </Animated.View>
+      </View>
     </Marker>
   );
 };

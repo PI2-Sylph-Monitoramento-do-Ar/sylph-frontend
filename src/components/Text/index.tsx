@@ -19,6 +19,8 @@ interface ITextProps extends TextProps {
   bold?: boolean;
   color?: string;
   style?: TextStyle | TextStyle[];
+  numberOfLines?: number;
+  clipLine?: boolean;
 }
 
 const Text = ({
@@ -26,6 +28,8 @@ const Text = ({
   style = {},
   size,
   family,
+  numberOfLines,
+  clipLine,
   ...rest
 }: ITextProps) => {
   const fontSize = getSize(size);
@@ -45,7 +49,14 @@ const Text = ({
     _style = style.reverse();
   }
 
-  return <TextRN {...rest} style={_style} />;
+  return (
+    <TextRN
+      {...rest}
+      numberOfLines={numberOfLines}
+      ellipsizeMode={clipLine ? "tail" : undefined}
+      style={_style}
+    />
+  );
 };
 
 const getSize = (size?: fontSize) => {

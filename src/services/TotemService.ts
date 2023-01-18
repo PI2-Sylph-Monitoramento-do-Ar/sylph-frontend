@@ -1,6 +1,7 @@
 import { TotemCardProps } from "_/components/TotemCard";
 
-export interface TotemFromApiType extends TotemCardProps {
+export interface TotemFromApiType
+  extends Pick<TotemCardProps, "title" | "totemProps"> {
   coords: {
     longitude: number;
     latitude: number;

@@ -20,6 +20,7 @@ export const SIZES = {
   ICON_SMALL: 16,
   ICON_REGULAR: 24,
   ICON_LARGE: 32,
+  TAB_SIZE: Dimensions.get("screen").height * 0.1,
   SCREEN_WIDTH: Dimensions.get("screen").width,
   SCREEN_HEIGHT: Dimensions.get("screen").height,
 };

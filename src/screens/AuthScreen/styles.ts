@@ -24,6 +24,9 @@ const styles = StyleSheet.create({
   mainButton: {
     marginBottom: SIZES.MARGING_LARGE,
   },
+  buttonBox: {
+    paddingBottom: SIZES.PADDING_LARGE,
+  },
 });
 
 export default styles;
