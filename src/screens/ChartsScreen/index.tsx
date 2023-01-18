@@ -9,7 +9,11 @@ import styles from "./styles";
 
 const PAGE_TITLE = "Temperatura";
 
-const ChartsScreen = () => {
+interface IChartsScreen {
+  title: string;
+}
+
+const ChartsScreen = ({ title }: IChartsScreen) => {
   const { top, bottom } = useSafeAreaInsets();
   const [isLoading, setIsLoading] = useState(true);
   const [hourlyValues, setHourlyValues] = useState<any>([]);
@@ -45,16 +49,7 @@ const ChartsScreen = () => {
 
   if (isLoading) return <></>;
   return (
-    <View
-      style={[styles.container, { paddingTop: top, paddingBottom: bottom }]}
-    >
-      <Text
-        size="xLarge"
-        family="InterBold"
-        style={{ alignSelf: "center", marginBottom: SIZES.MARGING_REGULAR }}
-      >
-        {PAGE_TITLE}
-      </Text>
+    <View style={[styles.container, { paddingBottom: bottom }]}>
       <ScrollView
         style={[{ flex: 1, paddingHorizontal: SIZES.PADDING_REGULAR }]}
       >

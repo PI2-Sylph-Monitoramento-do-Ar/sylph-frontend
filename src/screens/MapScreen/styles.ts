@@ -9,7 +9,9 @@ const styles = StyleSheet.create({
     width: "100%",
     bottom: 0,
   },
-  totemCard: { marginHorizontal: "2.5%" },
+  totemCard: {
+    marginHorizontal: "2.5%",
+  },
 });
 
 export default styles;

@@ -41,7 +41,13 @@ const IconInfo = ({
           style={styles.iconLeft}
         />
       )}
-      <Text family={family || "InterBold"} size={labelSize} color={color}>
+      <Text
+        clipLine
+        numberOfLines={1}
+        family={family || "InterBold"}
+        size={labelSize}
+        color={color}
+      >
         {label}
       </Text>
       {iconPosition !== "left" && (

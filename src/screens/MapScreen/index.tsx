@@ -9,8 +9,9 @@ import { TotemCardProps } from "_/components/TotemCard";
 import { SIZES } from "_/constants/sizes";
 import { Platform } from "react-native";
 import { useTotem } from "_/hooks/useTotem";
+import { useNavigate } from "_/hooks/useNavigate";
 
-const CAROUSEL_PERCENTAGE_HEIGHT = 0.175;
+const CAROUSEL_PERCENTAGE_HEIGHT = 0.2;
 const CAROUSEL_PERCENTAGE_WIDTH = 0.9;
 
 interface TotemFromApiType extends TotemCardProps {
@@ -27,6 +28,7 @@ const MapScreen = () => {
   const { position } = useLocation();
   const { isLoading, totens } = useTotem();
   const [zoomValue, setZoomValue] = useState(ZOOM_DELTA_MIN);
+  const { navigate } = useNavigate();
 
   const setZoom = useCallback(
     (region: Region) => {
@@ -60,12 +62,12 @@ const MapScreen = () => {
         data={totens}
         pagingEnabled
         scrollAnimationDuration={1000}
-        renderItem={({ item: { title, totemProps, onPressMoreInfo } }) => (
+        renderItem={({ item }) => (
           <TotemCard
             style={styles.totemCard}
-            title={title}
-            totemProps={totemProps}
-            onPressMoreInfo={onPressMoreInfo}
+            title={item.title}
+            totemProps={item.totemProps}
+            onPressMoreInfo={() => navigate("MoreInfo", item)}
           />
         )}
       />
@@ -109,6 +111,7 @@ const MapScreen = () => {
         {renderCarousel()}
       </>
     );
+  return <></>;
 };
 
 export default MapScreen;

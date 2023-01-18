@@ -4,16 +4,20 @@ import { COLORS } from "_/constants/colors";
 const MARKER_DIAMETER = 50;
 
 const styles = StyleSheet.create({
+  transparentBox: { width: MARKER_DIAMETER * 1.5 },
   content: {
     height: MARKER_DIAMETER,
+    justifyContent: "center",
     width: MARKER_DIAMETER,
     borderRadius: MARKER_DIAMETER / 2,
   },
   markerLabelBox: {
+    zIndex: 1,
+    overflow: "visible",
     backgroundColor: COLORS.WHITE,
-    minwidth: MARKER_DIAMETER,
+    minWidth: MARKER_DIAMETER,
+    maxWidth: MARKER_DIAMETER * 1.5,
     justifyContent: "center",
-    alignSelf: "flex-start",
   },
   iconInfo: {
     alignSelf: "center",
