@@ -27,6 +27,8 @@ export interface TotemCardProps {
   totemProps: TotemPropsType;
   onPressMoreInfo?: () => void;
   style?: ViewStyle;
+  onPressEditTotem?: () => void;
+  isTotensScreen?: boolean;
 }
 
 const TotemCard = ({
@@ -34,6 +36,8 @@ const TotemCard = ({
   totemProps,
   onPressMoreInfo,
   style,
+  onPressEditTotem,
+  isTotensScreen
 }: TotemCardProps) => {
   const borderColor = getQualityColor(Number(totemProps.score));
 
@@ -80,15 +84,27 @@ const TotemCard = ({
           </View>
         </View>
       </View>
-      <TouchableOpacity style={styles.moreInfoBox} onPress={onPressMoreInfo}>
-        <IconInfo
-          label={TEXTS.MORE_INFO}
-          iconName="chevron-right"
-          iconPosition="right"
-          style={styles.moreInfo}
-          color={COLORS.PRIMARY_COLOR}
-        />
-      </TouchableOpacity>
+      {isTotensScreen ? (
+        <TouchableOpacity style={styles.moreInfoBox} onPress={onPressEditTotem}>
+          <IconInfo
+            label={TEXTS.EDIT_TOTEM}
+            iconName="edit"
+            iconPosition="right"
+            style={styles.moreInfo}
+            color={COLORS.PRIMARY_COLOR}
+          />
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity style={styles.moreInfoBox} onPress={onPressMoreInfo}>
+          <IconInfo
+            label={TEXTS.MORE_INFO}
+            iconName="chevron-right"
+            iconPosition="right"
+            style={styles.moreInfo}
+            color={COLORS.PRIMARY_COLOR}
+          />
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
