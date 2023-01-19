@@ -1,18 +1,33 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import { View, ViewStyle } from "react-native";
-import { Text } from "_/components";
+import { AnimatedMarker, Text } from "_/components";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { TotemFromApiType } from "_/services/TotemService";
 import { AirQualityCard } from '_/components';
-import MapView from "react-native-maps";
+import MapView, { Region } from "react-native-maps";
+import { Platform } from "react-native";
+
 
 import styles from "./styles";
 
+const ZOOM_DELTA_MIN = 1;
+const ZOOM_DELTA_MAX = 1.25;
 interface IMoreInfoScreen {
   totemInfo: TotemFromApiType;
 }
 const TotemScreen = ({ totemInfo }: IMoreInfoScreen) => {
   const { top, bottom } = useSafeAreaInsets();
+  const [zoomValue, setZoomValue] = useState(ZOOM_DELTA_MIN);
+
+  const setZoom = useCallback(
+    (region: Region) => {
+      const { latitudeDelta } = region;
+      if (latitudeDelta < ZOOM_DELTA_MAX && latitudeDelta > ZOOM_DELTA_MIN)
+        setZoomValue(latitudeDelta);
+    },
+    [zoomValue]
+  );
+
   const safeArea = { paddingBottom: bottom, paddingTop: top } as ViewStyle
 
   return (
@@ -23,6 +38,8 @@ const TotemScreen = ({ totemInfo }: IMoreInfoScreen) => {
         </Text>
         <View style={styles.mapWrapper}>
           <MapView
+            provider={Platform.OS === "android" ? "google" : undefined}
+            onRegionChangeComplete={setZoom}
             style={styles.map}
             initialRegion={{
               latitude: totemInfo.coords.latitude,
@@ -30,7 +47,18 @@ const TotemScreen = ({ totemInfo }: IMoreInfoScreen) => {
               latitudeDelta: 0.0922,
               longitudeDelta: 0.0421,
             }}
-          />
+          >
+            <AnimatedMarker
+              tracksViewChanges={false}
+              totemName={totemInfo.title}
+              zoomValue={zoomValue}
+              totemProps={totemInfo.totemProps}
+              coordinate={{
+                latitude: totemInfo.coords.latitude,
+                longitude: totemInfo.coords.longitude,
+              }}
+            />
+          </MapView>
         </View>
       </View>
       <View>
