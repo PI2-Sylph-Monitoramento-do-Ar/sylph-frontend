@@ -1,11 +1,6 @@
 import React from "react";
-import MapScreen from "_/screens/MapScreen";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { TabBarIcon } from "../components/TabBarIcon";
-import { SIZES } from "_/constants/sizes";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import MoreInfoScreen from "_/screens/MoreInfoScreen";
-import ChartsScreen from "_/screens/ChartsScreen";
 import { MapStack } from "../map";
 import { useAuth } from "_/hooks/useAuth";
 import InfoScreen from "_/screens/InfoScreen";
