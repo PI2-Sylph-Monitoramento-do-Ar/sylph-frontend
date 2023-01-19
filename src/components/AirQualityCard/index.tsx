@@ -21,7 +21,7 @@ type minMaxValuesType = {
 interface IAirQualityCardProps extends ViewProps {
   titleProps: titleProps;
   dataCollected: number;
-  minMaxValues: minMaxValuesType;
+  minMaxValues?: minMaxValuesType;
   dataType?: string;
   onPressMoreInfo?: () => void;
 }
@@ -50,16 +50,18 @@ const AirQualityCard = ({
         {String(dataCollected)}
         {dataCollectedType}
       </Text>
-      <View style={styles.minMaxBox}>
-        <Text style={styles.minMaxText}>
-          Máx: {minMaxValues.max}
-          {dataType}
-        </Text>
-        <Text style={styles.minMaxText}>
-          Min: {minMaxValues.min}
-          {dataType}
-        </Text>
-      </View>
+      {minMaxValues &&
+        <View style={styles.minMaxBox}>
+          <Text style={styles.minMaxText}>
+            Máx: {minMaxValues.max}
+            {dataType}
+          </Text>
+          <Text style={styles.minMaxText}>
+            Min: {minMaxValues.min}
+            {dataType}
+          </Text>
+        </View>
+      }
       <TouchableOpacity style={styles.moreInfoBox} onPress={onPressMoreInfo}>
         <IconInfo
           label={TEXTS.MORE_INFO}

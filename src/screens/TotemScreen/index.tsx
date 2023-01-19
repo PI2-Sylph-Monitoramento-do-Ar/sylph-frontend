@@ -2,22 +2,22 @@ import React from "react";
 import { View, ViewStyle } from "react-native";
 import { Text } from "_/components";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { TotemFromApiType } from "_/services/TotemService";
 import { AirQualityCard } from '_/components';
 import MapView from "react-native-maps";
 
 import styles from "./styles";
 
-const TotemScreen = () => {
+interface IMoreInfoScreen {
+  totemInfo: TotemFromApiType;
+}
+const TotemScreen = ({ totemInfo }: IMoreInfoScreen) => {
   const { top, bottom } = useSafeAreaInsets();
-
   const safeArea = { paddingBottom: bottom, paddingTop: top } as ViewStyle
 
   return (
     <View style={[styles.container, safeArea]}>
       <View style={[styles.resumeWrapper]}>
-        <Text family="InterBold" size="large" style={styles.totemTitle}>
-          Totem 1
-        </Text>
         <Text family="InterBold" size="regular" style={styles.resumeText}>
           Resumo
         </Text>
@@ -25,8 +25,8 @@ const TotemScreen = () => {
           <MapView
             style={styles.map}
             initialRegion={{
-              latitude: -15.98961, //será as coordenadas do totem
-              longitude: -48.0443975,
+              latitude: totemInfo.coords.latitude,
+              longitude: totemInfo.coords.longitude,
               latitudeDelta: 0.0922,
               longitudeDelta: 0.0421,
             }}
@@ -36,22 +36,22 @@ const TotemScreen = () => {
       <View>
         <View style={[styles.cards]}>
           <AirQualityCard
-            dataCollected={30}
-            minMaxValues={{ min: 15, max: 40 }}
+            dataCollected={totemInfo.totemProps.temperature.actual}
+            minMaxValues={{ min: totemInfo.totemProps.temperature.min, max: totemInfo.totemProps.temperature.max }}
             titleProps={{ title: 'Temperatura', iconName: 'device-thermostat' }}
             dataType="%"
           />
           <AirQualityCard
-            dataCollected={90}
-            minMaxValues={{ min: 60, max: 95 }}
+            dataCollected={totemInfo.totemProps.humidity.actual}
+            minMaxValues={{ min: totemInfo.totemProps.humidity.min, max: totemInfo.totemProps.humidity.max }}
             titleProps={{ title: 'Umidade', iconName: 'cloud' }}
             dataType="%"
           />
         </View>
         <View style={[styles.cards]}>
           <AirQualityCard
-            dataCollected={65}
-            minMaxValues={{ min: 30, max: 90 }}
+            dataCollected={totemInfo.totemProps.airQuality}
+            // minMaxValues={{ min: 30, max: 90 }}
             titleProps={{ title: 'Qualidade do ar', iconName: 'attractions' }}
             dataType="%"
           />

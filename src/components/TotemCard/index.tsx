@@ -8,11 +8,18 @@ import Text from "../Text";
 
 import styles from "./styles";
 
+export interface MinMaxValues {
+  actual: number,
+  min: number,
+  max: number,
+}
+
 export interface TotemPropsType {
-  score: string | number;
-  locationName: string;
-  temperature: string | number;
-  humidity: string | number;
+  score: string | number,
+  locationName: string,
+  temperature: MinMaxValues,
+  humidity: MinMaxValues,
+  airQuality: number,
 }
 
 export interface TotemCardProps {
@@ -59,13 +66,13 @@ const TotemCard = ({
           <View style={styles.valuesMeasuredBox}>
             <IconInfo
               family="InterExtraLight"
-              label={`${totemProps.temperature}ºC`}
+              label={`${totemProps.temperature.actual}ºC`}
               iconName="device-thermostat"
               style={styles.valueMeasuredInfo}
               color={COLORS.BLACK}
             />
             <IconInfo
-              label={`${totemProps.humidity}%`}
+              label={`${totemProps.humidity.actual}%`}
               iconName="cloud"
               family="InterExtraLight"
               color={COLORS.BLACK}
