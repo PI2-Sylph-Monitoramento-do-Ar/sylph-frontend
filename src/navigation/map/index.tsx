@@ -8,6 +8,7 @@ import { Text } from "_/components";
 import { COLORS } from "_/constants/colors";
 import { View } from "react-native";
 import StackHeader from "../components/StackHeader";
+import TotemScreen from '_/screens/TotemScreen';
 
 export type MapStackParams = {
   Map: undefined;
@@ -40,7 +41,7 @@ export const MapStack = () => {
         })}
       >
         {({ route }) => {
-          return <MoreInfoScreen totemInfo={route.params} />;
+          return <TotemScreen totemInfo={route.params} />;
         }}
       </Stack.Screen>
       <Stack.Screen name="Charts">

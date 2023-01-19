@@ -22,8 +22,17 @@ export class TotemService implements ITotemService {
         return {
           title,
           totemProps: {
-            humidity: Math.floor(Math.random() * 90),
-            temperature: Math.floor(Math.random() * 35),
+            humidity: {
+              actual: Math.floor(Math.random() * 90),
+              max: Math.floor(Math.random() * 90),
+              min: Math.floor(Math.random() * 90),
+            },
+            temperature: {
+              actual: Math.floor(Math.random() * 35),
+              max: Math.floor(Math.random() * 35),
+              min: Math.floor(Math.random() * 35),
+            },
+            airQuality: Math.floor(Math.random() * 50),
             score: Math.floor(Math.random() * 10),
             locationName: "Gama",
           },
