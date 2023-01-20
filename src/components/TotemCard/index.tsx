@@ -3,41 +3,26 @@ import { TouchableOpacity, View, ViewStyle } from "react-native";
 import { COLORS } from "_/constants/colors";
 import { TEXTS } from "_/constants/texts";
 import { getQualityColor } from "_/helpers/getColor";
+import { TotemType } from "_/types/Totem";
 import IconInfo from "../IconInfo";
 import Text from "../Text";
 
 import styles from "./styles";
 
-export interface MinMaxValues {
-  actual: number,
-  min: number,
-  max: number,
-}
-
-export interface TotemPropsType {
-  score: string | number,
-  locationName: string,
-  temperature: MinMaxValues,
-  humidity: MinMaxValues,
-  airQuality: number,
-}
-
 export interface TotemCardProps {
   title: string;
-  totemProps: TotemPropsType;
-  onPressMoreInfo?: () => void;
+  totemProps: TotemType;
+  bottomButtonLabel?: string;
+  onPressBottomButton?: () => void;
   style?: ViewStyle;
-  onPressEditTotem?: () => void;
-  isTotensScreen?: boolean;
 }
 
 const TotemCard = ({
   title,
   totemProps,
-  onPressMoreInfo,
+  bottomButtonLabel,
+  onPressBottomButton,
   style,
-  onPressEditTotem,
-  isTotensScreen
 }: TotemCardProps) => {
   const borderColor = getQualityColor(Number(totemProps.score));
 
@@ -70,13 +55,13 @@ const TotemCard = ({
           <View style={styles.valuesMeasuredBox}>
             <IconInfo
               family="InterExtraLight"
-              label={`${totemProps.temperature.actual}ºC`}
+              label={`${totemProps.temperature.current}ºC`}
               iconName="device-thermostat"
               style={styles.valueMeasuredInfo}
               color={COLORS.BLACK}
             />
             <IconInfo
-              label={`${totemProps.humidity.actual}%`}
+              label={`${totemProps.humidity.current}%`}
               iconName="cloud"
               family="InterExtraLight"
               color={COLORS.BLACK}
@@ -84,27 +69,18 @@ const TotemCard = ({
           </View>
         </View>
       </View>
-      {isTotensScreen ? (
-        <TouchableOpacity style={styles.moreInfoBox} onPress={onPressEditTotem}>
-          <IconInfo
-            label={TEXTS.EDIT_TOTEM}
-            iconName="edit"
-            iconPosition="right"
-            style={styles.moreInfo}
-            color={COLORS.PRIMARY_COLOR}
-          />
-        </TouchableOpacity>
-      ) : (
-        <TouchableOpacity style={styles.moreInfoBox} onPress={onPressMoreInfo}>
-          <IconInfo
-            label={TEXTS.MORE_INFO}
-            iconName="chevron-right"
-            iconPosition="right"
-            style={styles.moreInfo}
-            color={COLORS.PRIMARY_COLOR}
-          />
-        </TouchableOpacity>
-      )}
+      <TouchableOpacity
+        style={styles.moreInfoBox}
+        onPress={onPressBottomButton}
+      >
+        <IconInfo
+          label={bottomButtonLabel || TEXTS.MORE_INFO}
+          iconName="edit"
+          iconPosition="right"
+          style={styles.moreInfo}
+          color={COLORS.PRIMARY_COLOR}
+        />
+      </TouchableOpacity>
     </View>
   );
 };

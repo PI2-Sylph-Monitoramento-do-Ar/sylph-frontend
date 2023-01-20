@@ -67,7 +67,7 @@ const MapScreen = () => {
             style={styles.totemCard}
             title={item.title}
             totemProps={item.totemProps}
-            onPressMoreInfo={() => navigate("MoreInfo", item)}
+            onPressBottomButton={() => navigate("MoreInfo", item)}
           />
         )}
       />

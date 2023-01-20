@@ -6,7 +6,7 @@ import { FONTS } from "_/constants/fonts";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: SIZES.PADDING_XX_LARGE,
+    paddingHorizontal: SIZES.PADDING_X_LARGE,
     backgroundColor: COLORS.GREY_PRIMARY,
   },
   resumeWrapper: {
@@ -16,14 +16,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     marginVertical: SIZES.MARGING_REGULAR,
-
+    flexWrap: "wrap",
   },
   mapWrapper: {
     marginTop: SIZES.MARGING_SMALL,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   map: {
-    width: '100%',
+    width: "100%",
     height: 150,
   },
   totemTitle: {
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
   updateText: {
     color: COLORS.GREY_TERTIARY,
     fontSize: FONTS.FONT_SIZE_SMALL,
-  }
+  },
 });
 
 export default styles;

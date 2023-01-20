@@ -23,7 +23,7 @@ interface IAirQualityCardProps extends ViewProps {
   dataCollected: number;
   minMaxValues?: minMaxValuesType;
   dataType?: string;
-  onPressMoreInfo?: () => void;
+  onPressBottomButton?: () => void;
 }
 
 const AirQualityCard = ({
@@ -31,7 +31,7 @@ const AirQualityCard = ({
   minMaxValues,
   titleProps,
   dataType,
-  onPressMoreInfo,
+  onPressBottomButton,
   style,
   ...rest
 }: IAirQualityCardProps) => {
@@ -50,7 +50,7 @@ const AirQualityCard = ({
         {String(dataCollected)}
         {dataCollectedType}
       </Text>
-      {minMaxValues &&
+      {minMaxValues && (
         <View style={styles.minMaxBox}>
           <Text style={styles.minMaxText}>
             Máx: {minMaxValues.max}
@@ -61,8 +61,11 @@ const AirQualityCard = ({
             {dataType}
           </Text>
         </View>
-      }
-      <TouchableOpacity style={styles.moreInfoBox} onPress={onPressMoreInfo}>
+      )}
+      <TouchableOpacity
+        style={styles.moreInfoBox}
+        onPress={onPressBottomButton}
+      >
         <IconInfo
           label={TEXTS.MORE_INFO}
           iconName={"chevron-right"}

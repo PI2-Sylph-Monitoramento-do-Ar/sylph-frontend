@@ -1,7 +1,8 @@
 import { TotemCardProps } from "_/components/TotemCard";
+import { TotemType } from "_/types/Totem";
 
-export interface TotemFromApiType
-  extends Pick<TotemCardProps, "title" | "totemProps"> {
+export interface TotemFromApiType extends Pick<TotemCardProps, "title"> {
+  totemProps: TotemType;
   coords: {
     longitude: number;
     latitude: number;
@@ -23,16 +24,16 @@ export class TotemService implements ITotemService {
           title,
           totemProps: {
             humidity: {
-              actual: Math.floor(Math.random() * 90),
+              current: Math.floor(Math.random() * 90),
               max: Math.floor(Math.random() * 90),
               min: Math.floor(Math.random() * 90),
             },
             temperature: {
-              actual: Math.floor(Math.random() * 35),
+              current: Math.floor(Math.random() * 35),
               max: Math.floor(Math.random() * 35),
               min: Math.floor(Math.random() * 35),
             },
-            airQuality: Math.floor(Math.random() * 50),
+            airQuality: Math.floor(Math.random() * 100),
             score: Math.floor(Math.random() * 10),
             locationName: "Gama",
           },
@@ -40,7 +41,7 @@ export class TotemService implements ITotemService {
             latitude: position.latitude + Math.random(),
             longitude: position.longitude + Math.random(),
           },
-          onPressMoreInfo: () => alert(title),
+          onPressBottomButton: () => alert(title),
         };
       }
     );

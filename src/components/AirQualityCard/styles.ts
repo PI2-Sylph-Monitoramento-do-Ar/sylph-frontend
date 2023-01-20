@@ -52,9 +52,9 @@ const styles = StyleSheet.create({
     paddingTop: SIZES.PADDING_SMALL,
     borderTopWidth: 0.2,
     borderColor: COLORS.BLACK_WITH_OPACITY,
-    paddingHorizontal: SIZES.PADDING_X_LARGE,
+    paddingHorizontal: SIZES.PADDING_REGULAR,
   },
-  infoIcon: { right: -SIZES.PADDING_LARGE },
+  infoIcon: { right: -SIZES.PADDING_REGULAR },
 });
 
 export default styles;

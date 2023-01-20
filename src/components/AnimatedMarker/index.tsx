@@ -2,14 +2,14 @@ import React from "react";
 import { Animated, View } from "react-native";
 import { MapMarkerProps, Marker } from "react-native-maps";
 import { getQualityColorWithOpacity } from "_/helpers/getColor";
+import { TotemType } from "_/types/Totem";
 import IconInfo from "../IconInfo";
-import { TotemPropsType } from "../TotemCard";
 
 import styles from "./styles";
 
 interface AnimatedMarkerProps extends MapMarkerProps {
   totemName: string;
-  totemProps: TotemPropsType;
+  totemProps: TotemType;
   zoomValue: number;
 }
 

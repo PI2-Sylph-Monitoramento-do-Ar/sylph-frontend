@@ -6,12 +6,13 @@ import { useTotem } from "_/hooks/useTotem";
 import { TotemFromApiType } from "_/services/TotemService";
 
 import styles from "./styles";
+import { TEXTS } from "_/constants/texts";
 
 const TotemScreen = () => {
-  const { top, bottom } = useSafeAreaInsets();
+  const { top } = useSafeAreaInsets();
   const { totens } = useTotem();
 
-  const safeArea = { paddingBottom: bottom, paddingTop: top } as ViewStyle
+  const safeArea = { paddingTop: top } as ViewStyle;
 
   return (
     <View style={[styles.container, safeArea]}>
@@ -20,22 +21,19 @@ const TotemScreen = () => {
           Meus Totens
         </Text>
       </View>
-      <ScrollView>
-        <View style={[styles.totens]}>
-          {totens.map((totem: TotemFromApiType, index: number) => {
-            if (totem.coords.latitude && totem.coords.latitude)
-              return (
-                <TotemCard
-                  key={index}
-                  style={styles.totemCard}
-                  title={totem.title}
-                  totemProps={totem.totemProps}
-                  // onPressEditTotem={totem.onPressEditTotem}
-                  isTotensScreen={true}
-                />
-              );
-          })}
-        </View>
+      <ScrollView style={styles.scrollViewContainer}>
+        {totens.map((totem: TotemFromApiType, index: number) => {
+          if (totem.coords.latitude && totem.coords.latitude)
+            return (
+              <TotemCard
+                key={index}
+                title={totem.title}
+                style={styles.totemCard}
+                totemProps={totem.totemProps}
+                bottomButtonLabel={TEXTS.EDIT_TOTEM}
+              />
+            );
+        })}
       </ScrollView>
     </View>
   );

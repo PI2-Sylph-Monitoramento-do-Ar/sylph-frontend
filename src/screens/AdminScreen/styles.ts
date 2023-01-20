@@ -1,23 +1,20 @@
 import { StyleSheet } from "react-native";
 import { COLORS } from "_/constants/colors";
 import { SIZES } from "_/constants/sizes";
-import { FONTS } from "_/constants/fonts";
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: SIZES.PADDING_XX_LARGE,
     backgroundColor: COLORS.GREY_PRIMARY,
+  },
+  scrollViewContainer: {
+    paddingHorizontal: SIZES.PADDING_XX_LARGE,
   },
   titleWrapper: {
     marginBottom: SIZES.MARGING_LARGE,
   },
-  totens: {
-    flexDirection: "column",
-    marginVertical: SIZES.MARGING_REGULAR,
-  },
   totemCard: {
-    marginBottom: SIZES.MARGING_LARGE,
+    marginBottom: SIZES.MARGING_X_LARGE,
   },
   title: {
     textAlign: "center",
