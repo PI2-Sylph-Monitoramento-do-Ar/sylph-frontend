@@ -7,11 +7,9 @@ import { useAuth } from "_/hooks/useAuth";
 export const Navigation = () => {
   const { isAuthed, isGuest } = useAuth();
 
-  const madeLogin = isAuthed || isGuest;
-
   return (
     <NavigationContainer>
-      {!madeLogin ? <AuthRoute /> : <MainRoute />}
+      {!(isAuthed || isGuest) ? <AuthRoute /> : <MainRoute />}
     </NavigationContainer>
   );
 };
