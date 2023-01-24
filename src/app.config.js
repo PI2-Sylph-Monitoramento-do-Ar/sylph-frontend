@@ -44,10 +44,7 @@ export default {
       expo_client_id: process.env.EXPO_CLIENT_ID,
       ios_client_id: process.env.IOS_CLIENT_ID,
       android_client_id: process.env.ANDROID_CLIENT_ID,
-      client_id: process.env.CLIENT_ID,
-      eas: {
-        projectId: process.env.EAS_PROJECT_ID,
-      },
+      client_id: process.env.CLIENT_ID
     },
   },
 };
