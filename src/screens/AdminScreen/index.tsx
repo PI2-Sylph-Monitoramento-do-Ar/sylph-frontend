@@ -1,6 +1,6 @@
 import React from "react";
 import { ScrollView, View, ViewStyle } from "react-native";
-import { Text, TotemCard } from "_/components";
+import { Text, TotemCard, FloattingButton } from "_/components";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTotem } from "_/hooks/useTotem";
 import { TotemFromApiType } from "_/services/TotemService";
@@ -35,6 +35,7 @@ const TotemScreen = () => {
             );
         })}
       </ScrollView>
+      <FloattingButton title="Totem" iconName="plus-one" style={styles.newTotem} isAbsolute={true}/>
     </View>
   );
 };
