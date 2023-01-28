@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ScrollView, View, ViewStyle } from "react-native";
 import { Text, TotemCard, FloattingButton } from "_/components";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -7,10 +7,12 @@ import { TotemFromApiType } from "_/services/TotemService";
 
 import styles from "./styles";
 import { TEXTS } from "_/constants/texts";
+import TotemModal from "_/components/TotemModal";
 
 const TotemScreen = () => {
   const { top } = useSafeAreaInsets();
   const { totens } = useTotem();
+  const [openModal, setOpenModal] = useState<boolean>(false);
 
   const safeArea = { paddingTop: top } as ViewStyle;
 
@@ -35,7 +37,8 @@ const TotemScreen = () => {
             );
         })}
       </ScrollView>
-      <FloattingButton title="Totem" iconName="plus-one" style={styles.newTotem} isAbsolute={true}/>
+      <FloattingButton onPress={() => { setOpenModal(true) }} title="Totem" iconName="plus-one" style={styles.newTotem} isAbsolute={true} />
+      {openModal && <TotemModal title="Novo Totem" modalVisible={openModal} setModalVisible={setOpenModal}/>}
     </View>
   );
 };
