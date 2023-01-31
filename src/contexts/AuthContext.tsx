@@ -1,8 +1,6 @@
 import React, { useState } from "react";
-import * as Google from "expo-auth-session/providers/google";
 import { firebaseAuthInstance } from "_/config/firebaseConfig";
-import { GoogleAuthProvider, signInWithCredential } from "firebase/auth";
-import { CLIENT_ID } from "_/constants/secrets";
+import { signInWithCredential, getAuth, OAuthCredential } from "firebase/auth";
 
 interface AuthContextProps {
   children: JSX.Element;
@@ -12,7 +10,7 @@ interface AuthContextParams {
   isLoading: boolean;
   isAuthed: boolean;
   isGuest: boolean;
-  adminLogin: () => Promise<void>;
+  adminLogin: (credential: OAuthCredential) => Promise<void>;
   guestLogin: () => void;
 }
 
@@ -26,33 +24,29 @@ const AuthContextProvider = ({ children }: AuthContextProps) => {
   const [userCredentials, setUserCredentials] = useState({});
   const [isGuest, setIsGuest] = useState(false);
 
-  const [_1, _2, promptAsync] = Google.useIdTokenAuthRequest({
-    clientId: CLIENT_ID,
-  });
-
   const guestLogin = async () => {
     setIsGuest(true);
     setIsLoading(false);
   };
 
-  const adminLogin = async () => {
-    await validateUserOnGoogle();
-    setIsAuthed(true);
+  const adminLogin = async (credential: OAuthCredential) => {
+    await validateUserOnGoogle(credential);
     setIsLoading(false);
   };
 
-  const validateUserOnGoogle = async () => {
+  const validateUserOnGoogle = async (credential?: OAuthCredential) => {
     try {
-      const response = await promptAsync();
-      if (response?.type === "success") {
-        const { id_token } = response.params;
-
-        const idToken = id_token;
-        const credential = GoogleAuthProvider.credential(idToken);
+      if (credential) {
         const googleUserCredentials = await signInWithCredential(
           firebaseAuthInstance,
           credential
         );
+
+        const auth = getAuth();
+        const user = auth.currentUser;
+        const token = await user?.getIdToken();
+
+        setIsAuthed(true);
         setUserCredentials(googleUserCredentials);
       }
     } catch (e) {

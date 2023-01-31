@@ -10,13 +10,19 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import styles from "./styles";
 import { useAuth } from "_/hooks/useAuth";
 import { SIZES } from "_/constants/sizes";
+import { useAuthPrompt } from "_/hooks/useAuthPrompt";
 
 const AuthScreen = () => {
   const { top, bottom } = useSafeAreaInsets();
-
+  const { promptAuth } = useAuthPrompt();
   const safeArea = { paddingBottom: bottom, paddingTop: top } as ViewStyle;
 
   const { adminLogin, guestLogin } = useAuth();
+
+  const loginWithGoogle = async () => {
+    const credential = await promptAuth();
+    adminLogin(credential);
+  };
 
   return (
     <View style={[styles.container, safeArea]}>
@@ -53,7 +59,7 @@ const AuthScreen = () => {
         <Button
           title="Entrar como Administrador"
           type="secondary"
-          onPress={adminLogin}
+          onPress={loginWithGoogle}
         />
       </View>
     </View>

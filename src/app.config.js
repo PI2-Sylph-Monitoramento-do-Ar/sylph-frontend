@@ -42,6 +42,7 @@ export default {
       firebase_app_id: process.env.FIREBASE_APP_ID,
       firebase_measurement_id: process.env.FIREBASE_MEASUREMENT_ID,
       client_id: process.env.CLIENT_ID,
+      url: process.env.URL,
     },
   },
 };
