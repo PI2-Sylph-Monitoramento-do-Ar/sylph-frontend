@@ -29,8 +29,14 @@ const AuthContextProvider = ({ children }: AuthContextProps) => {
     setIsLoading(false);
   };
 
+<<<<<<< Updated upstream
   const adminLogin = async (credential: OAuthCredential) => {
     await validateUserOnGoogle(credential);
+=======
+  const adminLogin = async () => {
+    // await validateUserOnGoogle();
+    setIsAuthed(true);
+>>>>>>> Stashed changes
     setIsLoading(false);
   };
 
