@@ -1,14 +1,10 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ChartsScreen from "_/screens/ChartsScreen";
-import MoreInfoScreen from "_/screens/MoreInfoScreen";
 import MapScreen from "_/screens/MapScreen";
 import { TotemFromApiType } from "_/services/TotemService";
-import { Text } from "_/components";
-import { COLORS } from "_/constants/colors";
-import { View } from "react-native";
 import StackHeader from "../components/StackHeader";
-import TotemScreen from '_/screens/TotemScreen';
+import TotemScreen from "_/screens/TotemScreen";
 
 export type MapStackParams = {
   Map: undefined;

@@ -11,8 +11,8 @@ import TotemModal from "_/components/TotemModal";
 
 const TotemScreen = () => {
   const { top } = useSafeAreaInsets();
-  const { totens } = useTotem();
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const { totems } = useTotem();
 
   const safeArea = { paddingTop: top } as ViewStyle;
 
@@ -24,7 +24,7 @@ const TotemScreen = () => {
         </Text>
       </View>
       <ScrollView style={styles.scrollViewContainer}>
-        {totens.map((totem: TotemFromApiType, index: number) => {
+        {totems.map((totem: TotemFromApiType, index: number) => {
           if (totem.coords.latitude && totem.coords.latitude)
             return (
               <TotemCard

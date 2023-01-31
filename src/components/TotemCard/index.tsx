@@ -24,14 +24,14 @@ const TotemCard = ({
   onPressBottomButton,
   style,
 }: TotemCardProps) => {
-  const borderColor = getQualityColor(Number(totemProps.score));
+  const borderColor = getQualityColor(Number(totemProps.airQuality));
 
   return (
     <View style={[styles.container, style]}>
       <View style={styles.mainContentBox}>
         <View style={[styles.circle, { borderColor }]}>
           <Text family="InterBold" style={styles.scoreText} size="large">
-            {totemProps.score}
+            {totemProps.airQuality}
           </Text>
           <Text
             style={styles.scoreMaxText}

@@ -41,10 +41,8 @@ export default {
       firebase_messaging_sender_id: process.env.FIREBASE_MESSAGING_SENDER_ID,
       firebase_app_id: process.env.FIREBASE_APP_ID,
       firebase_measurement_id: process.env.FIREBASE_MEASUREMENT_ID,
-      expo_client_id: process.env.EXPO_CLIENT_ID,
-      ios_client_id: process.env.IOS_CLIENT_ID,
-      android_client_id: process.env.ANDROID_CLIENT_ID,
-      client_id: process.env.CLIENT_ID
+      client_id: process.env.CLIENT_ID,
+      url: process.env.URL,
     },
   },
 };

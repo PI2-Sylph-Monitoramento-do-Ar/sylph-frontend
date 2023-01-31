@@ -1,15 +1,5 @@
 import Constants from "expo-constants";
 
-// GIT
-export const GIT_CLIENT_SECRET = Constants?.manifest?.extra?.git_cliet_secret;
-export const GIT_CLIENT_ID = Constants?.manifest?.extra?.git_client_id;
-export const GIT_AUTHORIZATION_ENDPOINT =
-  Constants?.manifest?.extra?.git_authorization_endpoint;
-export const GIT_TOKEN_ENDPOINT =
-  Constants?.manifest?.extra?.git_token_endpoint;
-export const GIT_REVOCATION_ENDPOINT =
-  Constants?.manifest?.extra?.git_revocation_endpoint;
-
 // FIREBASE
 export const FIREBASE_API_KEY = Constants?.manifest?.extra?.firebase_api_key;
 export const FIREBASE_AUTH_DOMAIN =
@@ -30,6 +20,7 @@ export const APP_SCHEME = Constants?.manifest?.extra?.app_scheme;
 // AUTH
 
 export const CLIENT_ID = Constants?.manifest?.extra?.client_id;
-export const IOS_CLIENT_ID = Constants?.manifest?.extra?.ios_client_id;
-export const ANDROID_CLIENT_ID = Constants?.manifest?.extra?.android_client_id;
-export const EXPO_CLIENT_ID = Constants?.manifest?.extra?.expo_client_id;
+
+// URL
+
+export const URL = Constants?.manifest?.extra?.url;

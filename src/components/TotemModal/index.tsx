@@ -30,7 +30,6 @@ const TotemModal = ({
   setModalVisible
 }: TotemModalProps) => {
   const { top, bottom, left, right } = useSafeAreaInsets();
-  const { totens } = useTotem();
 
   // const safeArea = { paddingTop: top, paddingBottom: bottom, paddingLeft: left, paddingRight: right } as ViewStyle;
 

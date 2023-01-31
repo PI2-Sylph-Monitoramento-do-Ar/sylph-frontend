@@ -9,6 +9,8 @@ import { TotemService } from "./services/TotemService";
 import { AuthContextProvider } from "./contexts/AuthContext";
 import { COLORS } from "./constants/colors";
 import { LogBox, Platform, StatusBar } from "react-native";
+import { HttpsAdapter } from "./adapters/https/HttpsAdapter";
+import { URL } from "./constants/secrets";
 
 export default function App() {
   const isFontLoaded = useFonts();
@@ -17,7 +19,8 @@ export default function App() {
     "Non-serializable values were found in the navigation state",
   ]);
 
-  const totemService = new TotemService();
+  const api = new HttpsAdapter(URL);
+  const totemService = new TotemService(api);
 
   if (isFontLoaded)
     return (
