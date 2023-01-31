@@ -27,7 +27,7 @@ const AnimatedMarker = ({
             styles.content,
             {
               backgroundColor: getQualityColorWithOpacity(
-                Number(totemProps.score)
+                Number(totemProps.airQuality)
               ),
               transform: [{ scaleY: zoomValue }, { scaleX: zoomValue }],
             },

@@ -10,7 +10,7 @@ import { TEXTS } from "_/constants/texts";
 
 const TotemScreen = () => {
   const { top } = useSafeAreaInsets();
-  const { totens } = useTotem();
+  const { totems } = useTotem();
 
   const safeArea = { paddingTop: top } as ViewStyle;
 
@@ -22,7 +22,7 @@ const TotemScreen = () => {
         </Text>
       </View>
       <ScrollView style={styles.scrollViewContainer}>
-        {totens.map((totem: TotemFromApiType, index: number) => {
+        {totems.map((totem: TotemFromApiType, index: number) => {
           if (totem.coords.latitude && totem.coords.latitude)
             return (
               <TotemCard

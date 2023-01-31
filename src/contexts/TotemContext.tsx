@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { useLocation } from "_/hooks/useLocation";
+import React, { useState } from "react";
 import { ITotemService, TotemFromApiType } from "_/services/TotemService";
 
 interface TotemContextProps {
@@ -9,7 +8,8 @@ interface TotemContextProps {
 
 interface TotemContextParams {
   isLoading: boolean;
-  totens: TotemFromApiType[];
+  totems: TotemFromApiType[];
+  listTotem: () => Promise<TotemFromApiType[]>;
 }
 
 const TotemContext = React.createContext<TotemContextParams>(
@@ -20,21 +20,18 @@ const TotemContextProvider = ({
   children,
   totemService,
 }: TotemContextProps) => {
-  const [totens, setTotens] = useState<TotemFromApiType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [totems, setTotems] = useState<TotemFromApiType[]>([]);
 
-  const { position } = useLocation();
-
-  useEffect(() => {
-    (async () => {
-      const totens = await totemService.getTotem(position);
-      setTotens(totens);
-      setIsLoading(false);
-    })();
-  }, [position]);
+  const listTotem = async () => {
+    const totems = await totemService.listTotem();
+    setTotems(totems);
+    setIsLoading(false);
+    return totems;
+  };
 
   return (
-    <TotemContext.Provider value={{ totens, isLoading }}>
+    <TotemContext.Provider value={{ totems, listTotem, isLoading }}>
       {children}
     </TotemContext.Provider>
   );
