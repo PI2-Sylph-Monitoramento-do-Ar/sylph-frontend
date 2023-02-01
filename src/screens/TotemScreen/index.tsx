@@ -2,7 +2,7 @@ import React from "react";
 import { View, ViewStyle } from "react-native";
 import { AnimatedMarker, Text } from "_/components";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { TotemFromApiType } from "_/services/TotemService";
+import { TotemType } from "_/services/TotemService";
 import { AirQualityCard } from "_/components";
 import MapView from "react-native-maps";
 import { Platform } from "react-native";
@@ -15,7 +15,7 @@ const LATITUEDE_DELTA = 0.09;
 const LONGITUDE_DELTA = 0.04;
 
 interface IMoreInfoScreen {
-  totemInfo: TotemFromApiType;
+  totemInfo: TotemType;
 }
 const TotemScreen = ({ totemInfo }: IMoreInfoScreen) => {
   const { top, bottom } = useSafeAreaInsets();

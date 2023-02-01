@@ -1,16 +1,20 @@
 import { HttpsAdapterType } from "_/adapters/https/HttpsAdapter";
 import { TotemCardProps } from "_/components/TotemCard";
 import { Measurement } from "_/types/dto/measurement";
-import { Location, Totem } from "_/types/dto/totem";
-import { TotemType } from "_/types/Totem";
+import { Location, TotemDTO } from "_/types/dto/totem";
+import { TotemInfo } from "_/types/Totem";
 
-export interface TotemFromApiType extends Pick<TotemCardProps, "title"> {
-  totemProps: TotemType;
-  coords: Omit<Location, "longitute"> & { longitude: number };
+export interface TotemType extends Pick<TotemCardProps, "title"> {
+  totemProps: TotemInfo;
+  coords: Location;
+  id: string,
+  name: string,
+  macAddress: string,
 }
 
 export interface ITotemService {
-  listTotem(): Promise<TotemFromApiType[]>;
+  listTotem(): Promise<TotemType[]>;
+  createTotem(totem: TotemDTO): Promise<void>;
 }
 
 export class TotemService implements ITotemService {
@@ -21,9 +25,9 @@ export class TotemService implements ITotemService {
   }
 
   async listTotem() {
-    const totems = await this.api.get<Array<Totem>>("/totems");
+    const totems = await this.api.get<Array<TotemDTO>>("/totems");
 
-    let mostRecentValues: Array<TotemFromApiType> = [];
+    let mostRecentValues: Array<TotemType> = [];
 
     if (totems) {
       for (const totem of totems) {
@@ -31,17 +35,24 @@ export class TotemService implements ITotemService {
         mostRecentValues.push({
           totemProps,
           coords: {
-            longitude: totem.location.longitute,
+            longitude: totem.location.longitude,
             latitude: totem.location.latitude,
           },
           title: totem.mac_address,
+          name: totem.name ?? '',
+          id: totem.id,
+          macAddress: totem.mac_address,
         });
       }
     }
     return mostRecentValues;
   }
 
-  private getTotemProps = async (totem: Totem): Promise<TotemType> => {
+  async createTotem (totem: TotemDTO) {
+    await this.api.post('/totems', totem);
+  }
+
+  private getTotemProps = async (totem: TotemDTO): Promise<TotemInfo> => {
     const measures = await this.api.get<Array<Measurement>>(
       `/measurements?totem_id=${totem.id}`
     );
@@ -57,7 +68,7 @@ export class TotemService implements ITotemService {
         max: -Infinity,
       },
       dateTime: new Date("01/01/1900"),
-    } as TotemType;
+    } as TotemInfo;
 
     measures?.forEach((measure) => {
       if (measure.temperature >= totemProps.temperature.max) {

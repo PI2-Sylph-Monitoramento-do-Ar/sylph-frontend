@@ -3,7 +3,7 @@ import { ScrollView, View, ViewStyle } from "react-native";
 import { Text, TotemCard, FloattingButton } from "_/components";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTotem } from "_/hooks/useTotem";
-import { TotemFromApiType } from "_/services/TotemService";
+import { TotemType } from "_/services/TotemService";
 
 import styles from "./styles";
 import { TEXTS } from "_/constants/texts";
@@ -24,7 +24,7 @@ const TotemScreen = () => {
         </Text>
       </View>
       <ScrollView style={styles.scrollViewContainer}>
-        {totems.map((totem: TotemFromApiType, index: number) => {
+        {totems.map((totem: TotemType, index: number) => {
           if (totem.coords.latitude && totem.coords.latitude)
             return (
               <TotemCard

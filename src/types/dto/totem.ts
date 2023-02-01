@@ -2,16 +2,12 @@ import { Model } from "./model";
 
 export interface Location {
   latitude: number;
-  longitute: number;
+  longitude: number;
 }
-export interface Totem extends Model {
+export interface TotemDTO {
+  id: string,
+  name?: string,
   mac_address: string;
   is_active: boolean;
   location: Location;
 }
-
-export type TotemDto = {
-  mac_address: string;
-  is_active: boolean;
-  location: Location;
-};

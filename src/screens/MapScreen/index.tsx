@@ -9,7 +9,7 @@ import { SIZES } from "_/constants/sizes";
 import { Platform } from "react-native";
 import { useTotem } from "_/hooks/useTotem";
 import { useNavigate } from "_/hooks/useNavigate";
-import { TotemFromApiType } from "_/services/TotemService";
+import { TotemType } from "_/services/TotemService";
 
 const CAROUSEL_PERCENTAGE_HEIGHT = 0.2;
 const CAROUSEL_PERCENTAGE_WIDTH = 0.9;
@@ -20,7 +20,7 @@ const ZOOM_DELTA_MAX = 1.25;
 const MapScreen = () => {
   const { position } = useLocation();
   const { isLoading, listTotem } = useTotem();
-  const [totems, setTotems] = useState<TotemFromApiType[]>([]);
+  const [totems, setTotems] = useState<TotemType[]>([]);
 
   useEffect(() => {
     listTotem().then((value) => {
@@ -78,7 +78,7 @@ const MapScreen = () => {
   }, [totems]);
 
   const renderMarker = useCallback(() => {
-    return totems.map((totem: TotemFromApiType, index: number) => {
+    return totems.map((totem: TotemType, index: number) => {
       if (totem.coords.latitude && totem.coords.longitude)
         return (
           <AnimatedMarker

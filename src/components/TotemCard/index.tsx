@@ -3,7 +3,7 @@ import { TouchableOpacity, View, ViewStyle } from "react-native";
 import { COLORS } from "_/constants/colors";
 import { TEXTS } from "_/constants/texts";
 import { getQualityColor } from "_/helpers/getColor";
-import { TotemType } from "_/types/Totem";
+import { TotemInfo } from "_/types/Totem";
 import IconInfo from "../IconInfo";
 import Text from "../Text";
 
@@ -11,7 +11,7 @@ import styles from "./styles";
 
 export interface TotemCardProps {
   title: string;
-  totemProps: TotemType;
+  totemProps: TotemInfo;
   bottomButtonLabel?: string;
   onPressBottomButton?: () => void;
   style?: ViewStyle;

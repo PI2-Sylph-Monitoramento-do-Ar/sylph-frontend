@@ -51,6 +51,7 @@ const styles = StyleSheet.create({
     marginLeft: SIZES.MARGING_X_SMALL,
     color: 'rgba(31, 27, 36, 0.5)',
     fontWeight: 'bold',
+    minWidth: 200,
   },
   buttonWrapper: {
     alignItems: 'center',

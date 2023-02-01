@@ -4,7 +4,7 @@ export interface IntervalValues {
   max: number;
 }
 
-export interface TotemType {
+export interface TotemInfo {
   locationName: string;
   airQuality: number;
   temperature: IntervalValues;

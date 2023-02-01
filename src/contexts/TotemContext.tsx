@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import { ITotemService, TotemFromApiType } from "_/services/TotemService";
+import { mapTotemTypeToDTO } from "_/helpers/totemTypeToDTO";
+import { ITotemService, TotemType } from "_/services/TotemService";
+import { TotemDTO } from "_/types/dto/totem";
 
 interface TotemContextProps {
   children: JSX.Element;
@@ -8,8 +10,9 @@ interface TotemContextProps {
 
 interface TotemContextParams {
   isLoading: boolean;
-  totems: TotemFromApiType[];
-  listTotem: () => Promise<TotemFromApiType[]>;
+  totems: TotemType[];
+  listTotem: () => Promise<TotemType[]>;
+  createTotem: (totem: TotemType) => Promise<void>;
 }
 
 const TotemContext = React.createContext<TotemContextParams>(
@@ -21,7 +24,7 @@ const TotemContextProvider = ({
   totemService,
 }: TotemContextProps) => {
   const [isLoading, setIsLoading] = useState(true);
-  const [totems, setTotems] = useState<TotemFromApiType[]>([]);
+  const [totems, setTotems] = useState<TotemType[]>([]);
 
   const listTotem = async () => {
     const totems = await totemService.listTotem();
@@ -30,8 +33,14 @@ const TotemContextProvider = ({
     return totems;
   };
 
+  const createTotem = async (totem: TotemType) => {
+    const totemDTO = mapTotemTypeToDTO(totem);
+    await totemService.createTotem(totemDTO);
+    listTotem();
+  }
+
   return (
-    <TotemContext.Provider value={{ totems, listTotem, isLoading }}>
+    <TotemContext.Provider value={{ totems, listTotem, isLoading, createTotem }}>
       {children}
     </TotemContext.Provider>
   );

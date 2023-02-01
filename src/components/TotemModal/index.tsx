@@ -1,14 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, Modal, Pressable, ScrollView, View, ViewStyle } from "react-native";
 import { Text, TotemCard, FloattingButton, Icon } from "_/components";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTotem } from "_/hooks/useTotem";
-import { TotemFromApiType } from "_/services/TotemService";
+import { TotemType } from "_/services/TotemService";
 
 import styles from "./styles";
 import { TEXTS } from "_/constants/texts";
-import { TotemType } from "_/types/Totem";
 import { IconProps } from "../Icon";
+import { TextInput } from "react-native-gesture-handler";
+import { uuidv4 } from "@firebase/util";
+import { TotemInfo } from "_/types/Totem";
 
 
 export interface TotemModalProps {
@@ -29,10 +31,32 @@ const TotemModal = ({
   modalVisible,
   setModalVisible
 }: TotemModalProps) => {
-  const { top, bottom, left, right } = useSafeAreaInsets();
+
+  const [totemName, setTotemName] = useState('');
+  const [macAddress, setMacAddress] = useState('');
+  const [totemLatitude, setTotemLatitude] = useState<number>(0);
+  const [totemLongitude, setTotemLongitude] = useState<number>(0);
+  const { createTotem } = useTotem();
 
   // const safeArea = { paddingTop: top, paddingBottom: bottom, paddingLeft: left, paddingRight: right } as ViewStyle;
 
+  const handleTotem = async () => {
+    const totem: TotemType = {
+      id: uuidv4(),
+      name: totemName,
+      macAddress,
+      title: macAddress,
+      coords: {
+        latitude: totemLatitude,
+        longitude: totemLongitude,
+      },
+      totemProps: {} as TotemInfo,
+      }
+
+      await createTotem(totem);
+
+    console.log(totem)
+  }
 
   return (
     <Modal transparent
@@ -49,14 +73,40 @@ const TotemModal = ({
           </View>
           <View style={styles.formBox}>
             <Icon name='edit' color={styles.icon.color} size="small" />
-            <Text style={styles.formText}>Nome do Totem</Text>
+            <TextInput
+              style={styles.formText}
+              onChangeText={name => setTotemName(name)}
+              defaultValue={totemName}
+              placeholder="Nome do Totem"
+            />
           </View>
           <View style={styles.formBox}>
             <Icon name='laptop' color={styles.icon.color} size="small" />
-            <Text style={styles.formText}>Endereço MAC do Totem</Text>
+            <TextInput
+              style={styles.formText}
+              onChangeText={macAddress => setMacAddress(macAddress)}
+              defaultValue={macAddress}
+              placeholder="Endereço MAC do Totem"
+            />
+          </View>
+          <View style={styles.formBox}>
+            <Icon name='place' color={styles.icon.color} size="small" />
+            <TextInput
+              style={styles.formText}
+              onChangeText={latitude => setTotemLatitude(Number(latitude))}
+              placeholder="Latitude"
+            />
+          </View>
+          <View style={styles.formBox}>
+            <Icon name='place' color={styles.icon.color} size="small" />
+            <TextInput
+              style={styles.formText}
+              onChangeText={longitude => setTotemLongitude(Number(longitude))}
+              placeholder="Latitude"
+            />
           </View>
           <View style={styles.buttonWrapper}>
-            <Pressable style={styles.button}>
+            <Pressable style={styles.button} onPress={handleTotem}>
               <Text style={styles.buttonText}>Cadastrar</Text>
             </Pressable>
           </View>
