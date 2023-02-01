@@ -54,8 +54,6 @@ const TotemModal = ({
       }
 
       await createTotem(totem);
-
-    console.log(totem)
   }
 
   return (
