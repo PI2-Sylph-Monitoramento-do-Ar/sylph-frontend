@@ -1,4 +1,4 @@
-export interface IntervalValues {
+export interface IEdgeValues {
   current: number;
   min: number;
   max: number;
@@ -7,7 +7,7 @@ export interface IntervalValues {
 export interface TotemType {
   locationName: string;
   airQuality: number;
-  temperature: IntervalValues;
-  humidity: IntervalValues;
+  temperature: IEdgeValues;
+  humidity: IEdgeValues;
   dateTime: Date;
 }
