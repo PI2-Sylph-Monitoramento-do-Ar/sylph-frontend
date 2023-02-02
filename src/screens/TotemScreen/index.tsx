@@ -67,7 +67,11 @@ const TotemScreen = ({ totemInfo }: IMoreInfoScreen) => {
           titleProps={{ title: "Temperatura", iconName: "device-thermostat" }}
           dataType="%"
           onPressBottomButton={() =>
-            navigate("Charts", { title: "Temperatura" })
+            navigate("Charts", {
+              title: "Temperatura",
+              totemId: totemInfo.totemId,
+              measureName: "temperature",
+            })
           }
         />
         <AirQualityCard
@@ -78,7 +82,13 @@ const TotemScreen = ({ totemInfo }: IMoreInfoScreen) => {
           }}
           titleProps={{ title: "Umidade", iconName: "cloud" }}
           dataType="%"
-          onPressBottomButton={() => navigate("Charts", { title: "Umidade" })}
+          onPressBottomButton={() =>
+            navigate("Charts", {
+              title: "Úmidade",
+              totemId: totemInfo.totemId,
+              measureName: "humidity",
+            })
+          }
         />
       </View>
       <View style={[styles.cards]}>
@@ -87,7 +97,11 @@ const TotemScreen = ({ totemInfo }: IMoreInfoScreen) => {
           titleProps={{ title: "Qualidade do ar", iconName: "attractions" }}
           dataType="%"
           onPressBottomButton={() =>
-            navigate("Charts", { title: "Qualidade do ar" })
+            navigate("Charts", {
+              title: "Qualidade do ar",
+              totemId: totemInfo.totemId,
+              measureName: "temperature",
+            })
           }
         />
       </View>
