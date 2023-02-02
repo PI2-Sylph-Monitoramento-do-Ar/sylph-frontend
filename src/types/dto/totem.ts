@@ -1,20 +1,13 @@
-import { Model } from "./model";
-
 export interface Location {
   latitude: number;
-  longitute: number;
+  longitude: number;
 }
-export interface Totem extends Model {
+
+export type Totem = {
   mac_address: string;
   is_active: boolean;
   location: Location;
   email: string;
   name: string;
-}
-
-export type TotemDto = {
-  mac_address: string;
-  is_active: boolean;
-  location: Location;
-  name: string;
+  id: string;
 };

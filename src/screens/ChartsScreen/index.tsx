@@ -1,50 +1,50 @@
+import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Button, LineChart, Text } from "_/components";
+import { Button, LineChart } from "_/components";
 import { SIZES } from "_/constants/sizes";
+import {
+  getValuesFromToday,
+  getValuesFromWeeks,
+} from "_/helpers/getValueFromTime";
+import { mapMeasuresToGraph } from "_/helpers/mapMeasuresToGraph";
+import { useMeasure } from "_/hooks/useMeasure";
+import { MeasurementKeys } from "_/types/dto/measurement";
 
 import styles from "./styles";
 
-const PAGE_TITLE = "Temperatura";
+export interface GraphValues {
+  x: string;
+  y: number;
+}
 
-interface IChartsScreen {
+export interface IChartsScreen {
+  measureName: MeasurementKeys;
+  totemId: string;
   title: string;
 }
 
-const ChartsScreen = ({ title }: IChartsScreen) => {
-  const { top, bottom } = useSafeAreaInsets();
+const ChartsScreen = ({ measureName, totemId }: IChartsScreen) => {
+  const { bottom } = useSafeAreaInsets();
   const [isLoading, setIsLoading] = useState(true);
   const [hourlyValues, setHourlyValues] = useState<any>([]);
-  const [dailyValues, setdailyValues] = useState<any>([]);
+  const [dailyValues, setDailyValues] = useState<any>([]);
   const [weeklyValues, setWeeklyValues] = useState<any>([]);
+  const { listMeasures } = useMeasure();
 
   useEffect(() => {
-    const data = [
-      { x: "00:00", y: Math.floor(Math.random() * 10) },
-      { x: "01:00", y: Math.floor(Math.random() * 10) },
-      { x: "02:00", y: Math.floor(Math.random() * 10) },
-      { x: "03:00", y: Math.floor(Math.random() * 10) },
-      { x: "04:00", y: Math.floor(Math.random() * 10) },
-      { x: "05:00", y: Math.floor(Math.random() * 10) },
-      { x: "06:00", y: Math.floor(Math.random() * 10) },
-      { x: "07:00", y: Math.floor(Math.random() * 10) },
-      { x: "08:00", y: Math.floor(Math.random() * 10) },
-      { x: "09:00", y: Math.floor(Math.random() * 10) },
-      { x: "10:00", y: Math.floor(Math.random() * 10) },
-      { x: "11:00", y: Math.floor(Math.random() * 10) },
-      { x: "12:00", y: Math.floor(Math.random() * 10) },
-    ];
+    listMeasures(totemId).then((measures) => {
+      if (measures) {
+        const graphValues = mapMeasuresToGraph(measures, measureName);
 
-    const apiData = () => Promise.resolve(data);
-
-    (async () => {
-      setWeeklyValues(await apiData());
-      setHourlyValues(await apiData());
-      setdailyValues(await apiData());
+        setHourlyValues(getValuesFromToday(graphValues));
+        setDailyValues(getValuesFromWeeks(graphValues));
+        setWeeklyValues(getValuesFromWeeks(graphValues, true));
+      }
       setIsLoading(false);
-    })();
+    });
   }, []);
 
   if (isLoading) return <></>;

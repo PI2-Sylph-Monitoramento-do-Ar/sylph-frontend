@@ -43,7 +43,7 @@ const LineChart = ({ timeOfMeasures, data, title, style }: LineChartData) => {
       <View style={styles.container}>
         <VictoryChart
           domain={{
-            x: [1, getXAxisMaxSize(timeOfMeasures)],
+            x: [1, data.length],
             y: [edgeValues.min - 0.5, edgeValues.max + 0.5],
           }}
           theme={VictoryTheme.material}
@@ -52,7 +52,7 @@ const LineChart = ({ timeOfMeasures, data, title, style }: LineChartData) => {
               allowZoom={false}
               zoomDimension="x"
               zoomDomain={{
-                x: [1, 6],
+                x: [1, 3],
               }}
             />
           }

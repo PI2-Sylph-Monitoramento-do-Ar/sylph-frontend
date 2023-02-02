@@ -12,6 +12,7 @@ const TOTAL_OF_MEASURES_IN_24H = (60 / 15) * 24;
 
 export interface TotemFromApiType extends Pick<TotemCardProps, "title"> {
   totemProps: TotemType;
+  totemId: string;
   coords: Omit<Location, "longitute"> & { longitude: number };
 }
 
@@ -37,9 +38,10 @@ export class TotemService implements ITotemService {
         mostRecentValues.push({
           totemProps,
           coords: {
-            longitude: totem.location.longitute,
+            longitude: totem.location.longitude,
             latitude: totem.location.latitude,
           },
+          totemId: totem.id,
           title: totem.name,
         });
       }
@@ -65,54 +67,64 @@ export class TotemService implements ITotemService {
       dateTime: new Date("01/01/1900"),
     } as TotemType;
 
-    let carbonMonoxideAverage = 0;
-    let nitrogenDioxideAverage = 0;
+    const carbonMonoxideValues: number[] = [];
+    const nitrogenDioxideValues: number[] = [];
 
     const _measures = measures?.slice(-TOTAL_OF_MEASURES_IN_24H);
 
     _measures?.forEach((measure) => {
       totemProps.temperature = getEdgeValues(
         totemProps.temperature,
-        Math.round(measure.temperature)
+        measure.temperature
       );
 
       totemProps.humidity = getEdgeValues(
         totemProps.humidity,
-        Math.round(measure.humidity)
+        measure.humidity
       );
+      if (measure.carbon_monoxide_level)
+        carbonMonoxideValues.push(measure?.carbon_monoxide_level);
 
-      carbonMonoxideAverage += measure.carbon_monoxide_level;
-      nitrogenDioxideAverage += measure.nitrogen_dioxide_level;
+      if (measure.nitrogen_dioxide_level)
+        nitrogenDioxideValues.push(measure.nitrogen_dioxide_level);
 
       const dateMeasured = new Date(measure.date_time);
 
       if (dateMeasured.getTime() > totemProps.dateTime.getTime()) {
         totemProps.dateTime = new Date(measure.date_time);
-        totemProps.humidity.current = Math.round(measure.humidity);
-        totemProps.temperature.current = Math.round(measure.temperature);
+
+        if (measure.humidity)
+          totemProps.humidity.current = Math.round(measure.humidity);
+
+        if (measure.temperature)
+          totemProps.temperature.current = Math.round(measure.temperature);
       }
     });
 
     let qualityLevel = 0;
 
-    const measuresLen = measures?.length || 0;
+    const carbonAverage =
+      carbonMonoxideValues.reduce((a, b) => a + b, 0) /
+      carbonMonoxideValues.length;
 
-    if (measuresLen > 0) {
-      const nitrogenDioxideFinal = airQualityCalculator(
-        nitrogenDioxideAverage / measuresLen,
-        "nitrogeDioxide"
-      );
+    const nitrogenAverage =
+      nitrogenDioxideValues.reduce((a, b) => a + b, 0) /
+      nitrogenDioxideValues.length;
 
-      const carbonMonoxideFinal = airQualityCalculator(
-        carbonMonoxideAverage / measuresLen,
-        "carbonMonoxide"
-      );
+    const nitrogenDioxideFinal = airQualityCalculator(
+      nitrogenAverage,
+      "nitrogeDioxide"
+    );
 
-      qualityLevel =
-        nitrogenDioxideFinal.qualityLevel < carbonMonoxideFinal.qualityLevel
-          ? nitrogenDioxideFinal.qualityLevel
-          : carbonMonoxideFinal.qualityLevel;
-    }
+    const carbonMonoxideFinal = airQualityCalculator(
+      carbonAverage,
+      "carbonMonoxide"
+    );
+
+    qualityLevel =
+      nitrogenDioxideFinal.qualityLevel < carbonMonoxideFinal.qualityLevel
+        ? nitrogenDioxideFinal.qualityLevel
+        : carbonMonoxideFinal.qualityLevel;
 
     totemProps.airQuality = qualityLevel;
 

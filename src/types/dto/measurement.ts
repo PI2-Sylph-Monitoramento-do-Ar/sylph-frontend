@@ -1,21 +1,16 @@
-import { Model } from "./model";
-
-export interface Measurement extends Model {
+export type Measurement = {
+  id?: string;
   totem_id: string;
-  temperature: number;
-  humidity: number;
   date_time: string;
-  carbon_monoxide_level: number;
-  nitrogen_dioxide_level: number;
-  particulate_matter_level: boolean;
-}
-
-export type MeasurementDto = {
-  totem_id: string;
-  temperature: number;
-  humidity: number;
-  date_time: Date;
-  carbon_monoxide_level: number;
-  nitrogen_dioxide_level: number;
-  particulate_matter_level: boolean;
+  temperature?: number;
+  humidity?: number;
+  carbon_monoxide_level?: number;
+  carbon_dioxide_level?: number;
+  nitrogen_dioxide_level?: number;
+  particulate_matter_level?: number;
+  pressure?: number;
+  altitude?: number;
+  ammonia?: number;
 };
+
+export type MeasurementKeys = keyof Measurement;
