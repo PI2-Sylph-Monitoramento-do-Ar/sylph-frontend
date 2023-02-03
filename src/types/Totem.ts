@@ -36,4 +36,5 @@ export interface TotemType {
   ammonia: IEdgeValues;
   pressure: number;
   altitude: number;
+
 }

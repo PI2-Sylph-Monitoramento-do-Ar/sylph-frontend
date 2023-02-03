@@ -147,7 +147,6 @@ const TotemScreen = ({ totemInfo }: IMoreInfoScreen) => {
             />
           ))}
         </View>
-
         <Text family="InterRegular" size="regular" style={styles.updateText}>
           {`Dados atualizados em: ${moment(
             totemInfo.totemProps.dateTime
