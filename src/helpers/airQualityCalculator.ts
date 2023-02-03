@@ -2,9 +2,15 @@ import { getCarbonMonoxideValues } from "./getCarbonMonoxideValues";
 import { getNitrogenDioxideValues } from "./getNitrogenDioxideValues";
 import { getParticlesValues } from "./getParticlesValues";
 
-type polluterType = "nitrogeDioxide" | "particles" | "carbonMonoxide";
+export type PolluterType = "nitrogeDioxide" | "particles" | "carbonMonoxide";
 
-export const airQualityCalculator = (value: number, polluter: polluterType) => {
+export const POLLUTERS_VALUES = [
+  "nitrogeDioxide",
+  "particles",
+  "carbonMonoxide",
+] as PolluterType[];
+
+export const airQualityCalculator = (value: number, polluter: PolluterType) => {
   const getQualityScores = polluterTableValues(polluter);
   const qualityScore = getQualityScores(value);
 
@@ -22,12 +28,10 @@ export const airQualityCalculator = (value: number, polluter: polluterType) => {
     qualityScore.initialScore +
     (scoreDiff / concentrationDiff) * currentConcentrationDiff;
 
-  const { qualityLevel } = getQualityScores(qualityValue);
-
-  return { score: qualityValue, qualityLevel };
+  return { score: qualityValue, qualityLevel: qualityScore.qualityLevel };
 };
 
-const polluterTableValues = (polluter: polluterType) => {
+const polluterTableValues = (polluter: PolluterType) => {
   switch (polluter) {
     case "carbonMonoxide":
       return getCarbonMonoxideValues;

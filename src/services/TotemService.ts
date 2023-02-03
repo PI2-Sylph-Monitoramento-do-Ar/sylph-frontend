@@ -1,12 +1,13 @@
 import { HttpsAdapterType } from "_/adapters/https/HttpsAdapter";
 import { TotemCardProps } from "_/components/TotemCard";
-import { airQualityCalculator } from "_/helpers/airQualityCalculator";
-import { getCarbonMonoxideValues } from "_/helpers/getCarbonMonoxideValues";
+import {
+  airQualityCalculator,
+  PolluterType,
+} from "_/helpers/airQualityCalculator";
 import { getEdgeValues } from "_/helpers/getEdgeValues";
-import { getParticlesValues } from "_/helpers/getParticlesValues";
 import { Measurement } from "_/types/dto/measurement";
 import { Location, Totem } from "_/types/dto/totem";
-import { TotemType } from "_/types/Totem";
+import { TotemType, EdgeValuesNamesArray } from "_/types/Totem";
 
 const TOTAL_OF_MEASURES_IN_24H = (60 / 15) * 24;
 
@@ -56,78 +57,96 @@ export class TotemService implements ITotemService {
 
     let totemProps = {
       locationName: "Gama",
-      temperature: {
-        min: Infinity,
-        max: -Infinity,
-      },
-      humidity: {
-        min: Infinity,
-        max: -Infinity,
-      },
+      temperature: { min: Infinity, max: -Infinity },
+      humidity: { min: Infinity, max: -Infinity },
+      particulate_matter_level: { min: Infinity, max: -Infinity },
+      carbon_dioxide_level: { min: Infinity, max: -Infinity },
+      carbon_monoxide_level: { min: Infinity, max: -Infinity },
+      ammonia: { min: Infinity, max: -Infinity },
+      nitrogen_dioxide_level: { min: Infinity, max: -Infinity },
       dateTime: new Date("01/01/1900"),
     } as TotemType;
 
     const carbonMonoxideValues: number[] = [];
     const nitrogenDioxideValues: number[] = [];
+    const particlesOnAirValues: number[] = [];
 
     const _measures = measures?.slice(-TOTAL_OF_MEASURES_IN_24H);
 
     _measures?.forEach((measure) => {
-      totemProps.temperature = getEdgeValues(
-        totemProps.temperature,
-        measure.temperature
-      );
+      totemProps = {
+        ...totemProps,
+        ...this.mapEdgeValues(totemProps, measure),
+      };
 
-      totemProps.humidity = getEdgeValues(
-        totemProps.humidity,
-        measure.humidity
-      );
       if (measure.carbon_monoxide_level)
         carbonMonoxideValues.push(measure?.carbon_monoxide_level);
 
       if (measure.nitrogen_dioxide_level)
         nitrogenDioxideValues.push(measure.nitrogen_dioxide_level);
 
+      if (measure.particulate_matter_level)
+        particlesOnAirValues.push(measure.particulate_matter_level);
+
       const dateMeasured = new Date(measure.date_time);
 
       if (dateMeasured.getTime() > totemProps.dateTime.getTime()) {
         totemProps.dateTime = new Date(measure.date_time);
 
-        if (measure.humidity)
-          totemProps.humidity.current = Math.round(measure.humidity);
-
-        if (measure.temperature)
-          totemProps.temperature.current = Math.round(measure.temperature);
+        totemProps = {
+          ...totemProps,
+          ...this.mapCurrentValues(totemProps, measure),
+        };
       }
     });
 
-    let qualityLevel = 0;
-
-    const carbonAverage =
-      carbonMonoxideValues.reduce((a, b) => a + b, 0) /
-      carbonMonoxideValues.length;
-
-    const nitrogenAverage =
-      nitrogenDioxideValues.reduce((a, b) => a + b, 0) /
-      nitrogenDioxideValues.length;
-
-    const nitrogenDioxideFinal = airQualityCalculator(
-      nitrogenAverage,
+    const nitrogenFinal = this.getAirQuality(
+      nitrogenDioxideValues,
       "nitrogeDioxide"
     );
 
-    const carbonMonoxideFinal = airQualityCalculator(
-      carbonAverage,
+    const carbonFinal = this.getAirQuality(
+      carbonMonoxideValues,
       "carbonMonoxide"
     );
 
-    qualityLevel =
-      nitrogenDioxideFinal.qualityLevel < carbonMonoxideFinal.qualityLevel
-        ? nitrogenDioxideFinal.qualityLevel
-        : carbonMonoxideFinal.qualityLevel;
+    const particlesFinal = this.getAirQuality(
+      particlesOnAirValues,
+      "particles"
+    );
 
-    totemProps.airQuality = qualityLevel;
+    totemProps.airQuality = Math.min(
+      nitrogenFinal.qualityLevel,
+      particlesFinal.qualityLevel,
+      carbonFinal.qualityLevel
+    );
+
+    totemProps.airQualityScore = Math.round(
+      Math.max(nitrogenFinal.score, particlesFinal.score, carbonFinal.score)
+    );
 
     return totemProps;
+  };
+
+  private mapEdgeValues = (totemProps: TotemType, measure: Measurement) => {
+    EdgeValuesNamesArray.forEach((value) => {
+      totemProps[value] = getEdgeValues(totemProps[value], measure[value]);
+    });
+
+    return totemProps;
+  };
+
+  private mapCurrentValues = (totemProps: TotemType, measure: Measurement) => {
+    EdgeValuesNamesArray.forEach((value) => {
+      if (measure[value])
+        totemProps[value].current = Math.round(measure[value]);
+    });
+
+    return totemProps;
+  };
+
+  private getAirQuality = (values: number[], polluterType: PolluterType) => {
+    const average = values.reduce((a, b) => a + b, 0) / values.length;
+    return airQualityCalculator(average, polluterType);
   };
 }

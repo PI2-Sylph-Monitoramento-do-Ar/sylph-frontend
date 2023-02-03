@@ -12,6 +12,12 @@ const styles = StyleSheet.create({
   resumeWrapper: {
     marginBottom: SIZES.MARGING_XX_LARGE,
   },
+  scrollView: {
+    width: "100%",
+  },
+  singleCard: {
+    marginBottom: SIZES.MARGING_X_LARGE,
+  },
   cards: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -36,6 +42,7 @@ const styles = StyleSheet.create({
   updateText: {
     color: COLORS.GREY_TERTIARY,
     fontSize: FONTS.FONT_SIZE_SMALL,
+    paddingBottom: SIZES.PADDING_XX_LARGE,
   },
 });
 
