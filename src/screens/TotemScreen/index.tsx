@@ -38,8 +38,8 @@ const TotemScreen = ({ totemInfo }: IMoreInfoScreen) => {
             provider={Platform.OS === "android" ? "google" : undefined}
             style={styles.map}
             initialRegion={{
-              latitude: totemInfo.coords.latitude,
-              longitude: totemInfo.coords.longitude,
+              latitude: totemInfo.coords?.latitude,
+              longitude: totemInfo.coords?.longitude,
               latitudeDelta: LATITUEDE_DELTA,
               longitudeDelta: LONGITUDE_DELTA,
             }}
@@ -50,8 +50,8 @@ const TotemScreen = ({ totemInfo }: IMoreInfoScreen) => {
               totemName={totemInfo.title}
               totemProps={totemInfo.totemProps}
               coordinate={{
-                latitude: totemInfo.coords.latitude,
-                longitude: totemInfo.coords.longitude,
+                latitude: totemInfo.coords?.latitude,
+                longitude: totemInfo.coords?.longitude,
               }}
             />
           </MapView>
@@ -59,10 +59,10 @@ const TotemScreen = ({ totemInfo }: IMoreInfoScreen) => {
       </View>
       <View style={styles.cards}>
         <AirQualityCard
-          dataCollected={totemInfo.totemProps.temperature.current}
+          dataCollected={Number(totemInfo.totemProps?.temperature?.current.toFixed(0)) ?? 0}
           minMaxValues={{
-            min: totemInfo.totemProps.temperature.min,
-            max: totemInfo.totemProps.temperature.max,
+            min: Number(totemInfo.totemProps?.temperature?.min.toFixed(0)) ?? 0,
+            max: Number(totemInfo.totemProps?.temperature?.max.toFixed(0)) ?? 0,
           }}
           titleProps={{ title: "Temperatura", iconName: "device-thermostat" }}
           dataType="%"
@@ -71,10 +71,10 @@ const TotemScreen = ({ totemInfo }: IMoreInfoScreen) => {
           }
         />
         <AirQualityCard
-          dataCollected={totemInfo.totemProps.humidity.current}
+          dataCollected={Number(totemInfo.totemProps?.humidity?.current.toFixed(0)) ?? 0}
           minMaxValues={{
-            min: totemInfo.totemProps.humidity.min,
-            max: totemInfo.totemProps.humidity.max,
+            min: Number(totemInfo.totemProps?.humidity?.min.toFixed(0)) ?? 0,
+            max: Number(totemInfo.totemProps?.humidity?.max.toFixed(0)) ?? 0,
           }}
           titleProps={{ title: "Umidade", iconName: "cloud" }}
           dataType="%"
@@ -83,7 +83,7 @@ const TotemScreen = ({ totemInfo }: IMoreInfoScreen) => {
       </View>
       <View style={[styles.cards]}>
         <AirQualityCard
-          dataCollected={totemInfo.totemProps.airQuality}
+          dataCollected={totemInfo.totemProps?.airQuality ?? 0}
           titleProps={{ title: "Qualidade do ar", iconName: "attractions" }}
           dataType="%"
           onPressBottomButton={() =>
@@ -91,9 +91,9 @@ const TotemScreen = ({ totemInfo }: IMoreInfoScreen) => {
           }
         />
       </View>
-      {/* <Text family="InterRegular" size="regular" style={styles.updateText}>
-        Dados atualizados em: 15/11/2022 12:15
-      </Text> */}
+      <Text family="InterRegular" size="regular" style={styles.updateText}>
+        {`Dados atualizados em: ${ new Date()}15/11/2022 12:15`}
+      </Text>
     </View>
   );
 };

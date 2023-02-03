@@ -55,13 +55,13 @@ const TotemCard = ({
           <View style={styles.valuesMeasuredBox}>
             <IconInfo
               family="InterExtraLight"
-              label={`${totemProps.temperature.current}ºC`}
+              label={`${totemProps.temperature.current ?? 0}ºC`}
               iconName="device-thermostat"
               style={styles.valueMeasuredInfo}
               color={COLORS.BLACK}
             />
             <IconInfo
-              label={`${totemProps.humidity.current}%`}
+              label={`${totemProps.humidity.current ?? 0}%`}
               iconName="cloud"
               family="InterExtraLight"
               color={COLORS.BLACK}

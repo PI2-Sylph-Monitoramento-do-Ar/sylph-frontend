@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { Button, Modal, Pressable, ScrollView, View, ViewStyle } from "react-native";
-import { Text, TotemCard, FloattingButton, Icon } from "_/components";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Modal, Pressable, View, ViewStyle } from "react-native";
+import { Text, Icon } from "_/components";
 import { useTotem } from "_/hooks/useTotem";
 import { TotemType } from "_/services/TotemService";
 
@@ -50,10 +49,26 @@ const TotemModal = ({
         latitude: totemLatitude,
         longitude: totemLongitude,
       },
-      totemProps: {} as TotemInfo,
+      totemProps: {
+        airQuality: 0,
+        dateTime: new Date(),
+        humidity: {
+          current: 0,
+          max: 0,
+          min: 0,
+        },
+        locationName: '',
+        temperature: {
+          current: 0,
+          max: 0,
+          min: 0,
+        }
+
+      } as TotemInfo,
       }
 
       await createTotem(totem);
+      setModalVisible(!modalVisible);
   }
 
   return (
