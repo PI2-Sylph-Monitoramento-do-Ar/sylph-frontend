@@ -127,8 +127,9 @@ const TotemScreen = ({ totemInfo }: IMoreInfoScreen) => {
             }}
             style={styles.singleCard}
           />
-          {mapToCard().map((data) => (
+          {mapToCard().map((data, i) => (
             <AirQualityCard
+              key={i}
               dataCollected={totemInfo.totemProps[data.valueName].current}
               minMaxValues={{
                 min: totemInfo.totemProps[data.valueName]?.min,

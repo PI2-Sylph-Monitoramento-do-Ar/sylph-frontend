@@ -5,12 +5,9 @@ import {
   PolluterType,
 } from "_/helpers/airQualityCalculator";
 import { getEdgeValues } from "_/helpers/getEdgeValues";
-
 import { Measurement } from "_/types/dto/measurement";
 import { Location, Totem } from "_/types/dto/totem";
 import { TotemType, EdgeValuesNamesArray } from "_/types/Totem";
-
-const TOTAL_OF_MEASURES_IN_24H = (60 / 15) * 24;
 
 const TOTAL_OF_MEASURES_IN_24H = (60 / 15) * 24;
 
@@ -74,7 +71,6 @@ export class TotemService implements ITotemService {
     const nitrogenDioxideValues: number[] = [];
     const particlesOnAirValues: number[] = [];
 
-
     const _measures = measures?.slice(-TOTAL_OF_MEASURES_IN_24H);
 
     _measures?.forEach((measure) => {
@@ -91,7 +87,6 @@ export class TotemService implements ITotemService {
 
       if (measure.particulate_matter_level)
         particlesOnAirValues.push(measure.particulate_matter_level);
-
 
       const dateMeasured = new Date(measure.date_time);
 

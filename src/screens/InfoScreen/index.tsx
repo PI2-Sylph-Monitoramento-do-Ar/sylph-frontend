@@ -49,41 +49,27 @@ const InfoScreen = () => {
   ] as { value: 0 | 1 | 2 | 3 | 4 | 5 | 6; text: string; title: string }[];
 
   return (
-    <View
-      style={[styles.container, { paddingTop: top, paddingHorizontal: 20 }]}
-    >
-      <Text
-        size="large"
-        family="InterBold"
-        style={{ textAlign: "center", marginBottom: 20 }}
-      >
+    <View style={[styles.container, { paddingTop: top }]}>
+      <Text size="large" family="InterBold" style={styles.title}>
         Qualidade do Ar
       </Text>
       <ScrollView>
         {colorInfo.map((data) => (
-          <View style={{ marginBottom: 20 }}>
-            <View style={{ flexDirection: "row", marginBottom: 20 }}>
+          <View style={styles.content}>
+            <View style={styles.infoContainer}>
               <View
-                style={{
-                  width: 40,
-                  height: 40,
-                  marginRight: 20,
-                  justifyContent: "center",
-                  backgroundColor: getQualityColor(data.value),
-                  borderRadius: 20,
-                }}
+                style={[
+                  styles.circle,
+                  {
+                    backgroundColor: getQualityColor(data.value),
+                  },
+                ]}
               >
-                <Text
-                  style={{
-                    textAlign: "center",
-                    color: "#FFF",
-                  }}
-                  family="InterBold"
-                >
+                <Text style={styles.circleText} family="InterBold">
                   {data.value}
                 </Text>
               </View>
-              <Text family="InterBold" style={{ alignSelf: "center" }}>
+              <Text family="InterBold" size="regular" style={styles.infoTitle}>
                 {data.title}
               </Text>
             </View>

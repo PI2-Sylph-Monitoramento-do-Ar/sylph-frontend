@@ -10,6 +10,7 @@ export const POLLUTERS_VALUES = [
   "carbonMonoxide",
 ] as PolluterType[];
 
+export const airQualityCalculator = (value: number, polluter: PolluterType) => {
   const getQualityScores = polluterTableValues(polluter);
   const qualityScore = getQualityScores(value);
 
@@ -31,7 +32,6 @@ export const POLLUTERS_VALUES = [
 };
 
 const polluterTableValues = (polluter: PolluterType) => {
-
   switch (polluter) {
     case "carbonMonoxide":
       return getCarbonMonoxideValues;
