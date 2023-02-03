@@ -14,7 +14,7 @@ export interface TotemCardProps {
   title: string;
   totemProps: TotemType;
   bottomButtonLabel?: string;
-  bottomButtonIcon: IconProps["name"];
+  bottomButtonIcon?: IconProps["name"];
   onPressBottomButton?: () => void;
   style?: ViewStyle;
 }
