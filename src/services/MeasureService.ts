@@ -3,6 +3,7 @@ import { Measurement } from "_/types/dto/measurement";
 
 export interface IMeasureService {
   listMeasures(totemId?: string): Promise<Measurement[] | undefined>;
+  downloadCsv(totemId: string): Promise<string | undefined>;
 }
 
 export class MeasureService implements IMeasureService {
@@ -20,5 +21,13 @@ export class MeasureService implements IMeasureService {
     );
 
     return measures;
+  }
+
+  async downloadCsv(totemId: string){
+    const csvData = await this.api.get<string>(
+      `/measurements/csv/${totemId}`
+    );
+
+    return csvData;
   }
 }

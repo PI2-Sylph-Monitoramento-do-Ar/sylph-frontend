@@ -4,6 +4,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Button, LineChart } from "_/components";
 import { SIZES } from "_/constants/sizes";
+import { saveCsvFile } from "_/helpers/saveCsvFile";
 import {
   getValuesFromToday,
   getValuesFromWeeks,
@@ -27,24 +28,25 @@ export interface IChartsScreen {
   title: string;
 }
 
-const ChartsScreen = ({ measureName, totemId }: IChartsScreen) => {
+const ChartsScreen = ({ measureName, totemId, title }: IChartsScreen) => {
   const { bottom } = useSafeAreaInsets();
   const { setIsLoading, isLoading } = useLoader();
   const { goBack } = useNavigate();
   const [hourlyValues, setHourlyValues] = useState<any>([]);
   const [dailyValues, setDailyValues] = useState<any>([]);
   const [weeklyValues, setWeeklyValues] = useState<any>([]);
-  const { listMeasures } = useMeasure();
+  const { listMeasures,  downloadCsv} = useMeasure();
 
   useEffect(() => {
     setIsLoading(true);
     listMeasures(totemId)
-      .then((measures) => {
-        if (measures) {
-          const graphValues = mapMeasuresToGraph(measures, measureName);
+      .then((measuresData) => {
+        if (measuresData) {
+          const graphValues = mapMeasuresToGraph(measuresData, measureName);
           setHourlyValues(getValuesFromToday(graphValues));
           setDailyValues(getValuesFromWeeks(graphValues));
           setWeeklyValues(getValuesFromWeeks(graphValues, true));
+
         }
         setIsLoading(false);
       })
@@ -55,6 +57,10 @@ const ChartsScreen = ({ measureName, totemId }: IChartsScreen) => {
       });
   }, []);
 
+  const handleExportData= async () => {
+    const data = await downloadCsv(totemId)
+    saveCsvFile(data!, title)
+  }
   if (isLoading) return <></>;
   return (
     <View style={[styles.container, { paddingBottom: bottom }]}>
@@ -79,7 +85,7 @@ const ChartsScreen = ({ measureName, totemId }: IChartsScreen) => {
           timeOfMeasures="weekly"
           style={{ alignSelf: "center", marginBottom: SIZES.MARGING_XX_LARGE }}
         />
-        <Button title="Exportar dados para planilha" />
+        <Button title="Exportar dados para planilha" onPress={handleExportData}/>
       </ScrollView>
     </View>
   );

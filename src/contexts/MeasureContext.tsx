@@ -8,6 +8,7 @@ export const MeasureContext = createContext<IMeasureContext>(
 
 interface IMeasureContext {
   listMeasures(totemId?: string): Promise<Measurement[] | undefined>;
+  downloadCsv(totemId: string): Promise<string | undefined>;
 }
 
 interface MeasureContextProviderParams {
@@ -23,8 +24,12 @@ export const MeasureContextProvider = ({
     return await measureService.listMeasures(totemId);
   };
 
+  const downloadCsv = async (totemId: string) => {
+    return await measureService.downloadCsv(totemId);
+  };
+
   return (
-    <MeasureContext.Provider value={{ listMeasures }}>
+    <MeasureContext.Provider value={{ listMeasures, downloadCsv }}>
       {children}
     </MeasureContext.Provider>
   );
