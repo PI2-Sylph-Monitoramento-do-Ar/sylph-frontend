@@ -70,6 +70,25 @@ export class TotemService implements ITotemService {
       dateTime: new Date("01/01/1900"),
     } as TotemInfo;
 
+
+    if (!measures?.length) {
+      totemProps = {
+        locationName: "Gama",
+        temperature: {
+          current: 0,
+          min: 0,
+          max:  0,
+        },
+        humidity: {
+          current: 0,
+          min: 0,
+          max:  0,
+        },
+        dateTime: new Date("01/01/1900"),
+      } as TotemInfo;
+  
+    }
+
     measures?.forEach((measure) => {
       if (measure.temperature >= totemProps.temperature.max) {
         totemProps.temperature.max = measure.temperature;
