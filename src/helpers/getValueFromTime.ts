@@ -10,7 +10,8 @@ const getValuesFromToday = (graphValues: GraphValues[]) => {
 
   graphValues.forEach((value) => {
     const measureDate = moment(value.x).utc().format(DATE_FORMAT);
-    if (moment(measureDate).isAfter(yesterday)) {
+
+    if (moment(measureDate).utc().isAfter(yesterday)) {
       measuresFromToday.push({
         x: moment(value.x).format("DD/MM - HH:mm"),
         y: value.y,

@@ -12,29 +12,9 @@ const InfoScreen = () => {
 
   const colorInfo = [
     {
-      value: 6,
-      title: "Bom",
-      text: "A qualidade do ar é considerada satisfatória e a poluição do ar representa pouco ou nenhum risco.",
-    },
-    {
-      value: 5,
-      title: "Moderado",
-      text: "A qualidade do ar é aceitável; entretanto, para alguns poluentes pode haver preocupação moderada com a saúde para um número muito pequeno de pessoas excepcionalmente sensíveis à poluição do ar.",
-    },
-    {
-      value: 4,
-      title: "Inadequado",
-      text: "Membros de grupos sensíveis podem apresentar problemas de saúde. O público em geral não é susceptível a ser afetado.",
-    },
-    {
-      value: 3,
-      title: "Ruim",
-      text: "Todos podem apresentar problemas de saúde: membros de grupos sensíveis podem apresentar problemas mais sérios.",
-    },
-    {
-      value: 2,
-      title: "Muito Ruim",
-      text: "Avisos de saúde de condições de emergência. Toda a população é susceptível.",
+      value: 0,
+      title: "Crítica",
+      text: "Alerta de saúde: todos podem apresentar efeitos sérios à saúde",
     },
     {
       value: 1,
@@ -42,9 +22,30 @@ const InfoScreen = () => {
       text: "Perigoso para toda a população. Muito perigoso.",
     },
     {
-      value: 0,
-      title: "Crítica",
-      text: "Alerta de saúde: todos podem apresentar efeitos sérios à saúde",
+      value: 2,
+      title: "Muito Ruim",
+      text: "Avisos de saúde de condições de emergência. Toda a população é susceptível.",
+    },
+    {
+      value: 3,
+      title: "Ruim",
+      text: "Todos podem apresentar problemas de saúde: membros de grupos sensíveis podem apresentar problemas mais sérios.",
+    },
+    {
+      value: 4,
+      title: "Inadequado",
+      text: "Membros de grupos sensíveis podem apresentar problemas de saúde. O público em geral não é susceptível a ser afetado.",
+    },
+    {
+      value: 5,
+      title: "Moderado",
+      text: "A qualidade do ar é aceitável; entretanto, para alguns poluentes pode haver preocupação moderada com a saúde para um número muito pequeno de pessoas excepcionalmente sensíveis à poluição do ar.",
+    },
+
+    {
+      value: 6,
+      title: "Bom",
+      text: "A qualidade do ar é considerada satisfatória e a poluição do ar representa pouco ou nenhum risco.",
     },
   ] as { value: 0 | 1 | 2 | 3 | 4 | 5 | 6; text: string; title: string }[];
 
@@ -55,7 +56,7 @@ const InfoScreen = () => {
       </Text>
       <ScrollView>
         {colorInfo.map((data) => (
-          <View style={styles.content}>
+          <View style={styles.content} key={data.value}>
             <View style={styles.infoContainer}>
               <View
                 style={[

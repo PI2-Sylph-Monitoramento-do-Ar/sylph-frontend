@@ -36,96 +36,103 @@ export class TotemService implements ITotemService {
     if (totems) {
       for (const totem of totems) {
         const totemProps = await this.getTotemProps(totem);
-        mostRecentValues.push({
-          totemProps,
-          coords: {
-            longitude: totem.location.longitude,
-            latitude: totem.location.latitude,
-          },
-          totemId: totem.id,
-          title: totem.name,
-        });
+        if (totemProps) {
+          mostRecentValues.push({
+            totemProps,
+            coords: {
+              longitude: totem.location.longitude,
+              latitude: totem.location.latitude,
+            },
+            totemId: totem.id,
+            title: totem.name,
+          });
+        }
       }
     }
+
     return mostRecentValues;
   }
 
-  private getTotemProps = async (totem: Totem): Promise<TotemType> => {
+  private getTotemProps = async (
+    totem: Totem
+  ): Promise<TotemType | undefined> => {
     const measures = await this.api.get<Array<Measurement>>(
       `/measurements?totem_id=${totem.id}`
     );
 
-    let totemProps = {
-      locationName: "Gama",
-      temperature: { min: Infinity, max: -Infinity },
-      humidity: { min: Infinity, max: -Infinity },
-      particulate_matter_level: { min: Infinity, max: -Infinity },
-      carbon_dioxide_level: { min: Infinity, max: -Infinity },
-      carbon_monoxide_level: { min: Infinity, max: -Infinity },
-      ammonia: { min: Infinity, max: -Infinity },
-      nitrogen_dioxide_level: { min: Infinity, max: -Infinity },
-      dateTime: new Date("01/01/1900"),
-    } as TotemType;
+    if (measures) {
+      let totemProps = {
+        locationName: "Gama",
+        temperature: { min: Infinity, max: -Infinity },
+        humidity: { min: Infinity, max: -Infinity },
+        particulate_matter_level: { min: Infinity, max: -Infinity },
+        carbon_dioxide_level: { min: Infinity, max: -Infinity },
+        carbon_monoxide_level: { min: Infinity, max: -Infinity },
+        ammonia: { min: Infinity, max: -Infinity },
+        nitrogen_dioxide_level: { min: Infinity, max: -Infinity },
+        dateTime: new Date("01/01/1900"),
+      } as TotemType;
 
-    const carbonMonoxideValues: number[] = [];
-    const nitrogenDioxideValues: number[] = [];
-    const particlesOnAirValues: number[] = [];
+      const carbonMonoxideValues: number[] = [];
+      const nitrogenDioxideValues: number[] = [];
+      const particlesOnAirValues: number[] = [];
 
-    const _measures = measures?.slice(-TOTAL_OF_MEASURES_IN_24H);
+      const _measures = measures.slice(-TOTAL_OF_MEASURES_IN_24H);
 
-    _measures?.forEach((measure) => {
-      totemProps = {
-        ...totemProps,
-        ...this.mapEdgeValues(totemProps, measure),
-      };
-
-      if (measure.carbon_monoxide_level)
-        carbonMonoxideValues.push(measure?.carbon_monoxide_level);
-
-      if (measure.nitrogen_dioxide_level)
-        nitrogenDioxideValues.push(measure.nitrogen_dioxide_level);
-
-      if (measure.particulate_matter_level)
-        particlesOnAirValues.push(measure.particulate_matter_level);
-
-      const dateMeasured = new Date(measure.date_time);
-
-      if (dateMeasured.getTime() > totemProps.dateTime.getTime()) {
-        totemProps.dateTime = new Date(measure.date_time);
-
+      _measures?.forEach((measure) => {
         totemProps = {
           ...totemProps,
-          ...this.mapCurrentValues(totemProps, measure),
+          ...this.mapEdgeValues(totemProps, measure),
         };
-      }
-    });
 
-    const nitrogenFinal = this.getAirQuality(
-      nitrogenDioxideValues,
-      "nitrogeDioxide"
-    );
+        if (measure.carbon_monoxide_level)
+          carbonMonoxideValues.push(measure?.carbon_monoxide_level);
 
-    const carbonFinal = this.getAirQuality(
-      carbonMonoxideValues,
-      "carbonMonoxide"
-    );
+        if (measure.nitrogen_dioxide_level)
+          nitrogenDioxideValues.push(measure.nitrogen_dioxide_level);
 
-    const particlesFinal = this.getAirQuality(
-      particlesOnAirValues,
-      "particles"
-    );
+        if (measure.particulate_matter_level)
+          particlesOnAirValues.push(measure.particulate_matter_level);
 
-    totemProps.airQuality = Math.min(
-      nitrogenFinal.qualityLevel,
-      particlesFinal.qualityLevel,
-      carbonFinal.qualityLevel
-    );
+        const dateMeasured = new Date(measure.date_time);
 
-    totemProps.airQualityScore = Math.round(
-      Math.max(nitrogenFinal.score, particlesFinal.score, carbonFinal.score)
-    );
+        if (dateMeasured.getTime() > totemProps.dateTime.getTime()) {
+          totemProps.dateTime = new Date(measure.date_time);
 
-    return totemProps;
+          totemProps = {
+            ...totemProps,
+            ...this.mapCurrentValues(totemProps, measure),
+          };
+        }
+      });
+
+      const nitrogenFinal = this.getAirQuality(
+        nitrogenDioxideValues,
+        "nitrogeDioxide"
+      );
+
+      const carbonFinal = this.getAirQuality(
+        carbonMonoxideValues,
+        "carbonMonoxide"
+      );
+
+      const particlesFinal = this.getAirQuality(
+        particlesOnAirValues,
+        "particles"
+      );
+
+      totemProps.airQuality = Math.min(
+        nitrogenFinal.qualityLevel,
+        particlesFinal.qualityLevel,
+        carbonFinal.qualityLevel
+      );
+
+      totemProps.airQualityScore = Math.round(
+        Math.max(nitrogenFinal.score, particlesFinal.score, carbonFinal.score)
+      );
+
+      return totemProps;
+    }
   };
 
   private mapEdgeValues = (totemProps: TotemType, measure: Measurement) => {
