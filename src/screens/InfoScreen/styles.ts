@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
   },
   title: {
     textAlign: "center",
-    marginVertical: SIZES.MARGING_X_LARGE,
+    marginVertical: SIZES.MARGING_REGULAR,
     justifyContent: "center",
     alignSelf: "center",
   },

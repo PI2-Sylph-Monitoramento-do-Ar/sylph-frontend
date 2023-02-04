@@ -1,5 +1,5 @@
 import React from "react";
-import { Animated, View } from "react-native";
+import { Animated, TouchableOpacity, View } from "react-native";
 import { MapMarkerProps, Marker } from "react-native-maps";
 import { getQualityColorWithOpacity } from "_/helpers/getColor";
 import { TotemType } from "_/types/Totem";

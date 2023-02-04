@@ -7,7 +7,6 @@ interface TotemContextProps {
 }
 
 interface TotemContextParams {
-  isLoading: boolean;
   totems: TotemFromApiType[];
   listTotem: () => Promise<TotemFromApiType[]>;
 }
@@ -20,18 +19,16 @@ const TotemContextProvider = ({
   children,
   totemService,
 }: TotemContextProps) => {
-  const [isLoading, setIsLoading] = useState(true);
   const [totems, setTotems] = useState<TotemFromApiType[]>([]);
 
   const listTotem = async () => {
     const totems = await totemService.listTotem();
     setTotems(totems);
-    setIsLoading(false);
     return totems;
   };
 
   return (
-    <TotemContext.Provider value={{ totems, listTotem, isLoading }}>
+    <TotemContext.Provider value={{ totems, listTotem }}>
       {children}
     </TotemContext.Provider>
   );

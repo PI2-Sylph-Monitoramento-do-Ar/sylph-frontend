@@ -1,4 +1,3 @@
-import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
@@ -10,7 +9,9 @@ import {
   getValuesFromWeeks,
 } from "_/helpers/getValueFromTime";
 import { mapMeasuresToGraph } from "_/helpers/mapMeasuresToGraph";
+import { useLoader } from "_/hooks/useLoader";
 import { useMeasure } from "_/hooks/useMeasure";
+import { useNavigate } from "_/hooks/useNavigate";
 import { MeasurementKeys } from "_/types/dto/measurement";
 
 import styles from "./styles";
@@ -28,23 +29,30 @@ export interface IChartsScreen {
 
 const ChartsScreen = ({ measureName, totemId }: IChartsScreen) => {
   const { bottom } = useSafeAreaInsets();
-  const [isLoading, setIsLoading] = useState(true);
+  const { setIsLoading, isLoading } = useLoader();
+  const { goBack } = useNavigate();
   const [hourlyValues, setHourlyValues] = useState<any>([]);
   const [dailyValues, setDailyValues] = useState<any>([]);
   const [weeklyValues, setWeeklyValues] = useState<any>([]);
   const { listMeasures } = useMeasure();
 
   useEffect(() => {
-    listMeasures(totemId).then((measures) => {
-      if (measures) {
-        const graphValues = mapMeasuresToGraph(measures, measureName);
-
-        setHourlyValues(getValuesFromToday(graphValues));
-        setDailyValues(getValuesFromWeeks(graphValues));
-        setWeeklyValues(getValuesFromWeeks(graphValues, true));
-      }
-      setIsLoading(false);
-    });
+    setIsLoading(true);
+    listMeasures(totemId)
+      .then((measures) => {
+        if (measures) {
+          const graphValues = mapMeasuresToGraph(measures, measureName);
+          setHourlyValues(getValuesFromToday(graphValues));
+          setDailyValues(getValuesFromWeeks(graphValues));
+          setWeeklyValues(getValuesFromWeeks(graphValues, true));
+        }
+        setIsLoading(false);
+      })
+      .catch(() => {
+        alert("Não foi possível recuperar dados do servidor");
+        setIsLoading(false);
+        goBack();
+      });
   }, []);
 
   if (isLoading) return <></>;
