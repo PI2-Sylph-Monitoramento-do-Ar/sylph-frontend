@@ -70,7 +70,6 @@ export class TotemService implements ITotemService {
       dateTime: new Date("01/01/1900"),
     } as TotemInfo;
 
-
     if (!measures?.length) {
       totemProps = {
         locationName: "Gama",
@@ -110,8 +109,8 @@ export class TotemService implements ITotemService {
 
       if (currentDate.getTime() > totemProps.dateTime.getTime()) {
         totemProps.dateTime = new Date(measure.date_time);
-        totemProps.humidity.current = measure.humidity;
-        totemProps.temperature.current = measure.temperature;
+        totemProps.humidity.current = measure.humidity ?? 0;
+        totemProps.temperature.current = measure.temperature ?? 0;
       }
     });
 

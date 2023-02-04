@@ -59,10 +59,10 @@ const TotemScreen = ({ totemInfo }: IMoreInfoScreen) => {
       </View>
       <View style={styles.cards}>
         <AirQualityCard
-          dataCollected={Number(totemInfo.totemProps?.temperature?.current.toFixed(0)) ?? 0}
+          dataCollected={Number(totemInfo.totemProps?.temperature?.current?.toFixed(0)) ?? 0}
           minMaxValues={{
-            min: Number(totemInfo.totemProps?.temperature?.min.toFixed(0)) ?? 0,
-            max: Number(totemInfo.totemProps?.temperature?.max.toFixed(0)) ?? 0,
+            min: Number(totemInfo.totemProps?.temperature?.min?.toFixed(0)) ?? 0,
+            max: Number(totemInfo.totemProps?.temperature?.max?.toFixed(0)) ?? 0,
           }}
           titleProps={{ title: "Temperatura", iconName: "device-thermostat" }}
           dataType="%"
@@ -71,10 +71,10 @@ const TotemScreen = ({ totemInfo }: IMoreInfoScreen) => {
           }
         />
         <AirQualityCard
-          dataCollected={Number(totemInfo.totemProps?.humidity?.current.toFixed(0)) ?? 0}
+          dataCollected={Number(totemInfo.totemProps?.humidity?.current?.toFixed(0)) ?? 0}
           minMaxValues={{
-            min: Number(totemInfo.totemProps?.humidity?.min.toFixed(0)) ?? 0,
-            max: Number(totemInfo.totemProps?.humidity?.max.toFixed(0)) ?? 0,
+            min: Number(totemInfo.totemProps?.humidity?.min?.toFixed(0)) ?? 0,
+            max: Number(totemInfo.totemProps?.humidity?.max?.toFixed(0)) ?? 0,
           }}
           titleProps={{ title: "Umidade", iconName: "cloud" }}
           dataType="%"
