@@ -4,6 +4,7 @@ import {
   airQualityCalculator,
   PolluterType,
 } from "_/helpers/airQualityCalculator";
+import { getEdgeValues } from "_/helpers/getEdgeValues";
 import { MeasurementDto } from "_/types/dto/measurement";
 import { Location, TotemDTO } from "_/types/dto/totem";
 import { EdgeValuesNamesArray, TotemInfo } from "_/types/Totem";
@@ -32,7 +33,6 @@ export class TotemService implements ITotemService {
 
   async listTotem() {
     const totems = await this.api.get<Array<TotemDTO>>("/totems");
-
     let mostRecentValues: Array<TotemType> = [];
 
     if (totems) {
@@ -53,6 +53,7 @@ export class TotemService implements ITotemService {
         }
       }
     }
+
     return mostRecentValues;
   }
 
@@ -139,7 +140,6 @@ export class TotemService implements ITotemService {
 
   private mapEdgeValues = (totemProps: TotemInfo, measure: MeasurementDto) => {
     EdgeValuesNamesArray.forEach((value) => {
-      //@ts-ignore
       totemProps[value] = getEdgeValues(totemProps[value], measure[value]);
     });
 
@@ -152,8 +152,7 @@ export class TotemService implements ITotemService {
   ) => {
     EdgeValuesNamesArray.forEach((value) => {
       if (measure[value])
-        //@ts-ignore
-        totemProps[value].current = Math.round(measure[value]);
+        totemProps[value].current = Math.round(measure[value] as number);
     });
 
     return totemProps;

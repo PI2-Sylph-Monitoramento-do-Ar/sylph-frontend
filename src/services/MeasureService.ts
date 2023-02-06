@@ -1,8 +1,8 @@
 import { HttpsAdapterType } from "_/adapters/https/HttpsAdapter";
-import { Measurement } from "_/types/dto/measurement";
+import { MeasurementDto } from "_/types/dto/measurement";
 
 export interface IMeasureService {
-  listMeasures(totemId?: string): Promise<Measurement[] | undefined>;
+  listMeasures(totemId?: string): Promise<MeasurementDto[] | undefined>;
   downloadCsv(totemId: string): Promise<string | undefined>;
 }
 
@@ -16,17 +16,15 @@ export class MeasureService implements IMeasureService {
   async listMeasures(totemId?: string) {
     const _totemId = totemId ? `?totem_id=${totemId}` : "";
 
-    const measures = await this.api.get<Array<Measurement>>(
+    const measures = await this.api.get<Array<MeasurementDto>>(
       `/measurements${_totemId}`
     );
 
     return measures;
   }
 
-  async downloadCsv(totemId: string){
-    const csvData = await this.api.get<string>(
-      `/measurements/csv/${totemId}`
-    );
+  async downloadCsv(totemId: string) {
+    const csvData = await this.api.get<string>(`/measurements/csv/${totemId}`);
 
     return csvData;
   }

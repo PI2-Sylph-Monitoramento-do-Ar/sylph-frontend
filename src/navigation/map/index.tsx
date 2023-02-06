@@ -45,7 +45,7 @@ export const MapStack = () => {
           return (
             <ChartsScreen
               title={route.params.title}
-              totemId={route.params.totemId}
+              id={route.params.id}
               measureName={route.params.measureName}
             />
           );

@@ -140,7 +140,7 @@ const TotemScreen = ({ totemInfo }: IMoreInfoScreen) => {
               onPressBottomButton={() =>
                 navigate("Charts", {
                   title: data.title,
-                  totemId: totemInfo.id,
+                  id: totemInfo.id,
                   measureName: data.valueName,
                 })
               }

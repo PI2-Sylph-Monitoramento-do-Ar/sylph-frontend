@@ -1,9 +1,9 @@
 import { GraphValues } from "_/screens/ChartsScreen";
-import { Measurement, MeasurementKeys } from "_/types/dto/measurement";
+import { MeasurementDto, MeasurementDtoKeys } from "_/types/dto/measurement";
 
 export const mapMeasuresToGraph = (
-  measures: Measurement[],
-  key: MeasurementKeys
+  measures: MeasurementDto[],
+  key: MeasurementDtoKeys
 ): GraphValues[] => {
   const _measures = measures.map((measure) => {
     return { x: measure.date_time, y: measure[key] };

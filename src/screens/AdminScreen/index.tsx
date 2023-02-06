@@ -12,7 +12,14 @@ import TotemModal from "_/components/TotemModal";
 const TotemScreen = () => {
   const { top } = useSafeAreaInsets();
   const [openModal, setOpenModal] = useState<boolean>(false);
-  const { totems } = useTotem();
+  const { listTotem } = useTotem();
+  const [totems, setTotems] = useState<TotemType[]>([]);
+
+  useEffect(() => {
+    listTotem().then((totemsApi) => {
+      setTotems(totemsApi);
+    });
+  }, []);
 
   const safeArea = { paddingTop: top } as ViewStyle;
 
