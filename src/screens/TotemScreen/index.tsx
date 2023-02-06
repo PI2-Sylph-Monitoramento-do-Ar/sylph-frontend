@@ -130,10 +130,10 @@ const TotemScreen = ({ totemInfo }: IMoreInfoScreen) => {
           {mapToCard().map((data, i) => (
             <AirQualityCard
               key={i}
-              dataCollected={totemInfo.totemProps[data.valueName].current}
+              dataCollected={totemInfo.totemProps[data.valueName].current ?? 0}
               minMaxValues={{
-                min: totemInfo.totemProps[data.valueName]?.min,
-                max: totemInfo.totemProps[data.valueName]?.max,
+                min: totemInfo.totemProps[data.valueName]?.min !== Infinity ? totemInfo.totemProps[data.valueName]?.min : 0,
+                max: totemInfo.totemProps[data.valueName]?.max !== -Infinity ? totemInfo.totemProps[data.valueName]?.max : 0,
               }}
               titleProps={{ title: data.title, iconName: data.iconName }}
               dataType={data.dataType}

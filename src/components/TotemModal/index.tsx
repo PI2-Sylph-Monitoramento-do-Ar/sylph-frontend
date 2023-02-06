@@ -44,7 +44,7 @@ const TotemModal = ({
       id: uuidv4(),
       name: totemName,
       macAddress,
-      title: macAddress,
+      title: totemName,
       coords: {
         latitude: totemLatitude,
         longitude: totemLongitude,
