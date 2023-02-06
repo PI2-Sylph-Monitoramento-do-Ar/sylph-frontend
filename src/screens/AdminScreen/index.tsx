@@ -37,8 +37,22 @@ const TotemScreen = () => {
             );
         })}
       </ScrollView>
-      <FloattingButton onPress={() => { setOpenModal(true) }} title="Totem" iconName="add" style={styles.newTotem} isAbsolute={true} />
-      {openModal && <TotemModal title="Novo Totem" modalVisible={openModal} setModalVisible={setOpenModal}/>}
+      <FloattingButton
+        onPress={() => {
+          setOpenModal(true);
+        }}
+        title="Totem"
+        iconName="add"
+        style={styles.newTotem}
+        isAbsolute={true}
+      />
+      {openModal && (
+        <TotemModal
+          title="Novo Totem"
+          modalVisible={openModal}
+          setModalVisible={setOpenModal}
+        />
+      )}
     </View>
   );
 };

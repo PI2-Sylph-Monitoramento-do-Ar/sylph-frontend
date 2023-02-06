@@ -4,6 +4,7 @@ import { COLORS } from "_/constants/colors";
 import { TEXTS } from "_/constants/texts";
 import { getQualityColor } from "_/helpers/getColor";
 import { TotemInfo } from "_/types/Totem";
+import { IconProps } from "../Icon";
 import IconInfo from "../IconInfo";
 import Text from "../Text";
 
@@ -13,6 +14,7 @@ export interface TotemCardProps {
   title: string;
   totemProps: TotemInfo;
   bottomButtonLabel?: string;
+  bottomButtonIcon?: IconProps["name"];
   onPressBottomButton?: () => void;
   style?: ViewStyle;
 }
@@ -21,6 +23,7 @@ const TotemCard = ({
   title,
   totemProps,
   bottomButtonLabel,
+  bottomButtonIcon,
   onPressBottomButton,
   style,
 }: TotemCardProps) => {
@@ -38,7 +41,7 @@ const TotemCard = ({
             color={COLORS.BLACK_WITH_OPACITY}
             size="small"
           >
-            de 10
+            de 6
           </Text>
         </View>
         <View>
@@ -75,7 +78,7 @@ const TotemCard = ({
       >
         <IconInfo
           label={bottomButtonLabel || TEXTS.MORE_INFO}
-          iconName="edit"
+          iconName={bottomButtonIcon || "chevron-right"}
           iconPosition="right"
           style={styles.moreInfo}
           color={COLORS.PRIMARY_COLOR}

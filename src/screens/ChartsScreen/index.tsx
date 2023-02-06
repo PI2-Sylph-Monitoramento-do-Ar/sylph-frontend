@@ -2,51 +2,65 @@ import React, { useEffect, useState } from "react";
 import { View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Button, LineChart, Text } from "_/components";
+import { Button, LineChart } from "_/components";
 import { SIZES } from "_/constants/sizes";
+import { saveCsvFile } from "_/helpers/saveCsvFile";
+import {
+  getValuesFromToday,
+  getValuesFromWeeks,
+} from "_/helpers/getValueFromTime";
+import { mapMeasuresToGraph } from "_/helpers/mapMeasuresToGraph";
+import { useLoader } from "_/hooks/useLoader";
+import { useMeasure } from "_/hooks/useMeasure";
+import { useNavigate } from "_/hooks/useNavigate";
+import { MeasurementKeys } from "_/types/dto/measurement";
 
 import styles from "./styles";
 
-const PAGE_TITLE = "Temperatura";
+export interface GraphValues {
+  x: string;
+  y: number;
+}
 
-interface IChartsScreen {
+export interface IChartsScreen {
+  measureName: MeasurementKeys;
+  totemId: string;
   title: string;
 }
 
-const ChartsScreen = ({ title }: IChartsScreen) => {
-  const { top, bottom } = useSafeAreaInsets();
-  const [isLoading, setIsLoading] = useState(true);
+const ChartsScreen = ({ measureName, totemId, title }: IChartsScreen) => {
+  const { bottom } = useSafeAreaInsets();
+  const { setIsLoading, isLoading } = useLoader();
+  const { goBack } = useNavigate();
   const [hourlyValues, setHourlyValues] = useState<any>([]);
-  const [dailyValues, setdailyValues] = useState<any>([]);
+  const [dailyValues, setDailyValues] = useState<any>([]);
   const [weeklyValues, setWeeklyValues] = useState<any>([]);
+  const { listMeasures,  downloadCsv} = useMeasure();
 
   useEffect(() => {
-    const data = [
-      { x: "00:00", y: Math.floor(Math.random() * 10) },
-      { x: "01:00", y: Math.floor(Math.random() * 10) },
-      { x: "02:00", y: Math.floor(Math.random() * 10) },
-      { x: "03:00", y: Math.floor(Math.random() * 10) },
-      { x: "04:00", y: Math.floor(Math.random() * 10) },
-      { x: "05:00", y: Math.floor(Math.random() * 10) },
-      { x: "06:00", y: Math.floor(Math.random() * 10) },
-      { x: "07:00", y: Math.floor(Math.random() * 10) },
-      { x: "08:00", y: Math.floor(Math.random() * 10) },
-      { x: "09:00", y: Math.floor(Math.random() * 10) },
-      { x: "10:00", y: Math.floor(Math.random() * 10) },
-      { x: "11:00", y: Math.floor(Math.random() * 10) },
-      { x: "12:00", y: Math.floor(Math.random() * 10) },
-    ];
+    setIsLoading(true);
+    listMeasures(totemId)
+      .then((measuresData) => {
+        if (measuresData) {
+          const graphValues = mapMeasuresToGraph(measuresData, measureName);
+          setHourlyValues(getValuesFromToday(graphValues));
+          setDailyValues(getValuesFromWeeks(graphValues));
+          setWeeklyValues(getValuesFromWeeks(graphValues, true));
 
-    const apiData = () => Promise.resolve(data);
-
-    (async () => {
-      setWeeklyValues(await apiData());
-      setHourlyValues(await apiData());
-      setdailyValues(await apiData());
-      setIsLoading(false);
-    })();
+        }
+        setIsLoading(false);
+      })
+      .catch(() => {
+        alert("Não foi possível recuperar dados do servidor");
+        setIsLoading(false);
+        goBack();
+      });
   }, []);
 
+  const handleExportData= async () => {
+    const data = await downloadCsv(totemId)
+    saveCsvFile(data!, title)
+  }
   if (isLoading) return <></>;
   return (
     <View style={[styles.container, { paddingBottom: bottom }]}>
@@ -71,7 +85,7 @@ const ChartsScreen = ({ title }: IChartsScreen) => {
           timeOfMeasures="weekly"
           style={{ alignSelf: "center", marginBottom: SIZES.MARGING_XX_LARGE }}
         />
-        <Button title="Exportar dados para planilha" />
+        <Button title="Exportar dados para planilha" onPress={handleExportData}/>
       </ScrollView>
     </View>
   );

@@ -9,6 +9,10 @@ import { Platform } from "react-native";
 
 import styles from "./styles";
 import { useNavigate } from "_/hooks/useNavigate";
+import { EdgeValuesTypes } from "_/types/Totem";
+import { ScrollView } from "react-native-gesture-handler";
+import { IconProps } from "_/components/Icon";
+import moment from "moment";
 
 const ZOOM_VALUE = 1;
 const LATITUEDE_DELTA = 0.09;
@@ -22,6 +26,58 @@ const TotemScreen = ({ totemInfo }: IMoreInfoScreen) => {
   const { navigate } = useNavigate();
 
   const safeArea = { paddingBottom: bottom, paddingTop: top } as ViewStyle;
+
+  const mapToCard = () => {
+    return [
+      {
+        valueName: "humidity",
+        title: "Umidade",
+        iconName: "cloud",
+        dataType: "%",
+      },
+      {
+        valueName: "temperature",
+        title: "Temperature",
+        iconName: "device-thermostat",
+        dataType: "ºC",
+      },
+      {
+        valueName: "ammonia",
+        title: "NH3",
+        iconName: "device-thermostat",
+        dataType: "ppm",
+      },
+      {
+        valueName: "carbon_dioxide_level",
+        title: "CO2",
+        iconName: "device-thermostat",
+        dataType: "ppm",
+      },
+      {
+        valueName: "carbon_monoxide_level",
+        title: "CO",
+        dataType: "ppm",
+        iconName: "device-thermostat",
+      },
+      {
+        valueName: "nitrogen_dioxide_level",
+        title: "NO2",
+        iconName: "device-thermostat",
+        dataType: "ppm",
+      },
+      {
+        valueName: "particulate_matter_level",
+        title: "Partículas finas",
+        dataType: "ppm",
+        iconName: "device-thermostat",
+      },
+    ] as {
+      valueName: EdgeValuesTypes;
+      title: string;
+      iconName: IconProps["name"];
+      dataType?: string;
+    }[];
+  };
 
   return (
     <View style={[styles.container, safeArea]}>
@@ -57,43 +113,47 @@ const TotemScreen = ({ totemInfo }: IMoreInfoScreen) => {
           </MapView>
         </View>
       </View>
-      <View style={styles.cards}>
-        <AirQualityCard
-          dataCollected={Number(totemInfo.totemProps?.temperature?.current.toFixed(0)) ?? 0}
-          minMaxValues={{
-            min: Number(totemInfo.totemProps?.temperature?.min.toFixed(0)) ?? 0,
-            max: Number(totemInfo.totemProps?.temperature?.max.toFixed(0)) ?? 0,
-          }}
-          titleProps={{ title: "Temperatura", iconName: "device-thermostat" }}
-          dataType="%"
-          onPressBottomButton={() =>
-            navigate("Charts", { title: "Temperatura" })
-          }
-        />
-        <AirQualityCard
-          dataCollected={Number(totemInfo.totemProps?.humidity?.current.toFixed(0)) ?? 0}
-          minMaxValues={{
-            min: Number(totemInfo.totemProps?.humidity?.min.toFixed(0)) ?? 0,
-            max: Number(totemInfo.totemProps?.humidity?.max.toFixed(0)) ?? 0,
-          }}
-          titleProps={{ title: "Umidade", iconName: "cloud" }}
-          dataType="%"
-          onPressBottomButton={() => navigate("Charts", { title: "Umidade" })}
-        />
-      </View>
-      <View style={[styles.cards]}>
-        <AirQualityCard
-          dataCollected={totemInfo.totemProps?.airQuality ?? 0}
-          titleProps={{ title: "Qualidade do ar", iconName: "attractions" }}
-          dataType="%"
-          onPressBottomButton={() =>
-            navigate("Charts", { title: "Qualidade do ar" })
-          }
-        />
-      </View>
-      <Text family="InterRegular" size="regular" style={styles.updateText}>
-        {`Dados atualizados em: ${ new Date()}15/11/2022 12:15`}
-      </Text>
+      <ScrollView style={styles.scrollView}>
+        <View style={styles.cards}>
+          <AirQualityCard
+            dataCollected={totemInfo.totemProps.airQuality}
+            titleProps={{
+              title: "Qualidade do Ar",
+              iconName: "device-thermostat",
+            }}
+            minMaxValues={{
+              min: "N/A",
+              max: "N/A",
+            }}
+            style={styles.singleCard}
+          />
+          {mapToCard().map((data, i) => (
+            <AirQualityCard
+              key={i}
+              dataCollected={totemInfo.totemProps[data.valueName].current}
+              minMaxValues={{
+                min: totemInfo.totemProps[data.valueName]?.min,
+                max: totemInfo.totemProps[data.valueName]?.max,
+              }}
+              titleProps={{ title: data.title, iconName: data.iconName }}
+              dataType={data.dataType}
+              onPressBottomButton={() =>
+                navigate("Charts", {
+                  title: data.title,
+                  totemId: totemInfo.id,
+                  measureName: data.valueName,
+                })
+              }
+              style={styles.singleCard}
+            />
+          ))}
+        </View>
+        <Text family="InterRegular" size="regular" style={styles.updateText}>
+          {`Dados atualizados em: ${moment(
+            totemInfo.totemProps.dateTime
+          ).format("DD/MM/YYYY HH:mm")}`}
+        </Text>
+      </ScrollView>
     </View>
   );
 };

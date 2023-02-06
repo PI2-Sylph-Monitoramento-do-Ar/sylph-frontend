@@ -10,6 +10,7 @@ import { Platform } from "react-native";
 import { useTotem } from "_/hooks/useTotem";
 import { useNavigate } from "_/hooks/useNavigate";
 import { TotemType } from "_/services/TotemService";
+import { useLoader } from "_/hooks/useLoader";
 
 const CAROUSEL_PERCENTAGE_HEIGHT = 0.2;
 const CAROUSEL_PERCENTAGE_WIDTH = 0.9;
@@ -19,17 +20,27 @@ const ZOOM_DELTA_MAX = 1.25;
 
 const MapScreen = () => {
   const { position } = useLocation();
-  const { isLoading, listTotem } = useTotem();
+  const { setIsLoading, isLoading } = useLoader();
+  const { listTotem } = useTotem();
   const [totems, setTotems] = useState<TotemType[]>([]);
+  const { navigate, addListener } = useNavigate();
 
   useEffect(() => {
-    listTotem().then((value) => {
-      if (value) setTotems(value);
+    addListener("focus", () => {
+      setIsLoading(true);
+      listTotem()
+        .then((value) => {
+          if (value) {
+            setTotems(value);
+          }
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
     });
-  }, []);
+  });
 
   const [zoomValue, setZoomValue] = useState(ZOOM_DELTA_MIN);
-  const { navigate } = useNavigate();
 
   const setZoom = useCallback(
     (region: Region) => {
@@ -42,39 +53,42 @@ const MapScreen = () => {
 
   let mapView = React.createRef<any>();
 
+  const onPressMarker = (totem: TotemType) => {
+    navigate("MoreInfo", totem);
+  };
+
   const renderCarousel = useCallback(() => {
-    if (totems) {
-      return (
-        <Carousel
-          loop
-          onSnapToItem={(index) => {
-            if (mapView.current && totems[index].coords)
-              mapView.current.animateToRegion(
-                {
-                  ...totems[index].coords,
-                  latitudeDelta: ZOOM_DELTA_MIN / 10,
-                  longitudeDelta: ZOOM_DELTA_MIN / 10,
-                },
-                1000
-              );
-          }}
-          width={SIZES.SCREEN_WIDTH * CAROUSEL_PERCENTAGE_WIDTH}
-          height={SIZES.SCREEN_HEIGHT * CAROUSEL_PERCENTAGE_HEIGHT}
-          style={styles.carousel}
-          data={totems}
-          pagingEnabled
-          scrollAnimationDuration={1000}
-          renderItem={({ item }) => (
-            <TotemCard
-              style={styles.totemCard}
-              title={item?.title}
-              totemProps={item.totemProps}
-              onPressBottomButton={() => navigate("MoreInfo", item)}
-            />
-          )}
-        />
-      );
-    }
+    return (
+      <Carousel
+        loop
+        onSnapToItem={(index) => {
+          if (mapView.current && totems[index].coords)
+            mapView.current.animateToRegion(
+              {
+                ...totems[index].coords,
+                latitudeDelta: ZOOM_DELTA_MIN / 10,
+                longitudeDelta: ZOOM_DELTA_MIN / 10,
+              },
+              1000
+            );
+        }}
+        width={SIZES.SCREEN_WIDTH * CAROUSEL_PERCENTAGE_WIDTH}
+        height={SIZES.SCREEN_HEIGHT * CAROUSEL_PERCENTAGE_HEIGHT}
+        style={styles.carousel}
+        data={totems}
+        pagingEnabled
+        scrollAnimationDuration={1000}
+        renderItem={({ item, index }) => (
+          <TotemCard
+            key={index}
+            style={styles.totemCard}
+            title={item?.title}
+            totemProps={item.totemProps}
+            onPressBottomButton={() => onPressMarker(item)}
+          />
+        )}
+      />
+    );
   }, [totems]);
 
   const renderMarker = useCallback(() => {
