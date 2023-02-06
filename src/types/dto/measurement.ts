@@ -1,4 +1,4 @@
-export type Measurement = {
+export type MeasurementDto = {
   id?: string;
   totem_id: string;
   date_time: string;
@@ -13,4 +13,4 @@ export type Measurement = {
   ammonia?: number;
 };
 
-export type MeasurementKeys = keyof Measurement;
+export type MeasurementDtoKeys = keyof MeasurementDto;

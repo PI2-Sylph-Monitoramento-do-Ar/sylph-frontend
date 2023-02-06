@@ -1,13 +1,13 @@
 import React, { createContext } from "react";
 import { IMeasureService } from "_/services/MeasureService";
-import { Measurement } from "_/types/dto/measurement";
+import { MeasurementDto } from "_/types/dto/measurement";
 
 export const MeasureContext = createContext<IMeasureContext>(
   {} as IMeasureContext
 );
 
 interface IMeasureContext {
-  listMeasures(totemId?: string): Promise<Measurement[] | undefined>;
+  listMeasures(totemId?: string): Promise<MeasurementDto[] | undefined>;
   downloadCsv(totemId: string): Promise<string | undefined>;
 }
 

@@ -1,16 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ScrollView, View, ViewStyle } from "react-native";
-import { Text, TotemCard } from "_/components";
+import { Text, TotemCard, FloattingButton } from "_/components";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTotem } from "_/hooks/useTotem";
-import { TotemFromApiType } from "_/services/TotemService";
+import { TotemType } from "_/services/TotemService";
 
 import styles from "./styles";
 import { TEXTS } from "_/constants/texts";
+import TotemModal from "_/components/TotemModal";
 
 const TotemScreen = () => {
   const { top } = useSafeAreaInsets();
-  const { totems } = useTotem();
+  const [openModal, setOpenModal] = useState<boolean>(false);
+  const { listTotem } = useTotem();
+  const [totems, setTotems] = useState<TotemType[]>([]);
+
+  useEffect(() => {
+    listTotem().then((totemsApi) => {
+      setTotems(totemsApi);
+    });
+  }, []);
 
   const safeArea = { paddingTop: top } as ViewStyle;
 
@@ -22,7 +31,7 @@ const TotemScreen = () => {
         </Text>
       </View>
       <ScrollView style={styles.scrollViewContainer}>
-        {totems.map((totem: TotemFromApiType, index: number) => {
+        {totems.map((totem: TotemType, index: number) => {
           if (totem.coords.latitude && totem.coords.latitude)
             return (
               <TotemCard
@@ -35,6 +44,22 @@ const TotemScreen = () => {
             );
         })}
       </ScrollView>
+      <FloattingButton
+        onPress={() => {
+          setOpenModal(true);
+        }}
+        title="Totem"
+        iconName="add"
+        style={styles.newTotem}
+        isAbsolute={true}
+      />
+      {openModal && (
+        <TotemModal
+          title="Novo Totem"
+          modalVisible={openModal}
+          setModalVisible={setOpenModal}
+        />
+      )}
     </View>
   );
 };

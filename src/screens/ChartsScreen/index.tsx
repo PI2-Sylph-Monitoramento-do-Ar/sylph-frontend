@@ -13,7 +13,7 @@ import { mapMeasuresToGraph } from "_/helpers/mapMeasuresToGraph";
 import { useLoader } from "_/hooks/useLoader";
 import { useMeasure } from "_/hooks/useMeasure";
 import { useNavigate } from "_/hooks/useNavigate";
-import { MeasurementKeys } from "_/types/dto/measurement";
+import { MeasurementDtoKeys } from "_/types/dto/measurement";
 
 import styles from "./styles";
 
@@ -23,30 +23,29 @@ export interface GraphValues {
 }
 
 export interface IChartsScreen {
-  measureName: MeasurementKeys;
-  totemId: string;
+  measureName: MeasurementDtoKeys;
+  id: string;
   title: string;
 }
 
-const ChartsScreen = ({ measureName, totemId, title }: IChartsScreen) => {
+const ChartsScreen = ({ measureName, id, title }: IChartsScreen) => {
   const { bottom } = useSafeAreaInsets();
   const { setIsLoading, isLoading } = useLoader();
   const { goBack } = useNavigate();
   const [hourlyValues, setHourlyValues] = useState<any>([]);
   const [dailyValues, setDailyValues] = useState<any>([]);
   const [weeklyValues, setWeeklyValues] = useState<any>([]);
-  const { listMeasures,  downloadCsv} = useMeasure();
+  const { listMeasures, downloadCsv } = useMeasure();
 
   useEffect(() => {
     setIsLoading(true);
-    listMeasures(totemId)
+    listMeasures(id)
       .then((measuresData) => {
         if (measuresData) {
           const graphValues = mapMeasuresToGraph(measuresData, measureName);
           setHourlyValues(getValuesFromToday(graphValues));
           setDailyValues(getValuesFromWeeks(graphValues));
           setWeeklyValues(getValuesFromWeeks(graphValues, true));
-
         }
         setIsLoading(false);
       })
@@ -57,10 +56,10 @@ const ChartsScreen = ({ measureName, totemId, title }: IChartsScreen) => {
       });
   }, []);
 
-  const handleExportData= async () => {
-    const data = await downloadCsv(totemId)
-    saveCsvFile(data!, title)
-  }
+  const handleExportData = async () => {
+    const data = await downloadCsv(id);
+    saveCsvFile(data!, title);
+  };
   if (isLoading) return <></>;
   return (
     <View style={[styles.container, { paddingBottom: bottom }]}>
@@ -85,7 +84,10 @@ const ChartsScreen = ({ measureName, totemId, title }: IChartsScreen) => {
           timeOfMeasures="weekly"
           style={{ alignSelf: "center", marginBottom: SIZES.MARGING_XX_LARGE }}
         />
-        <Button title="Exportar dados para planilha" onPress={handleExportData}/>
+        <Button
+          title="Exportar dados para planilha"
+          onPress={handleExportData}
+        />
       </ScrollView>
     </View>
   );

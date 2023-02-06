@@ -19,6 +19,13 @@ const styles = StyleSheet.create({
   title: {
     textAlign: "center",
   },
+  newTotem: {
+    height: 50,
+    width: 115,
+    right: 16,
+    bottom: 10,
+
+  }
 });
 
 export default styles;

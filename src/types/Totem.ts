@@ -23,7 +23,7 @@ export const EdgeValuesNamesArray = [
   "temperature",
 ] as EdgeValuesTypes[];
 
-export interface TotemType {
+export interface TotemInfo {
   locationName: string;
   airQuality: number;
   dateTime: Date;
@@ -36,5 +36,4 @@ export interface TotemType {
   ammonia: IEdgeValues;
   pressure: number;
   altitude: number;
-
 }

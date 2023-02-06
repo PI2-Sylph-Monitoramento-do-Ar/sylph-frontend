@@ -9,7 +9,7 @@ import { SIZES } from "_/constants/sizes";
 import { Platform } from "react-native";
 import { useTotem } from "_/hooks/useTotem";
 import { useNavigate } from "_/hooks/useNavigate";
-import { TotemFromApiType } from "_/services/TotemService";
+import { TotemType } from "_/services/TotemService";
 import { useLoader } from "_/hooks/useLoader";
 
 const CAROUSEL_PERCENTAGE_HEIGHT = 0.2;
@@ -22,7 +22,7 @@ const MapScreen = () => {
   const { position } = useLocation();
   const { setIsLoading, isLoading } = useLoader();
   const { listTotem } = useTotem();
-  const [totems, setTotems] = useState<TotemFromApiType[]>([]);
+  const [totems, setTotems] = useState<TotemType[]>([]);
   const { navigate, addListener } = useNavigate();
 
   useEffect(() => {
@@ -53,7 +53,7 @@ const MapScreen = () => {
 
   let mapView = React.createRef<any>();
 
-  const onPressMarker = (totem: TotemFromApiType) => {
+  const onPressMarker = (totem: TotemType) => {
     navigate("MoreInfo", totem);
   };
 
@@ -92,11 +92,10 @@ const MapScreen = () => {
   }, [totems]);
 
   const renderMarker = useCallback(() => {
-    return totems.map((totem: TotemFromApiType, index: number) => {
+    return totems.map((totem: TotemType, index: number) => {
       if (totem.coords.latitude && totem.coords.longitude)
         return (
           <AnimatedMarker
-            onPress={() => onPressMarker(totem)}
             tracksViewChanges={false}
             totemName={totem.title}
             key={index}
@@ -111,7 +110,7 @@ const MapScreen = () => {
     });
   }, [totems]);
 
-  if (position.latitude && position.longitude && !isLoading)
+  if (position.latitude && position.longitude && !isLoading && totems)
     return (
       <>
         <MapView

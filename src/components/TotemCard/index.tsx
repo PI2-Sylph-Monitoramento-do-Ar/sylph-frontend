@@ -3,7 +3,7 @@ import { TouchableOpacity, View, ViewStyle } from "react-native";
 import { COLORS } from "_/constants/colors";
 import { TEXTS } from "_/constants/texts";
 import { getQualityColor } from "_/helpers/getColor";
-import { TotemType } from "_/types/Totem";
+import { TotemInfo } from "_/types/Totem";
 import { IconProps } from "../Icon";
 import IconInfo from "../IconInfo";
 import Text from "../Text";
@@ -12,7 +12,7 @@ import styles from "./styles";
 
 export interface TotemCardProps {
   title: string;
-  totemProps: TotemType;
+  totemProps: TotemInfo;
   bottomButtonLabel?: string;
   bottomButtonIcon?: IconProps["name"];
   onPressBottomButton?: () => void;
@@ -58,13 +58,13 @@ const TotemCard = ({
           <View style={styles.valuesMeasuredBox}>
             <IconInfo
               family="InterExtraLight"
-              label={`${totemProps.temperature.current}ºC`}
+              label={`${totemProps.temperature.current ?? 0}ºC`}
               iconName="device-thermostat"
               style={styles.valueMeasuredInfo}
               color={COLORS.BLACK}
             />
             <IconInfo
-              label={`${totemProps.humidity.current}%`}
+              label={`${totemProps.humidity.current ?? 0}%`}
               iconName="cloud"
               family="InterExtraLight"
               color={COLORS.BLACK}

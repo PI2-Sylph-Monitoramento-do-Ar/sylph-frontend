@@ -5,20 +5,23 @@ import {
   PolluterType,
 } from "_/helpers/airQualityCalculator";
 import { getEdgeValues } from "_/helpers/getEdgeValues";
-import { Measurement } from "_/types/dto/measurement";
-import { Location, Totem } from "_/types/dto/totem";
-import { TotemType, EdgeValuesNamesArray } from "_/types/Totem";
+import { MeasurementDto } from "_/types/dto/measurement";
+import { Location, TotemDTO } from "_/types/dto/totem";
+import { EdgeValuesNamesArray, TotemInfo } from "_/types/Totem";
 
 const TOTAL_OF_MEASURES_IN_24H = (60 / 15) * 24;
 
-export interface TotemFromApiType extends Pick<TotemCardProps, "title"> {
-  totemProps: TotemType;
-  totemId: string;
-  coords: Omit<Location, "longitute"> & { longitude: number };
+export interface TotemType extends Pick<TotemCardProps, "title"> {
+  totemProps: TotemInfo;
+  coords: Location;
+  id: string;
+  name: string;
+  macAddress: string;
 }
 
 export interface ITotemService {
-  listTotem(): Promise<TotemFromApiType[]>;
+  listTotem(): Promise<TotemType[]>;
+  createTotem(totem: TotemDTO): Promise<void>;
 }
 
 export class TotemService implements ITotemService {
@@ -29,9 +32,8 @@ export class TotemService implements ITotemService {
   }
 
   async listTotem() {
-    const totems = await this.api.get<Array<Totem>>("/totems");
-
-    let mostRecentValues: Array<TotemFromApiType> = [];
+    const totems = await this.api.get<Array<TotemDTO>>("/totems");
+    let mostRecentValues: Array<TotemType> = [];
 
     if (totems) {
       for (const totem of totems) {
@@ -43,8 +45,10 @@ export class TotemService implements ITotemService {
               longitude: totem.location.longitude,
               latitude: totem.location.latitude,
             },
-            totemId: totem.id,
-            title: totem.name,
+            title: totem.name ?? "",
+            name: totem.name ?? "",
+            id: totem.id,
+            macAddress: totem.mac_address,
           });
         }
       }
@@ -53,25 +57,29 @@ export class TotemService implements ITotemService {
     return mostRecentValues;
   }
 
+  async createTotem(totem: TotemDTO) {
+    await this.api.post("/totems", totem);
+  }
+
   private getTotemProps = async (
-    totem: Totem
-  ): Promise<TotemType | undefined> => {
-    const measures = await this.api.get<Array<Measurement>>(
+    totem: TotemDTO
+  ): Promise<TotemInfo | undefined> => {
+    const measures = await this.api.get<Array<MeasurementDto>>(
       `/measurements?totem_id=${totem.id}`
     );
 
     if (measures) {
       let totemProps = {
         locationName: "Gama",
-        temperature: { min: Infinity, max: -Infinity },
-        humidity: { min: Infinity, max: -Infinity },
-        particulate_matter_level: { min: Infinity, max: -Infinity },
-        carbon_dioxide_level: { min: Infinity, max: -Infinity },
-        carbon_monoxide_level: { min: Infinity, max: -Infinity },
-        ammonia: { min: Infinity, max: -Infinity },
-        nitrogen_dioxide_level: { min: Infinity, max: -Infinity },
+        temperature: { min: Infinity, max: -Infinity, current: 0 },
+        humidity: { min: Infinity, max: -Infinity, current: 0 },
+        particulate_matter_level: { min: Infinity, max: -Infinity, current: 0 },
+        carbon_dioxide_level: { min: Infinity, max: -Infinity, current: 0 },
+        carbon_monoxide_level: { min: Infinity, max: -Infinity, current: 0 },
+        ammonia: { min: Infinity, max: -Infinity, current: 0 },
+        nitrogen_dioxide_level: { min: Infinity, max: -Infinity, current: 0 },
         dateTime: new Date("01/01/1900"),
-      } as TotemType;
+      } as TotemInfo;
 
       const carbonMonoxideValues: number[] = [];
       const nitrogenDioxideValues: number[] = [];
@@ -126,16 +134,11 @@ export class TotemService implements ITotemService {
         particlesFinal.qualityLevel,
         carbonFinal.qualityLevel
       );
-
-      totemProps.airQualityScore = Math.round(
-        Math.max(nitrogenFinal.score, particlesFinal.score, carbonFinal.score)
-      );
-
       return totemProps;
     }
   };
 
-  private mapEdgeValues = (totemProps: TotemType, measure: Measurement) => {
+  private mapEdgeValues = (totemProps: TotemInfo, measure: MeasurementDto) => {
     EdgeValuesNamesArray.forEach((value) => {
       totemProps[value] = getEdgeValues(totemProps[value], measure[value]);
     });
@@ -143,10 +146,13 @@ export class TotemService implements ITotemService {
     return totemProps;
   };
 
-  private mapCurrentValues = (totemProps: TotemType, measure: Measurement) => {
+  private mapCurrentValues = (
+    totemProps: TotemInfo,
+    measure: MeasurementDto
+  ) => {
     EdgeValuesNamesArray.forEach((value) => {
       if (measure[value])
-        totemProps[value].current = Math.round(measure[value]);
+        totemProps[value].current = Math.round(measure[value] as number);
     });
 
     return totemProps;

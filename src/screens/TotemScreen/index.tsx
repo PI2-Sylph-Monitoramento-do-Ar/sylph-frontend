@@ -2,14 +2,14 @@ import React from "react";
 import { View, ViewStyle } from "react-native";
 import { AnimatedMarker, Text } from "_/components";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { TotemFromApiType } from "_/services/TotemService";
+import { TotemType } from "_/services/TotemService";
 import { AirQualityCard } from "_/components";
 import MapView from "react-native-maps";
 import { Platform } from "react-native";
 
 import styles from "./styles";
 import { useNavigate } from "_/hooks/useNavigate";
-import { EdgeValuesNamesArray, EdgeValuesTypes } from "_/types/Totem";
+import { EdgeValuesTypes } from "_/types/Totem";
 import { ScrollView } from "react-native-gesture-handler";
 import { IconProps } from "_/components/Icon";
 import moment from "moment";
@@ -19,7 +19,7 @@ const LATITUEDE_DELTA = 0.09;
 const LONGITUDE_DELTA = 0.04;
 
 interface IMoreInfoScreen {
-  totemInfo: TotemFromApiType;
+  totemInfo: TotemType;
 }
 const TotemScreen = ({ totemInfo }: IMoreInfoScreen) => {
   const { top, bottom } = useSafeAreaInsets();
@@ -94,8 +94,8 @@ const TotemScreen = ({ totemInfo }: IMoreInfoScreen) => {
             provider={Platform.OS === "android" ? "google" : undefined}
             style={styles.map}
             initialRegion={{
-              latitude: totemInfo.coords.latitude,
-              longitude: totemInfo.coords.longitude,
+              latitude: totemInfo.coords?.latitude,
+              longitude: totemInfo.coords?.longitude,
               latitudeDelta: LATITUEDE_DELTA,
               longitudeDelta: LONGITUDE_DELTA,
             }}
@@ -106,8 +106,8 @@ const TotemScreen = ({ totemInfo }: IMoreInfoScreen) => {
               totemName={totemInfo.title}
               totemProps={totemInfo.totemProps}
               coordinate={{
-                latitude: totemInfo.coords.latitude,
-                longitude: totemInfo.coords.longitude,
+                latitude: totemInfo.coords?.latitude,
+                longitude: totemInfo.coords?.longitude,
               }}
             />
           </MapView>
@@ -130,17 +130,17 @@ const TotemScreen = ({ totemInfo }: IMoreInfoScreen) => {
           {mapToCard().map((data, i) => (
             <AirQualityCard
               key={i}
-              dataCollected={totemInfo.totemProps[data.valueName].current}
+              dataCollected={totemInfo.totemProps[data.valueName].current ?? 0}
               minMaxValues={{
-                min: totemInfo.totemProps[data.valueName]?.min,
-                max: totemInfo.totemProps[data.valueName]?.max,
+                min: totemInfo.totemProps[data.valueName]?.min !== Infinity ? totemInfo.totemProps[data.valueName]?.min : 0,
+                max: totemInfo.totemProps[data.valueName]?.max !== -Infinity ? totemInfo.totemProps[data.valueName]?.max : 0,
               }}
               titleProps={{ title: data.title, iconName: data.iconName }}
               dataType={data.dataType}
               onPressBottomButton={() =>
                 navigate("Charts", {
                   title: data.title,
-                  totemId: totemInfo.totemId,
+                  id: totemInfo.id,
                   measureName: data.valueName,
                 })
               }

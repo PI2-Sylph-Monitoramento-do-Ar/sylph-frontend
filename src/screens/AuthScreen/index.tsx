@@ -45,7 +45,7 @@ const AuthScreen = () => {
         />
         <Text family="InterBold" size="xLarge" style={styles.welcomeTitle}>
           Temperatura{"\n"}
-          Humidade{"\n"}
+          Umidade{"\n"}
           Qualidade do Ar
         </Text>
         <Text style={styles.welcomeText}>{TEXTS.WELCOME}</Text>
