@@ -5,7 +5,6 @@ import {
   PolluterType,
 } from "_/helpers/airQualityCalculator";
 import { getEdgeValues } from "_/helpers/getEdgeValues";
-import { useAuth } from "_/hooks/useAuth";
 import { MeasurementDto } from "_/types/dto/measurement";
 import { Location, TotemDTO } from "_/types/dto/totem";
 import { EdgeValuesNamesArray, TotemInfo } from "_/types/Totem";
@@ -22,7 +21,9 @@ export interface TotemType extends Pick<TotemCardProps, "title"> {
 
 export interface ITotemService {
   listTotem(): Promise<TotemType[]>;
-  createTotem(totem: TotemDTO, token:string): Promise<void>;
+  createTotem(totem: TotemDTO, token: string): Promise<void>;
+  editTotem(totem: TotemDTO, token: string): Promise<void>;
+  deleteTotem(totem: TotemDTO, token: string): Promise<void>;
 }
 
 export class TotemService implements ITotemService {
@@ -58,12 +59,28 @@ export class TotemService implements ITotemService {
     return mostRecentValues;
   }
 
-  async createTotem(totem: TotemDTO, token:string) {
+  async createTotem(totem: TotemDTO, token: string) {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
-  };
+    };
 
     await this.api.post("/totems", totem, config);
+  }
+
+  async editTotem(totem: TotemDTO, token: string) {
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
+
+    await this.api.patch(`/totems/${totem.id}`, totem, config);
+  }
+
+  async deleteTotem(totem: TotemDTO, token: string) {
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
+
+    await this.api.delete(`/totems?totem_id=${totem.id}`, config);
   }
 
   private getTotemProps = async (

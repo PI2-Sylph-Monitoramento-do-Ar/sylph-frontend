@@ -33,7 +33,7 @@ const TotemModal = ({
   const [macAddress, setMacAddress] = useState(totem?.macAddress ?? '');
   const [totemLatitude, setTotemLatitude] = useState<number>(totem?.coords.latitude ?? 0);
   const [totemLongitude, setTotemLongitude] = useState<number>(totem?.coords.longitude ?? 0);
-  const { createTotem } = useTotem();
+  const { createTotem, editTotem } = useTotem();
   const { adminToken } = useAuth();
 
   // const safeArea = { paddingTop: top, paddingBottom: bottom, paddingLeft: left, paddingRight: right } as ViewStyle;
@@ -66,16 +66,41 @@ const TotemModal = ({
       } as TotemInfo,
     }
 
-<<<<<<< HEAD
-      await createTotem(totem, adminToken);
-      setModalVisible(!modalVisible);
-=======
-    await createTotem(totem);
+    await createTotem(totem, adminToken);
     setModalVisible(!modalVisible);
->>>>>>> a547c43 (separate totem modal on edit and create, add new buttons)
   }
 
-  const handleEditTotem = () => { }
+  const handleEditTotem = async () => {
+    const totem: TotemType = {
+      id: uuidv4(),
+      name: totemName,
+      macAddress,
+      title: totemName,
+      coords: {
+        latitude: totemLatitude,
+        longitude: totemLongitude,
+      },
+      totemProps: {
+        airQuality: 0,
+        dateTime: new Date(),
+        humidity: {
+          current: 0,
+          max: 0,
+          min: 0,
+        },
+        locationName: '',
+        temperature: {
+          current: 0,
+          max: 0,
+          min: 0,
+        }
+
+      } as TotemInfo,
+    }
+
+    await editTotem(totem, adminToken);
+    setModalVisible(!modalVisible);
+  }
   const handleDeleteTotem = () => { }
 
   return (

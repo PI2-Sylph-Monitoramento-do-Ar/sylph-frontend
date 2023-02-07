@@ -10,6 +10,7 @@ interface TotemContextProps {
 interface TotemContextParams {
   listTotem: () => Promise<TotemType[]>;
   createTotem: (totem: TotemType, token: string) => Promise<void>;
+  editTotem: (totem: TotemType, token: string) => Promise<void>;
 }
 
 const TotemContext = React.createContext<TotemContextParams>(
@@ -31,8 +32,15 @@ const TotemContextProvider = ({
     listTotem();
   };
 
+  const editTotem = async (totem: TotemType, token: string) => {
+    const totemDTO = mapTotemTypeToDTO(totem);
+    await totemService.editTotem(totemDTO, token);
+    listTotem();
+  };
+
+
   return (
-    <TotemContext.Provider value={{ listTotem, createTotem }}>
+    <TotemContext.Provider value={{ listTotem, createTotem, editTotem }}>
       {children}
     </TotemContext.Provider>
   );
