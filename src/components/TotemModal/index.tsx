@@ -66,8 +66,13 @@ const TotemModal = ({
       } as TotemInfo,
     }
 
+<<<<<<< HEAD
       await createTotem(totem, adminToken);
       setModalVisible(!modalVisible);
+=======
+    await createTotem(totem);
+    setModalVisible(!modalVisible);
+>>>>>>> a547c43 (separate totem modal on edit and create, add new buttons)
   }
 
   const handleEditTotem = () => { }
