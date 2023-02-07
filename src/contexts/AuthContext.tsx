@@ -12,6 +12,7 @@ interface AuthContextParams {
   isGuest: boolean;
   adminLogin: (credential: OAuthCredential) => Promise<void>;
   guestLogin: () => void;
+  adminToken: string,
 }
 
 const AuthContext = React.createContext<AuthContextParams>(
@@ -23,6 +24,7 @@ const AuthContextProvider = ({ children }: AuthContextProps) => {
   const [isAuthed, setIsAuthed] = useState(false);
   const [userCredentials, setUserCredentials] = useState({});
   const [isGuest, setIsGuest] = useState(false);
+  const [adminToken, setAdminToken] = useState('');
 
   const guestLogin = async () => {
     setIsGuest(true);
@@ -48,6 +50,8 @@ const AuthContextProvider = ({ children }: AuthContextProps) => {
 
         setIsAuthed(true);
         setUserCredentials(googleUserCredentials);
+        if (token) setAdminToken(token);
+
       }
     } catch (e) {
       console.error(e);
@@ -56,7 +60,7 @@ const AuthContextProvider = ({ children }: AuthContextProps) => {
 
   return (
     <AuthContext.Provider
-      value={{ adminLogin, guestLogin, isLoading, isGuest, isAuthed }}
+      value={{ adminLogin, guestLogin, isLoading, isGuest, isAuthed, adminToken }}
     >
       {children}
     </AuthContext.Provider>
