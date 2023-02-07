@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, ViewStyle } from "react-native";
 import { Button, Text } from "_/components";
 import { homeImage } from "_/assets/home-image";
@@ -11,17 +11,35 @@ import styles from "./styles";
 import { useAuth } from "_/hooks/useAuth";
 import { SIZES } from "_/constants/sizes";
 import { useAuthPrompt } from "_/hooks/useAuthPrompt";
+import { useNavigate } from "_/hooks/useNavigate";
+import { useGuest } from "_/hooks/useGuest";
 
 const AuthScreen = () => {
   const { top, bottom } = useSafeAreaInsets();
   const { promptAuth } = useAuthPrompt();
   const safeArea = { paddingBottom: bottom, paddingTop: top } as ViewStyle;
+  const { navigate } = useNavigate();
+  const { adminLogin, isCheckingAuth, isAuthed } = useAuth();
+  const { guestLogin, isCheckingGuest, isGuest } = useGuest();
 
-  const { adminLogin, guestLogin } = useAuth();
+  useEffect(() => {
+    if (isAuthed) loginWithGoogle();
+  }, [isCheckingAuth]);
+
+  useEffect(() => {
+    if (isGuest) loginAsGuest();
+  }, [isCheckingGuest]);
 
   const loginWithGoogle = async () => {
     const credential = await promptAuth();
-    adminLogin(credential);
+    adminLogin(credential).then(() => {
+      navigate("Main");
+    });
+  };
+
+  const loginAsGuest = () => {
+    guestLogin();
+    navigate("Main");
   };
 
   return (
@@ -54,7 +72,7 @@ const AuthScreen = () => {
         <Button
           title="Entrar como Visitante"
           style={styles.mainButton}
-          onPress={guestLogin}
+          onPress={loginAsGuest}
         />
         <Button
           title="Entrar como Administrador"

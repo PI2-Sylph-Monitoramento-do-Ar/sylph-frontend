@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { SIZES } from "_/constants/sizes";
 
 const styles = StyleSheet.create({
   container: {
@@ -11,6 +12,12 @@ const styles = StyleSheet.create({
   },
   totemCard: {
     marginHorizontal: "2.5%",
+  },
+  floattingButton: {
+    position: "absolute",
+    top: SIZES.MARGING_REGULAR,
+    right: SIZES.MARGING_REGULAR,
+    zIndex: 1,
   },
 });
 

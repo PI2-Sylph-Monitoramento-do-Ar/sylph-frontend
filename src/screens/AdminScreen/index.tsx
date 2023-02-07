@@ -19,7 +19,7 @@ const TotemScreen = () => {
     listTotem().then((totemsApi) => {
       setTotems(totemsApi);
     });
-  }, []);
+  }, [totems]);
 
   const safeArea = { paddingTop: top } as ViewStyle;
 

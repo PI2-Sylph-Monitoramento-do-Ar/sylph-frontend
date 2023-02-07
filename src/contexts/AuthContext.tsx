@@ -3,6 +3,7 @@ import { firebaseAuthInstance } from "_/config/firebaseConfig";
 import { signInWithCredential, getAuth, OAuthCredential } from "firebase/auth";
 import { ILocalStorageService } from "_/services/LocalStorageService";
 import { ASYNC_STORAGE } from "_/constants/asyncStorage";
+import { usePersistentState } from "_/hooks/usePersistentState";
 
 interface AuthContextProps {
   children: JSX.Element;
@@ -10,11 +11,11 @@ interface AuthContextProps {
 }
 
 interface AuthContextParams {
-  isLoading: boolean;
-  isAuthed: boolean;
-  isGuest: boolean;
+  isAuthed?: string;
+  isCheckingAuth: boolean;
   adminLogin: (credential: OAuthCredential) => Promise<void>;
-  guestLogin: () => void;
+  signOut: () => void;
+  adminToken: string;
 }
 
 const AuthContext = React.createContext<AuthContextParams>(
@@ -22,18 +23,15 @@ const AuthContext = React.createContext<AuthContextParams>(
 );
 
 const AuthContextProvider = ({ children, localStorage }: AuthContextProps) => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [isAuthed, setIsAuthed] = useState(false);
-  const [isGuest, setIsGuest] = useState(false);
+  const [adminToken, setAdminToken] = useState("");
 
-  const guestLogin = async () => {
-    setIsGuest(true);
-    setIsLoading(false);
-  };
+  const { setPersistentState, value, isCheckingState } = usePersistentState(
+    ASYNC_STORAGE.AUTH_USER,
+    localStorage
+  );
 
   const adminLogin = async (credential: OAuthCredential) => {
     await validateUserOnGoogle(credential);
-    setIsLoading(false);
   };
 
   const validateUserOnGoogle = async (credential?: OAuthCredential) => {
@@ -43,19 +41,28 @@ const AuthContextProvider = ({ children, localStorage }: AuthContextProps) => {
 
         const auth = getAuth();
         const user = auth.currentUser;
-
-        localStorage.setItem(ASYNC_STORAGE.JSW, user);
-
-        setIsAuthed(true);
+        const token = await user?.getIdToken();
+        if (token) setAdminToken(token);
+        setPersistentState(true);
       }
     } catch (e) {
       console.error(e);
     }
   };
 
+  const signOut = () => {
+    setPersistentState(false);
+  };
+
   return (
     <AuthContext.Provider
-      value={{ adminLogin, guestLogin, isLoading, isGuest, isAuthed }}
+      value={{
+        adminLogin,
+        isCheckingAuth: isCheckingState,
+        isAuthed: value as string | undefined,
+        adminToken,
+        signOut,
+      }}
     >
       {children}
     </AuthContext.Provider>

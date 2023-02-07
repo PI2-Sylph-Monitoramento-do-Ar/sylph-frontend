@@ -10,6 +10,8 @@ import { IconProps } from "../Icon";
 import { TextInput } from "react-native-gesture-handler";
 import { uuidv4 } from "@firebase/util";
 import { TotemInfo } from "_/types/Totem";
+import { useAuth } from "_/hooks/useAuth";
+import { usePersistentState } from "_/hooks/usePersistentState";
 
 
 export interface TotemModalProps {
@@ -36,6 +38,7 @@ const TotemModal = ({
   const [totemLatitude, setTotemLatitude] = useState<number>(0);
   const [totemLongitude, setTotemLongitude] = useState<number>(0);
   const { createTotem } = useTotem();
+  const { adminToken } = useAuth();
 
   // const safeArea = { paddingTop: top, paddingBottom: bottom, paddingLeft: left, paddingRight: right } as ViewStyle;
 
@@ -67,7 +70,7 @@ const TotemModal = ({
       } as TotemInfo,
       }
 
-      await createTotem(totem);
+      await createTotem(totem, adminToken);
       setModalVisible(!modalVisible);
   }
 

@@ -1,3 +1,4 @@
 export enum ASYNC_STORAGE {
-  JSW = "jsw-token",
+  AUTH_USER = "auth-user",
+  GUEST_USER = "guest-user",
 }
