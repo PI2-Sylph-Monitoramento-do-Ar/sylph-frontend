@@ -11,15 +11,15 @@ import TotemModal from "_/components/TotemModal";
 
 const TotemScreen = () => {
   const { top } = useSafeAreaInsets();
-  const [openModal, setOpenModal] = useState<boolean>(false);
-  const { listTotem } = useTotem();
-  const [totems, setTotems] = useState<TotemType[]>([]);
+  const [openCreateTotemModal, setCreateTotemOpenModal] = useState<boolean>(false);
+  const [openEditModal, setOpenEditModal] = useState<boolean>(false);
+  const { listTotem, totems } = useTotem();
+ 
+  const [selectedTotem, setSelectedTotem] = useState<TotemType>({} as TotemType);
 
   useEffect(() => {
-    listTotem().then((totemsApi) => {
-      setTotems(totemsApi);
-    });
-  }, [totems]);
+    listTotem();
+  },[]);
 
   const safeArea = { paddingTop: top } as ViewStyle;
 
@@ -40,24 +40,35 @@ const TotemScreen = () => {
                 style={styles.totemCard}
                 totemProps={totem.totemProps}
                 bottomButtonLabel={TEXTS.EDIT_TOTEM}
+                onPressBottomButton={() => { setSelectedTotem(totem); setOpenEditModal(true) }}
               />
             );
         })}
       </ScrollView>
       <FloattingButton
         onPress={() => {
-          setOpenModal(true);
+          setCreateTotemOpenModal(true);
         }}
         title="Totem"
         iconName="add"
         style={styles.newTotem}
         isAbsolute={true}
       />
-      {openModal && (
+      {openCreateTotemModal && (
         <TotemModal
           title="Novo Totem"
-          modalVisible={openModal}
-          setModalVisible={setOpenModal}
+          modalVisible={openCreateTotemModal}
+          setModalVisible={setCreateTotemOpenModal}
+          actionType="create"
+        />
+      )}
+      {openEditModal && (
+        <TotemModal
+          title="Editar Totem"
+          modalVisible={openEditModal}
+          setModalVisible={setOpenEditModal}
+          actionType="edit"
+          totem={selectedTotem}
         />
       )}
     </View>

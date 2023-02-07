@@ -16,6 +16,17 @@ export interface HttpsAdapterType {
     data: Record<string, any>,
     config?: any
   ) => Promise<T | undefined>;
+  patch: <T>(
+    endpoint: string,
+    data: Record<string, any>,
+    params?: Record<string, any>,
+    config?: any
+  ) => Promise<T | undefined>;
+  delete: <T>(
+    endpoint: string,
+    data: Record<string, any>,
+    config?: any
+  ) => Promise<T | undefined>;
 }
 
 export class HttpsAdapter implements HttpsAdapterType {
@@ -55,6 +66,32 @@ export class HttpsAdapter implements HttpsAdapterType {
     }
   };
 
+  patch = async <T>(
+    endpoint: string,
+    data: Record<string, any>,
+    config?: any
+  ) => {
+    try {
+      const response = await this.api.patch(endpoint, data, { ...config });
+      return response.data as T;
+    } catch (error) {
+      if (error instanceof AxiosError) throw this.handleAxiosError(error);
+      throw new ServerError();
+    }
+  };
+
+  delete = async <T>(
+    endpoint: string,
+    config?: any,
+  ) => {
+    try {
+      const response = await this.api.delete(endpoint, { ...config });
+      return response.data as T;
+    } catch (error) {
+      if (error instanceof AxiosError) throw this.handleAxiosError(error);
+      throw new ServerError();
+    }
+  };
   private handleAxiosError(error: AxiosError<any, any>) {
     const { status, message } = error;
     const errorFromRes = ErrorFromRes(status, message);

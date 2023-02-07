@@ -21,22 +21,14 @@ const ZOOM_DELTA_MAX = 1.25;
 const MapScreen = () => {
   const { position } = useLocation();
   const { setIsLoading, isLoading } = useLoader();
-  const { listTotem } = useTotem();
-  const [totems, setTotems] = useState<TotemType[]>([]);
+  const { listTotem, totems } = useTotem();
   const { navigate, addListener } = useNavigate();
 
   useEffect(() => {
     addListener("focus", () => {
       setIsLoading(true);
       listTotem()
-        .then((value) => {
-          if (value) {
-            setTotems(value);
-          }
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
+        .then(() => setIsLoading(false));
     });
   });
 
