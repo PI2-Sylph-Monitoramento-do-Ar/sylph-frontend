@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { firebaseAuthInstance } from "_/config/firebaseConfig";
 import { signInWithCredential, getAuth, OAuthCredential } from "firebase/auth";
+import { ILocalStorageService } from "_/services/LocalStorageService";
+import { ASYNC_STORAGE } from "_/constants/asyncStorage";
 
 interface AuthContextProps {
   children: JSX.Element;
+  localStorage: ILocalStorageService;
 }
 
 interface AuthContextParams {
@@ -18,10 +21,9 @@ const AuthContext = React.createContext<AuthContextParams>(
   {} as AuthContextParams
 );
 
-const AuthContextProvider = ({ children }: AuthContextProps) => {
+const AuthContextProvider = ({ children, localStorage }: AuthContextProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthed, setIsAuthed] = useState(false);
-  const [userCredentials, setUserCredentials] = useState({});
   const [isGuest, setIsGuest] = useState(false);
 
   const guestLogin = async () => {
@@ -37,17 +39,14 @@ const AuthContextProvider = ({ children }: AuthContextProps) => {
   const validateUserOnGoogle = async (credential?: OAuthCredential) => {
     try {
       if (credential) {
-        const googleUserCredentials = await signInWithCredential(
-          firebaseAuthInstance,
-          credential
-        );
+        await signInWithCredential(firebaseAuthInstance, credential);
 
         const auth = getAuth();
         const user = auth.currentUser;
-        const token = await user?.getIdToken();
+
+        localStorage.setItem(ASYNC_STORAGE.JSW, user);
 
         setIsAuthed(true);
-        setUserCredentials(googleUserCredentials);
       }
     } catch (e) {
       console.error(e);
