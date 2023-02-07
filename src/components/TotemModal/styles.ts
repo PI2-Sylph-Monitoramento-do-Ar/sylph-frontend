@@ -56,11 +56,30 @@ const styles = StyleSheet.create({
   buttonWrapper: {
     alignItems: 'center',
   },
-  button: {
+  buttonWrapperEdit: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  buttonCreate: {
     justifyContent: 'center',
     backgroundColor: COLORS.PRIMARY_COLOR,
     marginTop: SIZES.MARGING_LARGE,
     width: 184,
+    borderRadius: SIZES.MARGING_SMALL,
+  },
+  buttonEdit: {
+    justifyContent: 'center',
+    backgroundColor: COLORS.PRIMARY_COLOR,
+    marginTop: SIZES.MARGING_LARGE,
+    width: 120,
+    borderRadius: SIZES.MARGING_SMALL,
+  },
+  buttonDelete: {
+    justifyContent: 'center',
+    backgroundColor: COLORS.COLOR_QUALITY_0,
+    marginTop: SIZES.MARGING_LARGE,
+    width: 120,
     borderRadius: SIZES.MARGING_SMALL,
   },
   buttonText: {
