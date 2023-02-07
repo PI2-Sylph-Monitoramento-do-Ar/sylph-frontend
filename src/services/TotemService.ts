@@ -61,7 +61,7 @@ export class TotemService implements ITotemService {
 
   async createTotem(totem: TotemDTO, token: string) {
     const config = {
-      headers: { Authorization: `Bearer ${token}` }
+      headers: { Authorization: `Bearer ${token}` },
     };
 
     await this.api.post("/totems", totem, config);
@@ -69,7 +69,7 @@ export class TotemService implements ITotemService {
 
   async editTotem(totem: TotemDTO, token: string) {
     const config = {
-      headers: { Authorization: `Bearer ${token}` }
+      headers: { Authorization: `Bearer ${token}` },
     };
 
     await this.api.patch(`/totems/${totem.id}`, totem, config);
@@ -77,7 +77,7 @@ export class TotemService implements ITotemService {
 
   async deleteTotem(id: string, token: string) {
     const config = {
-      headers: { Authorization: `Bearer ${token}` }
+      headers: { Authorization: `Bearer ${token}` },
     };
 
     await this.api.delete(`/totems/${id}`, config);

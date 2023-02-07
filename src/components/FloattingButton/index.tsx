@@ -9,7 +9,7 @@ interface IFloattingButton extends ButtonProps {
   iconName?: IconProps["name"];
   isAbsolute?: boolean;
   style?: ViewStyle;
-  onPress?: () => void,
+  onPress?: () => void;
 }
 
 const FloattingButton = ({
@@ -22,7 +22,11 @@ const FloattingButton = ({
 }: IFloattingButton) => {
   const position: ViewStyle = isAbsolute ? { position: "absolute" } : {};
   return (
-    <TouchableOpacity {...rest} onPress={onPress} style={[style, position, styles.buttonBody]}>
+    <TouchableOpacity
+      {...rest}
+      onPress={onPress}
+      style={[style, position, styles.buttonBody]}
+    >
       <View style={styles.contentBox}>
         {iconName && (
           <Icon name={iconName} style={styles.icon} color={styles.icon.color} />

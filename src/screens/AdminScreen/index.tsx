@@ -11,15 +11,21 @@ import TotemModal from "_/components/TotemModal";
 
 const TotemScreen = () => {
   const { top } = useSafeAreaInsets();
-  const [openCreateTotemModal, setCreateTotemOpenModal] = useState<boolean>(false);
+  const [totems, setTotems] = useState<TotemType[]>([]);
+  const [openCreateTotemModal, setCreateTotemOpenModal] =
+    useState<boolean>(false);
   const [openEditModal, setOpenEditModal] = useState<boolean>(false);
-  const { listTotem, totems } = useTotem();
- 
-  const [selectedTotem, setSelectedTotem] = useState<TotemType>({} as TotemType);
+  const { listTotem } = useTotem();
+
+  const [selectedTotem, setSelectedTotem] = useState<TotemType>(
+    {} as TotemType
+  );
 
   useEffect(() => {
-    listTotem();
-  },[]);
+    listTotem().then((totemsApi) => {
+      setTotems(totemsApi);
+    });
+  }, [totems]);
 
   const safeArea = { paddingTop: top } as ViewStyle;
 
@@ -40,7 +46,10 @@ const TotemScreen = () => {
                 style={styles.totemCard}
                 totemProps={totem.totemProps}
                 bottomButtonLabel={TEXTS.EDIT_TOTEM}
-                onPressBottomButton={() => { setSelectedTotem(totem); setOpenEditModal(true) }}
+                onPressBottomButton={() => {
+                  setSelectedTotem(totem);
+                  setOpenEditModal(true);
+                }}
               />
             );
         })}

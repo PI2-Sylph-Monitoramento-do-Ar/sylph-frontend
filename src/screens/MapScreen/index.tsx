@@ -1,16 +1,18 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 import { useLocation } from "_/hooks/useLocation";
 import Carousel from "react-native-reanimated-carousel";
 import MapView, { Region } from "react-native-maps";
 import styles from "./styles";
-import { AnimatedMarker, TotemCard } from "_/components";
+import { AnimatedMarker, FloattingButton, TotemCard } from "_/components";
 import { SIZES } from "_/constants/sizes";
 import { Platform } from "react-native";
 import { useTotem } from "_/hooks/useTotem";
 import { useNavigate } from "_/hooks/useNavigate";
 import { TotemType } from "_/services/TotemService";
 import { useLoader } from "_/hooks/useLoader";
+import { useAuth } from "_/hooks/useAuth";
+import { useGuest } from "_/hooks/useGuest";
 
 const CAROUSEL_PERCENTAGE_HEIGHT = 0.2;
 const CAROUSEL_PERCENTAGE_WIDTH = 0.9;
@@ -21,14 +23,30 @@ const ZOOM_DELTA_MAX = 1.25;
 const MapScreen = () => {
   const { position } = useLocation();
   const { setIsLoading, isLoading } = useLoader();
-  const { listTotem, totems } = useTotem();
+  const { listTotem } = useTotem();
+  const [totems, setTotems] = useState<TotemType[]>([]);
   const { navigate, addListener } = useNavigate();
+  const { signOut: signOutAdmin } = useAuth();
+  const { signOut: signOutGuest } = useGuest();
+
+  const _signOut = () => {
+    signOutGuest();
+    signOutAdmin();
+    navigate("Auth");
+  };
 
   useEffect(() => {
     addListener("focus", () => {
       setIsLoading(true);
       listTotem()
-        .then(() => setIsLoading(false));
+        .then((value) => {
+          if (value) {
+            setTotems(value);
+          }
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
     });
   });
 
@@ -43,7 +61,7 @@ const MapScreen = () => {
     [zoomValue]
   );
 
-  let mapView = React.createRef<any>();
+  let mapView = useRef<any>();
 
   const onPressMarker = (totem: TotemType) => {
     navigate("MoreInfo", totem);
@@ -54,7 +72,7 @@ const MapScreen = () => {
       <Carousel
         loop
         onSnapToItem={(index) => {
-          if (mapView.current && totems[index].coords)
+          if (mapView?.current && totems[index].coords) {
             mapView.current.animateToRegion(
               {
                 ...totems[index].coords,
@@ -63,6 +81,7 @@ const MapScreen = () => {
               },
               1000
             );
+          }
         }}
         width={SIZES.SCREEN_WIDTH * CAROUSEL_PERCENTAGE_WIDTH}
         height={SIZES.SCREEN_HEIGHT * CAROUSEL_PERCENTAGE_HEIGHT}
@@ -102,9 +121,15 @@ const MapScreen = () => {
     });
   }, [totems]);
 
-  if (position.latitude && position.longitude && !isLoading && totems)
+  if (position.latitude && position.longitude && !isLoading)
     return (
       <>
+        <FloattingButton
+          iconName="logout"
+          title="Sair"
+          style={styles.floattingButton}
+          onPress={_signOut}
+        />
         <MapView
           provider={Platform.OS === "android" ? "google" : undefined}
           onRegionChangeComplete={setZoom}
@@ -122,6 +147,7 @@ const MapScreen = () => {
         {renderCarousel()}
       </>
     );
+
   return <></>;
 };
 

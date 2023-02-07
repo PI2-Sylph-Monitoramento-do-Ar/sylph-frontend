@@ -14,6 +14,8 @@ import { URL } from "./constants/secrets";
 import { MeasureService } from "./services/MeasureService";
 import { MeasureContextProvider } from "./contexts/MeasureContext";
 import { LoaderContextProvider } from "./contexts/LoaderContext";
+import { LocalStorageService } from "./services/LocalStorageService";
+import { GuestContextProvider } from "./contexts/GuestContext";
 
 export default function App() {
   const isFontLoaded = useFonts();
@@ -22,6 +24,7 @@ export default function App() {
     "Non-serializable values were found in the navigation state",
   ]);
 
+  const localStorage = new LocalStorageService();
   const api = new HttpsAdapter(URL);
   const totemService = new TotemService(api);
   const measureService = new MeasureService(api);
@@ -35,16 +38,18 @@ export default function App() {
         />
         <SafeAreaProvider>
           <LoaderContextProvider>
-            <AuthContextProvider>
-              <LocationContextProvider>
-                <MeasureContextProvider measureService={measureService}>
-                  <TotemContextProvider totemService={totemService}>
-                    <GestureHandlerRootView style={{ flex: 1 }}>
-                      <Navigation />
-                    </GestureHandlerRootView>
-                  </TotemContextProvider>
-                </MeasureContextProvider>
-              </LocationContextProvider>
+            <AuthContextProvider localStorage={localStorage}>
+              <GuestContextProvider localStorage={localStorage}>
+                <LocationContextProvider>
+                  <MeasureContextProvider measureService={measureService}>
+                    <TotemContextProvider totemService={totemService}>
+                      <GestureHandlerRootView style={{ flex: 1 }}>
+                        <Navigation />
+                      </GestureHandlerRootView>
+                    </TotemContextProvider>
+                  </MeasureContextProvider>
+                </LocationContextProvider>
+              </GuestContextProvider>
             </AuthContextProvider>
           </LoaderContextProvider>
         </SafeAreaProvider>
