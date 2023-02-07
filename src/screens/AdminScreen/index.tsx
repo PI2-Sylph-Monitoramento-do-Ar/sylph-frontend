@@ -13,15 +13,13 @@ const TotemScreen = () => {
   const { top } = useSafeAreaInsets();
   const [openCreateTotemModal, setCreateTotemOpenModal] = useState<boolean>(false);
   const [openEditModal, setOpenEditModal] = useState<boolean>(false);
-  const { listTotem } = useTotem();
-  const [totems, setTotems] = useState<TotemType[]>([]);
+  const { listTotem, totems } = useTotem();
+ 
   const [selectedTotem, setSelectedTotem] = useState<TotemType>({} as TotemType);
 
   useEffect(() => {
-    listTotem().then((totemsApi) => {
-      setTotems(totemsApi);
-    });
-  });
+    listTotem();
+  },[]);
 
   const safeArea = { paddingTop: top } as ViewStyle;
 

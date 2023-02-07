@@ -33,7 +33,7 @@ const TotemModal = ({
   const [macAddress, setMacAddress] = useState(totem?.macAddress ?? '');
   const [totemLatitude, setTotemLatitude] = useState<number>(totem?.coords.latitude ?? 0);
   const [totemLongitude, setTotemLongitude] = useState<number>(totem?.coords.longitude ?? 0);
-  const { createTotem, editTotem } = useTotem();
+  const { createTotem, editTotem, deleteTotem } = useTotem();
   const { adminToken } = useAuth();
 
   // const safeArea = { paddingTop: top, paddingBottom: bottom, paddingLeft: left, paddingRight: right } as ViewStyle;
@@ -71,8 +71,8 @@ const TotemModal = ({
   }
 
   const handleEditTotem = async () => {
-    const totem: TotemType = {
-      id: uuidv4(),
+    const _totem: TotemType = {
+      id: totem?.id ?? '',
       name: totemName,
       macAddress,
       title: totemName,
@@ -98,10 +98,13 @@ const TotemModal = ({
       } as TotemInfo,
     }
 
-    await editTotem(totem, adminToken);
+    await editTotem(_totem, adminToken);
     setModalVisible(!modalVisible);
   }
-  const handleDeleteTotem = () => { }
+  const handleDeleteTotem = async() => {
+    await deleteTotem(totem?.id ?? '', adminToken);
+    setModalVisible(!modalVisible);
+  }
 
   return (
     <Modal transparent

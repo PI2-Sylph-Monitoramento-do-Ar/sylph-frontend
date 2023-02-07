@@ -83,10 +83,9 @@ export class HttpsAdapter implements HttpsAdapterType {
   delete = async <T>(
     endpoint: string,
     config?: any,
-    params?: Record<string, any>
   ) => {
     try {
-      const response = await this.api.delete(endpoint, { ...config, params });
+      const response = await this.api.delete(endpoint, { ...config });
       return response.data as T;
     } catch (error) {
       if (error instanceof AxiosError) throw this.handleAxiosError(error);

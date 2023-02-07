@@ -23,7 +23,7 @@ export interface ITotemService {
   listTotem(): Promise<TotemType[]>;
   createTotem(totem: TotemDTO, token: string): Promise<void>;
   editTotem(totem: TotemDTO, token: string): Promise<void>;
-  deleteTotem(totem: TotemDTO, token: string): Promise<void>;
+  deleteTotem(id: string, token: string): Promise<void>;
 }
 
 export class TotemService implements ITotemService {
@@ -75,12 +75,12 @@ export class TotemService implements ITotemService {
     await this.api.patch(`/totems/${totem.id}`, totem, config);
   }
 
-  async deleteTotem(totem: TotemDTO, token: string) {
+  async deleteTotem(id: string, token: string) {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
     };
 
-    await this.api.delete(`/totems?totem_id=${totem.id}`, config);
+    await this.api.delete(`/totems/${id}`, config);
   }
 
   private getTotemProps = async (
