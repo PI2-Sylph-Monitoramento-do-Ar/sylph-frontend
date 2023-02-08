@@ -21,7 +21,7 @@ export interface TotemType extends Pick<TotemCardProps, "title"> {
 }
 
 export interface ITotemService {
-  listTotem(): Promise<TotemType[]>;
+  listTotem(totemId?: string): Promise<TotemType[]>;
   createTotem(totem: TotemDTO, token: string): Promise<void>;
   editTotem(totem: TotemDTO, token: string): Promise<void>;
   deleteTotem(id: string, token: string): Promise<void>;
@@ -34,25 +34,26 @@ export class TotemService implements ITotemService {
     this.api = api;
   }
 
-  async listTotem() {
-    const totems = await this.api.get<Array<TotemDTO>>("/totems");
+  async listTotem(totemId?: string) {
+    const _totemId = totemId || ''
+    const totems = await this.api.get<Array<TotemDTO>>(`/totems/${_totemId}`);
     let mostRecentValues: Array<TotemType> = [];
-
+    const _totems = Array.isArray(totems) ? totems : [totems]
     if (totems) {
-      for (const totem of totems) {
-        const totemProps = await this.getTotemProps(totem);
+      for (const totem of _totems) {
+        const totemProps = await this.getTotemProps(totem!);
         if (totemProps) {
           mostRecentValues.push({
-            email: totem.email,
+            email: totem!.email,
             totemProps,
             coords: {
-              longitude: totem.location.longitude,
-              latitude: totem.location.latitude,
+              longitude: totem!.location.longitude,
+              latitude: totem!.location.latitude,
             },
-            title: totem.name ?? "",
-            name: totem.name ?? "",
-            id: totem.id,
-            macAddress: totem.mac_address,
+            title: totem!.name ?? "",
+            name: totem!.name ?? "",
+            id: totem!.id,
+            macAddress: totem!.mac_address,
           });
         }
       }
