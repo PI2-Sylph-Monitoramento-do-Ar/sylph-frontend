@@ -30,18 +30,15 @@ const TotemContextProvider = ({
   const createTotem = async (totem: TotemType, token: string) => {
     const totemDTO = mapTotemTypeToDTO(totem);
     await totemService.createTotem(totemDTO, token);
-    listTotem();
   };
 
   const editTotem = async (totem: TotemType, token: string) => {
     const totemDTO = mapTotemTypeToDTO(totem);
     await totemService.editTotem(totemDTO, token);
-    listTotem();
   };
 
   const deleteTotem = async (id: string, token: string) => {
     await totemService.deleteTotem(id, token);
-    listTotem();
   };
 
   return (
