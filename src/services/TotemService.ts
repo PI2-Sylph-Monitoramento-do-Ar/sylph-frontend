@@ -12,6 +12,7 @@ import { EdgeValuesNamesArray, TotemInfo } from "_/types/Totem";
 const TOTAL_OF_MEASURES_IN_24H = (60 / 15) * 24;
 
 export interface TotemType extends Pick<TotemCardProps, "title"> {
+  email: string;
   totemProps: TotemInfo;
   coords: Location;
   id: string;
@@ -42,6 +43,7 @@ export class TotemService implements ITotemService {
         const totemProps = await this.getTotemProps(totem);
         if (totemProps) {
           mostRecentValues.push({
+            email: totem.email,
             totemProps,
             coords: {
               longitude: totem.location.longitude,

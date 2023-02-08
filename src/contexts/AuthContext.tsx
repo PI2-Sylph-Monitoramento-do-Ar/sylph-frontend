@@ -13,6 +13,7 @@ interface AuthContextProps {
 interface AuthContextParams {
   isAuthed?: string;
   isCheckingAuth: boolean;
+  email: string;
   adminLogin: (credential: OAuthCredential) => Promise<void>;
   signOut: () => void;
   adminToken: string;
@@ -24,6 +25,7 @@ const AuthContext = React.createContext<AuthContextParams>(
 
 const AuthContextProvider = ({ children, localStorage }: AuthContextProps) => {
   const [adminToken, setAdminToken] = useState("");
+  const [email, setEmail] = useState("");
 
   const { setPersistentState, value, isCheckingState } = usePersistentState(
     ASYNC_STORAGE.AUTH_USER,
@@ -42,6 +44,7 @@ const AuthContextProvider = ({ children, localStorage }: AuthContextProps) => {
         const auth = getAuth();
         const user = auth.currentUser;
         const token = await user?.getIdToken();
+        if (user?.email) setEmail(user.email);
         if (token) setAdminToken(token);
         setPersistentState(true);
       }
@@ -57,6 +60,7 @@ const AuthContextProvider = ({ children, localStorage }: AuthContextProps) => {
   return (
     <AuthContext.Provider
       value={{
+        email,
         adminLogin,
         isCheckingAuth: isCheckingState,
         isAuthed: value as string | undefined,

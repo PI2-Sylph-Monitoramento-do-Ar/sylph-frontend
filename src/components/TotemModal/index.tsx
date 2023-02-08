@@ -10,6 +10,7 @@ import { TotemInfo } from "_/types/Totem";
 import { useAuth } from "_/hooks/useAuth";
 import { macAddressMask } from "_/helpers/macAddressMask";
 import { useLocation } from "_/hooks/useLocation";
+import { useLoader } from "_/hooks/useLoader";
 
 export interface TotemModalProps {
   title: string;
@@ -32,6 +33,8 @@ const TotemModal = ({
   const [totemName, setTotemName] = useState(totem?.name ?? "");
   const [macAddress, setMacAddress] = useState(totem?.macAddress ?? "");
   const { position } = useLocation();
+  const { setIsLoading } = useLoader();
+  const { email } = useAuth();
 
   const [totemLatitude, setTotemLatitude] = useState<number>(
     totem?.coords.latitude ?? position.latitude
@@ -43,11 +46,10 @@ const TotemModal = ({
   const { createTotem, editTotem, deleteTotem } = useTotem();
   const { adminToken } = useAuth();
 
-  // const safeArea = { paddingTop: top, paddingBottom: bottom, paddingLeft: left, paddingRight: right } as ViewStyle;
-
   const handleCreateTotem = async () => {
     const totem: TotemType = {
       id: macAddress,
+      email,
       name: totemName,
       macAddress,
       title: totemName,
@@ -71,8 +73,9 @@ const TotemModal = ({
         },
       } as TotemInfo,
     };
-
+    setIsLoading(true);
     await createTotem(totem, adminToken);
+    setIsLoading(false);
     setModalVisible(!modalVisible);
     onClose();
   };
@@ -81,6 +84,7 @@ const TotemModal = ({
     const _totem: TotemType = {
       id: totem?.id ?? "",
       name: totemName,
+      email,
       macAddress,
       title: totemName,
       coords: {
@@ -104,13 +108,17 @@ const TotemModal = ({
       } as TotemInfo,
     };
 
+    setIsLoading(true);
     await editTotem(_totem, adminToken);
+    setIsLoading(false);
     setModalVisible(!modalVisible);
     onClose();
   };
 
   const handleDeleteTotem = async () => {
+    setIsLoading(true);
     await deleteTotem(totem?.id ?? "", adminToken);
+    setIsLoading(false);
     setModalVisible(!modalVisible);
     onClose();
   };
