@@ -10,25 +10,26 @@ import { TEXTS } from "_/constants/texts";
 import TotemModal from "_/components/TotemModal";
 import { useNavigate } from "_/hooks/useNavigate";
 
-const TotemScreen = () => {
+const AdminScreen = () => {
   const { top } = useSafeAreaInsets();
   const [totems, setTotems] = useState<TotemType[]>([]);
   const [openCreateTotemModal, setCreateTotemOpenModal] =
     useState<boolean>(false);
   const [openEditModal, setOpenEditModal] = useState<boolean>(false);
   const { listTotem } = useTotem();
-  const { addListener } = useNavigate();
 
   const [selectedTotem, setSelectedTotem] = useState<TotemType>(
     {} as TotemType
   );
 
+  const getAllTotems = () => {
+    listTotem().then((totemsApi) => {
+      setTotems(totemsApi);
+    });
+  };
+
   useEffect(() => {
-    addListener("focus", () => {
-      listTotem().then((totemsApi) => {
-        setTotems(totemsApi);
-      });
-    })
+    getAllTotems();
   }, []);
 
   const safeArea = { paddingTop: top } as ViewStyle;
@@ -69,6 +70,7 @@ const TotemScreen = () => {
       />
       {openCreateTotemModal && (
         <TotemModal
+          onClose={getAllTotems}
           title="Novo Totem"
           modalVisible={openCreateTotemModal}
           setModalVisible={setCreateTotemOpenModal}
@@ -77,6 +79,7 @@ const TotemScreen = () => {
       )}
       {openEditModal && (
         <TotemModal
+          onClose={getAllTotems}
           title="Editar Totem"
           modalVisible={openEditModal}
           setModalVisible={setOpenEditModal}
@@ -88,4 +91,4 @@ const TotemScreen = () => {
   );
 };
 
-export default TotemScreen;
+export default AdminScreen;
