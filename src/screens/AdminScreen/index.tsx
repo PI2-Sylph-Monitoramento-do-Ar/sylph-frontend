@@ -8,6 +8,7 @@ import { TotemType } from "_/services/TotemService";
 import styles from "./styles";
 import { TEXTS } from "_/constants/texts";
 import TotemModal from "_/components/TotemModal";
+import { useNavigate } from "_/hooks/useNavigate";
 
 const TotemScreen = () => {
   const { top } = useSafeAreaInsets();
@@ -16,16 +17,19 @@ const TotemScreen = () => {
     useState<boolean>(false);
   const [openEditModal, setOpenEditModal] = useState<boolean>(false);
   const { listTotem } = useTotem();
+  const { addListener } = useNavigate();
 
   const [selectedTotem, setSelectedTotem] = useState<TotemType>(
     {} as TotemType
   );
 
   useEffect(() => {
-    listTotem().then((totemsApi) => {
-      setTotems(totemsApi);
-    });
-  }, [totems]);
+    addListener("focus", () => {
+      listTotem().then((totemsApi) => {
+        setTotems(totemsApi);
+      });
+    })
+  }, []);
 
   const safeArea = { paddingTop: top } as ViewStyle;
 
