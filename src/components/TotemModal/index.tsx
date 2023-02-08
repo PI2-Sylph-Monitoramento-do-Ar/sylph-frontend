@@ -1,14 +1,15 @@
-import React, { useState } from "react";
-import { Modal, Pressable, View, ViewStyle } from "react-native";
+import React, { useCallback, useState } from "react";
+import { Modal, Pressable, View } from "react-native";
 import { Text, Icon } from "_/components";
 import { useTotem } from "_/hooks/useTotem";
 import { TotemType } from "_/services/TotemService";
 
 import styles from "./styles";
 import { TextInput } from "react-native-gesture-handler";
-import { uuidv4 } from "@firebase/util";
 import { TotemInfo } from "_/types/Totem";
 import { useAuth } from "_/hooks/useAuth";
+import { macAddressMask } from "_/helpers/macAddressMask";
+import { useLocation } from "_/hooks/useLocation";
 
 export interface TotemModalProps {
   title: string;
@@ -28,26 +29,29 @@ const TotemModal = ({
 }: TotemModalProps) => {
   const [totemName, setTotemName] = useState(totem?.name ?? "");
   const [macAddress, setMacAddress] = useState(totem?.macAddress ?? "");
+  const { position } = useLocation();
+
   const [totemLatitude, setTotemLatitude] = useState<number>(
-    totem?.coords.latitude ?? 0
+    totem?.coords.latitude ?? position.latitude
   );
   const [totemLongitude, setTotemLongitude] = useState<number>(
-    totem?.coords.longitude ?? 0
+    totem?.coords.longitude ?? position.longitude
   );
+
   const { createTotem, editTotem, deleteTotem } = useTotem();
   const { adminToken } = useAuth();
 
   // const safeArea = { paddingTop: top, paddingBottom: bottom, paddingLeft: left, paddingRight: right } as ViewStyle;
 
-  const handleCreateTotem = async () => {
+  const handleCreateTotem = useCallback(async () => {
     const totem: TotemType = {
       id: macAddress,
       name: totemName,
       macAddress,
       title: totemName,
       coords: {
-        latitude: totemLatitude,
-        longitude: totemLongitude,
+        latitude: position.latitude,
+        longitude: position.longitude,
       },
       totemProps: {
         airQuality: 0,
@@ -68,7 +72,7 @@ const TotemModal = ({
 
     await createTotem(totem, adminToken);
     setModalVisible(!modalVisible);
-  };
+  }, [position]);
 
   const handleEditTotem = async () => {
     const _totem: TotemType = {
@@ -137,7 +141,10 @@ const TotemModal = ({
             <Icon name="laptop" color={styles.icon.color} size="small" />
             <TextInput
               style={styles.formText}
-              onChangeText={(macAddress) => setMacAddress(macAddress)}
+              onChangeText={(macAddress) =>
+                setMacAddress(macAddressMask(macAddress))
+              }
+              maxLength={17}
               defaultValue={macAddress}
               placeholder="Endereço MAC do Totem"
             />
@@ -145,6 +152,7 @@ const TotemModal = ({
           <View style={styles.formBox}>
             <Icon name="place" color={styles.icon.color} size="small" />
             <TextInput
+              editable={false}
               style={styles.formText}
               onChangeText={(latitude) => setTotemLatitude(Number(latitude))}
               placeholder="Latitude"
@@ -154,6 +162,7 @@ const TotemModal = ({
           <View style={styles.formBox}>
             <Icon name="place" color={styles.icon.color} size="small" />
             <TextInput
+              editable={false}
               style={styles.formText}
               onChangeText={(longitude) => setTotemLongitude(Number(longitude))}
               placeholder="Longitude"
