@@ -19,11 +19,15 @@ export default {
     },
     assetBundlePatterns: ["**/*"],
     ios: {
+      config: { googleMapsApiKey: process.env.MAP_API_KEY_IOS },
       supportsTablet: true,
       bundleIdentifier: "com.sylph_fga.app",
       buildNumber: "3",
     },
     android: {
+      config: {
+        googleMaps: { apiKey: process.env.MAP_API_KEY_ANDROID },
+      },
       package: "com.sylph_fga.app",
       adaptiveIcon: {
         foregroundImage: "./assets/adaptive-icon.png",
@@ -42,7 +46,13 @@ export default {
       firebase_app_id: process.env.FIREBASE_APP_ID,
       firebase_measurement_id: process.env.FIREBASE_MEASUREMENT_ID,
       client_id: process.env.CLIENT_ID,
+      client_id_android: process.env.CLIENT_ID_ANDROID,
+      client_id_ios: process.env.CLIENT_ID_IOS,
+      client_id_expo: process.env.CLIENT_ID_EXPO,
       url: process.env.URL,
+      eas: {
+        projectId: "23457b0b-7bea-4a94-8c6c-e44e1d7f7450",
+      },
     },
   },
 };

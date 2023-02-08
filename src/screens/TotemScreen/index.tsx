@@ -4,8 +4,7 @@ import { AnimatedMarker, Text } from "_/components";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { TotemType } from "_/services/TotemService";
 import { AirQualityCard } from "_/components";
-import MapView from "react-native-maps";
-import { Platform } from "react-native";
+import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 
 import styles from "./styles";
 import { useNavigate } from "_/hooks/useNavigate";
@@ -91,7 +90,7 @@ const TotemScreen = ({ totemInfo }: IMoreInfoScreen) => {
             rotateEnabled={false}
             zoomEnabled={false}
             scrollEnabled={false}
-            provider={Platform.OS === "android" ? "google" : undefined}
+            provider={PROVIDER_GOOGLE}
             style={styles.map}
             initialRegion={{
               latitude: totemInfo.coords?.latitude,
@@ -132,8 +131,14 @@ const TotemScreen = ({ totemInfo }: IMoreInfoScreen) => {
               key={i}
               dataCollected={totemInfo.totemProps[data.valueName].current ?? 0}
               minMaxValues={{
-                min: totemInfo.totemProps[data.valueName]?.min !== Infinity ? totemInfo.totemProps[data.valueName]?.min : 0,
-                max: totemInfo.totemProps[data.valueName]?.max !== -Infinity ? totemInfo.totemProps[data.valueName]?.max : 0,
+                min:
+                  totemInfo.totemProps[data.valueName]?.min !== Infinity
+                    ? totemInfo.totemProps[data.valueName]?.min
+                    : 0,
+                max:
+                  totemInfo.totemProps[data.valueName]?.max !== -Infinity
+                    ? totemInfo.totemProps[data.valueName]?.max
+                    : 0,
               }}
               titleProps={{ title: data.title, iconName: data.iconName }}
               dataType={data.dataType}

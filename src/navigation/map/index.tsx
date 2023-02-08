@@ -5,19 +5,24 @@ import { TotemType } from "_/services/TotemService";
 import ChartsScreen, { IChartsScreen } from "_/screens/ChartsScreen";
 import StackHeader from "../components/StackHeader";
 import TotemScreen from "_/screens/TotemScreen";
+import QrCodeReader from "_/screens/QrCodeReader";
 
 export type MapStackParams = {
   Map: undefined;
   MoreInfo: TotemType;
   Charts: IChartsScreen;
+  QrCode: undefined;
 };
+export type MapStaskParams = {
+  initialRouteName: keyof MapStackParams
+}
 
 const Stack = createNativeStackNavigator<MapStackParams>();
 
-export const MapStack = () => {
+export const MapStack = ({initialRouteName} : MapStaskParams) => {
   return (
     <Stack.Navigator
-      initialRouteName="Map"
+      initialRouteName={initialRouteName}
       screenOptions={{
         header: ({ route, navigation }) => (
           <StackHeader route={route} navigation={navigation} />
@@ -51,6 +56,13 @@ export const MapStack = () => {
           );
         }}
       </Stack.Screen>
+      <Stack.Screen
+        name="QrCode"
+        component={QrCodeReader}
+        options={{ headerShown: false }}
+      />
+
+
     </Stack.Navigator>
   );
 };

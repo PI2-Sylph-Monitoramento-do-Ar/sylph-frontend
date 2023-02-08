@@ -20,6 +20,9 @@ export const APP_SCHEME = Constants?.manifest?.extra?.app_scheme;
 // AUTH
 
 export const CLIENT_ID = Constants?.manifest?.extra?.client_id;
+export const CLIENT_ID_ANDROID = Constants?.manifest?.extra?.client_id_android;
+export const CLIENT_ID_IOS = Constants?.manifest?.extra?.client_id_ios;
+export const CLIENT_ID_EXPO = Constants?.manifest?.extra?.client_id_expo;
 
 // URL
 

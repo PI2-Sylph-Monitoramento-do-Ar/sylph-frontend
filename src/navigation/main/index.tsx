@@ -28,11 +28,26 @@ export const MainRoute = () => {
       />
       <Tab.Screen
         name="MapStack"
-        component={MapStack}
         options={{
           tabBarIcon: ({ focused }) => TabBarIcon({ focused, name: "map" }),
         }}
-      />
+      >
+        {() => {
+          return <MapStack initialRouteName="Map"/>
+        }}
+      </Tab.Screen>
+
+      <Tab.Screen
+        name="QrCodeReader"
+        options={{
+          tabBarIcon: ({ focused }) => TabBarIcon({ focused, name: "qr-code-2" }),
+        }}
+      >
+        {() => {
+          return <MapStack initialRouteName="QrCode"/>
+        }}
+      </Tab.Screen>
+
       {isAuthed && (
         <Tab.Screen
           name="Admin"

@@ -2,11 +2,10 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 
 import { useLocation } from "_/hooks/useLocation";
 import Carousel from "react-native-reanimated-carousel";
-import MapView, { Region } from "react-native-maps";
+import MapView, { PROVIDER_GOOGLE, Region } from "react-native-maps";
 import styles from "./styles";
 import { AnimatedMarker, FloattingButton, TotemCard } from "_/components";
 import { SIZES } from "_/constants/sizes";
-import { Platform } from "react-native";
 import { useTotem } from "_/hooks/useTotem";
 import { useNavigate } from "_/hooks/useNavigate";
 import { TotemType } from "_/services/TotemService";
@@ -133,7 +132,7 @@ const MapScreen = () => {
           onPress={_signOut}
         />
         <MapView
-          provider={Platform.OS === "android" ? "google" : undefined}
+          provider={PROVIDER_GOOGLE}
           onRegionChangeComplete={setZoom}
           style={styles.container}
           initialRegion={{
