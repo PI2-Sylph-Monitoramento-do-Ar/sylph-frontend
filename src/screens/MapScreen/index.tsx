@@ -13,6 +13,7 @@ import { TotemType } from "_/services/TotemService";
 import { useLoader } from "_/hooks/useLoader";
 import { useAuth } from "_/hooks/useAuth";
 import { useGuest } from "_/hooks/useGuest";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const CAROUSEL_PERCENTAGE_HEIGHT = 0.2;
 const CAROUSEL_PERCENTAGE_WIDTH = 0.9;
@@ -28,6 +29,7 @@ const MapScreen = () => {
   const { navigate, addListener } = useNavigate();
   const { signOut: signOutAdmin } = useAuth();
   const { signOut: signOutGuest } = useGuest();
+  const { top } = useSafeAreaInsets();
 
   const _signOut = () => {
     signOutGuest();
@@ -127,7 +129,7 @@ const MapScreen = () => {
         <FloattingButton
           iconName="logout"
           title="Sair"
-          style={styles.floattingButton}
+          style={{ ...styles.floattingButton, marginTop: top }}
           onPress={_signOut}
         />
         <MapView
