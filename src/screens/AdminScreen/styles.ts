@@ -22,10 +22,9 @@ const styles = StyleSheet.create({
   newTotem: {
     height: 50,
     width: 115,
-    right: 16,
+    left: 16,
     bottom: 10,
-
-  }
+  },
 });
 
 export default styles;

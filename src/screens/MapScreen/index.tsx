@@ -50,7 +50,7 @@ const MapScreen = () => {
           setIsLoading(false);
         });
     });
-  });
+  }, []);
 
   const [zoomValue, setZoomValue] = useState(ZOOM_DELTA_MIN);
 

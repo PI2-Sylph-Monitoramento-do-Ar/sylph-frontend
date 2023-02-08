@@ -14,6 +14,7 @@ import { useLocation } from "_/hooks/useLocation";
 export interface TotemModalProps {
   title: string;
   onPressButton?: () => void;
+  onClose: () => void;
   modalVisible: boolean;
   setModalVisible: (modalVisible: boolean) => void;
   actionType: "edit" | "create";
@@ -25,6 +26,7 @@ const TotemModal = ({
   modalVisible,
   setModalVisible,
   actionType,
+  onClose,
   totem,
 }: TotemModalProps) => {
   const [totemName, setTotemName] = useState(totem?.name ?? "");
@@ -43,7 +45,7 @@ const TotemModal = ({
 
   // const safeArea = { paddingTop: top, paddingBottom: bottom, paddingLeft: left, paddingRight: right } as ViewStyle;
 
-  const handleCreateTotem = useCallback(async () => {
+  const handleCreateTotem = async () => {
     const totem: TotemType = {
       id: macAddress,
       name: totemName,
@@ -72,7 +74,8 @@ const TotemModal = ({
 
     await createTotem(totem, adminToken);
     setModalVisible(!modalVisible);
-  }, [position]);
+    onClose();
+  };
 
   const handleEditTotem = async () => {
     const _totem: TotemType = {
@@ -103,10 +106,13 @@ const TotemModal = ({
 
     await editTotem(_totem, adminToken);
     setModalVisible(!modalVisible);
+    onClose();
   };
+
   const handleDeleteTotem = async () => {
     await deleteTotem(totem?.id ?? "", adminToken);
     setModalVisible(!modalVisible);
+    onClose();
   };
 
   return (
@@ -172,8 +178,12 @@ const TotemModal = ({
           {actionType === "create" && (
             <View style={styles.buttonWrapper}>
               <Pressable
-                style={styles.buttonCreate}
+                style={[
+                  styles.buttonCreate,
+                  { opacity: !(macAddress && totemName) ? 0.5 : 1 },
+                ]}
                 onPress={handleCreateTotem}
+                disabled={!(macAddress && totemName)}
               >
                 <Text style={styles.buttonText}>Cadastrar</Text>
               </Pressable>
@@ -187,7 +197,14 @@ const TotemModal = ({
               >
                 <Text style={styles.buttonText}>Excluir</Text>
               </Pressable>
-              <Pressable style={styles.buttonEdit} onPress={handleEditTotem}>
+              <Pressable
+                style={[
+                  styles.buttonEdit,
+                  { opacity: !(macAddress && totemName) ? 0.5 : 1 },
+                ]}
+                onPress={handleEditTotem}
+                disabled={!(macAddress && totemName)}
+              >
                 <Text style={styles.buttonText}>Editar</Text>
               </Pressable>
             </View>
