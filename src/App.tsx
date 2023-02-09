@@ -16,6 +16,7 @@ import { MeasureContextProvider } from "./contexts/MeasureContext";
 import { LoaderContextProvider } from "./contexts/LoaderContext";
 import { LocalStorageService } from "./services/LocalStorageService";
 import { GuestContextProvider } from "./contexts/GuestContext";
+import { AuthService } from "./services/AuthService";
 
 export default function App() {
   const isFontLoaded = useFonts();
@@ -29,6 +30,8 @@ export default function App() {
   const totemService = new TotemService(api);
   const measureService = new MeasureService(api);
 
+  const authService = new AuthService()
+
   if (isFontLoaded)
     return (
       <>
@@ -38,7 +41,7 @@ export default function App() {
         />
         <SafeAreaProvider>
           <LoaderContextProvider>
-            <AuthContextProvider localStorage={localStorage}>
+            <AuthContextProvider localStorage={localStorage} authService={authService}>
               <GuestContextProvider localStorage={localStorage}>
                 <LocationContextProvider>
                   <MeasureContextProvider measureService={measureService}>
