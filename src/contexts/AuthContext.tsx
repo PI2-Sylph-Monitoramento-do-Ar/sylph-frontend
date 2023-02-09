@@ -45,7 +45,6 @@ const AuthContextProvider = ({ children, authService }: AuthContextProps) => {
   const signIn = async (credentials: AuthCredentials) => {
     try {
       const adminUser = await authService.signIn(credentials)
-      console.log(adminUser)
       setAdminUser(adminUser)
     } catch(error){
       console.error(error)

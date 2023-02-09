@@ -24,35 +24,25 @@ export function AdminAuthScreen(){
         }
     }, [isAuthed])
 
-    const handleSignIn = () => {
+    const handleSignIn = async () => {
         setIsLoading(true)
-        signIn({ email, password })
+        await signIn({ email, password })
         setIsLoading(false)
     }
 
     return(
         <View style={styles.container}>
-          {error && <Text>{error?.message ?? "Something went wrong."}</Text>}
+          <Text bold size="large" style={styles.title}>Login como administrador</Text>
+          {error && <Text color={COLORS.COLOR_QUALITY_0}>{error?.message ?? "Something went wrong."}</Text>}
             <TextInput 
-                style={{
-                    width: "100%", 
-                    height: 30,
-                    borderWidth: 1,
-                    borderColor: COLORS.BLACK
-                }}
+                style={styles.input}
                 autoCapitalize="none"
                 onChangeText={setEmail}
             />
             <TextInput 
                 secureTextEntry={true}
                 autoCapitalize="none"
-                style={{
-                    width: "100%", 
-                    height: 30,
-                    borderWidth: 1,
-                    borderColor: COLORS.BLACK, 
-                    marginTop: 10,
-                }}
+                style={[styles.input, {marginTop: 8}]}
                 onChangeText={setPassword}
             />
             <Button 

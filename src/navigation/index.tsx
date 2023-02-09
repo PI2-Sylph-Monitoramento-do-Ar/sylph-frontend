@@ -17,13 +17,12 @@ export type AppStackParams = {
 export const Navigation = () => {
 
   const { isAuthed, isCheckingAuth } = useAuth()
-  console.log(isCheckingAuth)
 
   if(isCheckingAuth) return <View />
   
   return (
     <NavigationContainer<AppStackParams>>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName={isAuthed ? "Main" : "Auth"}>
         <Stack.Screen name="Auth" component={AuthRoute} />       
         <Stack.Screen name="Main" component={MainRoute} />
       </Stack.Navigator>

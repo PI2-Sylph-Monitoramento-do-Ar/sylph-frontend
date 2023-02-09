@@ -26,13 +26,18 @@ const MapScreen = () => {
   const { setIsLoading, isLoading } = useLoader();
   const { listTotem } = useTotem();
   const [totems, setTotems] = useState<TotemType[]>([]);
-  const { navigate, addListener } = useNavigate();
+  const { reset, addListener, navigate } = useNavigate();
   const { signOut: signOutAdmin, isAuthed } = useAuth();
   const { top } = useSafeAreaInsets();
 
   const _signOut = () => {
     signOutAdmin()
-    navigate("Auth", { screen: "Initial" })
+    reset({
+      index: 0, 
+      routes:[
+       { name: "Auth" }
+      ]
+    })
   };
 
   useEffect(() => {
