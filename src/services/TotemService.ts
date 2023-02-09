@@ -97,9 +97,9 @@ export class TotemService implements ITotemService {
       let totemProps = {
         locationName: "Gama",
         temperature: { min: Infinity, max: -Infinity, current: 0 },
-        humidity: { min: Infinity, max: -Infinity, current: 0 },
+        pressure: { min: Infinity, max: -Infinity, current: 0 },
         particulate_matter_level: { min: Infinity, max: -Infinity, current: 0 },
-        carbon_dioxide_level: { min: Infinity, max: -Infinity, current: 0 },
+        ozone_level: { min: Infinity, max: -Infinity, current: 0 },
         carbon_monoxide_level: { min: Infinity, max: -Infinity, current: 0 },
         ammonia: { min: Infinity, max: -Infinity, current: 0 },
         nitrogen_dioxide_level: { min: Infinity, max: -Infinity, current: 0 },
