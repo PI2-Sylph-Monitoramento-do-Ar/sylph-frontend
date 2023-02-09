@@ -35,11 +35,13 @@ export function AdminAuthScreen(){
           <Text bold size="large" style={styles.title}>Login como administrador</Text>
           {error && <Text color={COLORS.COLOR_QUALITY_0}>{error?.message ?? "Something went wrong."}</Text>}
             <TextInput 
+                placeholder="email"
                 style={styles.input}
                 autoCapitalize="none"
                 onChangeText={setEmail}
             />
             <TextInput 
+                placeholder="senha"
                 secureTextEntry={true}
                 autoCapitalize="none"
                 style={[styles.input, {marginTop: 8}]}
