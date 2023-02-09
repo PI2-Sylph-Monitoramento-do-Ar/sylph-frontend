@@ -34,6 +34,5 @@ export interface TotemInfo {
   nitrogen_dioxide_level: IEdgeValues;
   particulate_matter_level: IEdgeValues;
   ammonia: IEdgeValues;
-  pressure: number;
   altitude: number;
 }

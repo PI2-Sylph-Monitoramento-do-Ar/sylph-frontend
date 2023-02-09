@@ -8,7 +8,6 @@ export type MeasurementDto = {
   ozone_level?: number;
   nitrogen_dioxide_level?: number;
   particulate_matter_level?: number;
-  pressure?: number;
   altitude?: number;
   ammonia?: number;
 };
