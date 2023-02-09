@@ -35,44 +35,47 @@ const LineChart = ({ timeOfMeasures, data, title, style }: LineChartData) => {
 
   const edgeValues = getEdgeValues(data);
 
-  const renderChart = () => (
-    <VictoryChart
-      domain={{
-        x: [1, data.length],
-        y: [edgeValues.min - 0.5, edgeValues.max + 0.5],
-      }}
-      theme={VictoryTheme.material}
-      containerComponent={
-        <VictoryZoomContainer
-          allowZoom={false}
-          zoomDimension="x"
-          zoomDomain={{
-            x: [1, 3],
-          }}
-        />
-      }
-      width={SIZES.SCREEN_WIDTH * 0.8}
-      height={CHART_SIZE}
-    >
-      <VictoryLine
-        interpolation={interpolation}
-        style={{
-          data: { stroke: COLORS.GREY_PRIMARY },
+  const renderChart = () => {
+    const xRange = data.length === 1 ? 2 : data.length;
+    return (
+      <VictoryChart
+        domain={{
+          x: [1, xRange],
+          y: [edgeValues.min - 0.5, edgeValues.max + 0.5],
         }}
-        data={data}
-      />
-      <VictoryArea
-        interpolation={interpolation}
-        style={{ data: { fill: COLORS.GREY_SECONDARY } }}
-        data={data}
-      />
-      <VictoryScatter
-        data={data}
-        size={5}
-        style={{ data: { fill: COLORS.BLACK_WITH_OPACITY } }}
-      />
-    </VictoryChart>
-  );
+        theme={VictoryTheme.material}
+        containerComponent={
+          <VictoryZoomContainer
+            allowZoom={false}
+            zoomDimension="x"
+            zoomDomain={{
+              x: [1, 3],
+            }}
+          />
+        }
+        width={SIZES.SCREEN_WIDTH * 0.8}
+        height={CHART_SIZE}
+      >
+        <VictoryLine
+          interpolation={interpolation}
+          style={{
+            data: { stroke: COLORS.GREY_PRIMARY },
+          }}
+          data={data}
+        />
+        <VictoryArea
+          interpolation={interpolation}
+          style={{ data: { fill: COLORS.GREY_SECONDARY } }}
+          data={data}
+        />
+        <VictoryScatter
+          data={data}
+          size={5}
+          style={{ data: { fill: COLORS.BLACK_WITH_OPACITY } }}
+        />
+      </VictoryChart>
+    );
+  };
 
   const renderNoData = () => (
     <View

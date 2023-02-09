@@ -32,7 +32,6 @@ const TotemScreen = ({ totemInfo }: IMoreInfoScreen) => {
         valueName: "pressure",
         title: "Pressão",
         iconName: "cloud",
-        dataType: "%",
       },
       {
         valueName: "temperature",
