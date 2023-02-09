@@ -29,14 +29,14 @@ const TotemScreen = ({ totemInfo }: IMoreInfoScreen) => {
   const mapToCard = () => {
     return [
       {
-        valueName: "humidity",
-        title: "Umidade",
+        valueName: "pressure",
+        title: "Pressão",
         iconName: "cloud",
         dataType: "%",
       },
       {
         valueName: "temperature",
-        title: "Temperature",
+        title: "Temperatura",
         iconName: "device-thermostat",
         dataType: "ºC",
       },
@@ -47,8 +47,8 @@ const TotemScreen = ({ totemInfo }: IMoreInfoScreen) => {
         dataType: "ppm",
       },
       {
-        valueName: "carbon_dioxide_level",
-        title: "CO2",
+        valueName: "ozone-level",
+        title: "O3",
         iconName: "device-thermostat",
         dataType: "ppm",
       },
@@ -115,7 +115,7 @@ const TotemScreen = ({ totemInfo }: IMoreInfoScreen) => {
       <ScrollView style={styles.scrollView}>
         <View style={styles.cards}>
           <AirQualityCard
-            dataCollected={totemInfo.totemProps.airQuality}
+            dataCollected={totemInfo.totemProps?.airQuality}
             titleProps={{
               title: "Qualidade do Ar",
               iconName: "device-thermostat",
@@ -129,7 +129,7 @@ const TotemScreen = ({ totemInfo }: IMoreInfoScreen) => {
           {mapToCard().map((data, i) => (
             <AirQualityCard
               key={i}
-              dataCollected={totemInfo.totemProps[data.valueName].current ?? 0}
+              dataCollected={totemInfo.totemProps[data.valueName]?.current ?? 0}
               minMaxValues={{
                 min:
                   totemInfo.totemProps[data.valueName]?.min !== Infinity
