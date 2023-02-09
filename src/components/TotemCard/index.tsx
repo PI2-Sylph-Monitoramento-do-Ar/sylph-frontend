@@ -48,13 +48,6 @@ const TotemCard = ({
           <Text family="InterBold" style={styles.title}>
             {title}
           </Text>
-          <IconInfo
-            label={totemProps.locationName}
-            iconName="place"
-            size="small"
-            color={COLORS.BLACK_WITH_OPACITY}
-            style={styles.locationText}
-          />
           <View style={styles.valuesMeasuredBox}>
             <IconInfo
               family="InterExtraLight"
