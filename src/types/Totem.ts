@@ -6,7 +6,7 @@ export interface IEdgeValues {
 
 export type EdgeValuesTypes =
   | "temperature"
-  | "humidity"
+  | "pressure"
   | "ozone_level"
   | "carbon_monoxide_level"
   | "nitrogen_dioxide_level"
@@ -17,7 +17,7 @@ export const EdgeValuesNamesArray = [
   "ammonia",
   "ozone_level",
   "carbon_monoxide_level",
-  "humidity",
+  "pressure",
   "nitrogen_dioxide_level",
   "particulate_matter_level",
   "temperature",
@@ -28,7 +28,7 @@ export interface TotemInfo {
   airQuality: number;
   dateTime: Date;
   temperature: IEdgeValues;
-  humidity: IEdgeValues;
+  pressure: IEdgeValues;
   ozone_level: IEdgeValues;
   carbon_monoxide_level: IEdgeValues;
   nitrogen_dioxide_level: IEdgeValues;

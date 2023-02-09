@@ -64,7 +64,7 @@ const TotemCard = ({
               color={COLORS.BLACK}
             />
             <IconInfo
-              label={`${totemProps.humidity.current ?? 0}%`}
+              label={`${totemProps.pressure.current ?? 0}%`}
               iconName="cloud"
               family="InterExtraLight"
               color={COLORS.BLACK}

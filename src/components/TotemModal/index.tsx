@@ -58,7 +58,7 @@ const TotemModal = ({
       totemProps: {
         airQuality: 0,
         dateTime: new Date(),
-        humidity: {
+        pressure: {
           current: 0,
           max: 0,
           min: 0,
@@ -92,7 +92,7 @@ const TotemModal = ({
       totemProps: {
         airQuality: 0,
         dateTime: new Date(),
-        humidity: {
+        pressure: {
           current: 0,
           max: 0,
           min: 0,

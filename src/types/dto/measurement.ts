@@ -3,7 +3,7 @@ export type MeasurementDto = {
   totem_id: string;
   date_time: string;
   temperature?: number;
-  humidity?: number;
+  pressure?: number;
   carbon_monoxide_level?: number;
   ozone_level?: number;
   nitrogen_dioxide_level?: number;
