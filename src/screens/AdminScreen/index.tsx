@@ -20,7 +20,7 @@ const AdminScreen = () => {
   const [openEditModal, setOpenEditModal] = useState<boolean>(false);
   const { listTotem } = useTotem();
   const { setIsLoading } = useLoader();
-  const { email } = useAuth();
+  const { adminUser } = useAuth();
   const { addListener } = useNavigation();
   const [selectedTotem, setSelectedTotem] = useState<TotemType>(
     {} as TotemType
@@ -30,7 +30,7 @@ const AdminScreen = () => {
     setIsLoading(true);
     listTotem()
       .then((totemsApi) => {
-        const totems = totemsApi.filter((totem) => totem.email === email);
+        const totems = totemsApi.filter((totem) => totem.email === adminUser?.email);
         setTotems(totems);
       })
       .finally(() => {

@@ -34,8 +34,6 @@ const TotemModal = ({
   const [macAddress, setMacAddress] = useState(totem?.macAddress ?? "");
   const { position } = useLocation();
   const { setIsLoading } = useLoader();
-  const { email } = useAuth();
-
   const [totemLatitude, setTotemLatitude] = useState<number>(
     totem?.coords.latitude ?? position.latitude
   );
@@ -44,12 +42,12 @@ const TotemModal = ({
   );
 
   const { createTotem, editTotem, deleteTotem } = useTotem();
-  const { adminToken } = useAuth();
+  const { adminUser } = useAuth();
 
   const handleCreateTotem = async () => {
     const totem: TotemType = {
       id: macAddress,
-      email,
+      email: adminUser?.email ?? "",
       name: totemName,
       macAddress,
       title: totemName,
@@ -74,7 +72,7 @@ const TotemModal = ({
       } as TotemInfo,
     };
     setIsLoading(true);
-    await createTotem(totem, adminToken);
+    await createTotem(totem, adminUser?.token ?? "");
     setIsLoading(false);
     setModalVisible(!modalVisible);
     onClose();
@@ -84,7 +82,7 @@ const TotemModal = ({
     const _totem: TotemType = {
       id: totem?.id ?? "",
       name: totemName,
-      email,
+      email: adminUser?.email ?? "",
       macAddress,
       title: totemName,
       coords: {
@@ -109,7 +107,7 @@ const TotemModal = ({
     };
 
     setIsLoading(true);
-    await editTotem(_totem, adminToken);
+    await editTotem(_totem, adminUser?.token ?? "");
     setIsLoading(false);
     setModalVisible(!modalVisible);
     onClose();
@@ -117,7 +115,7 @@ const TotemModal = ({
 
   const handleDeleteTotem = async () => {
     setIsLoading(true);
-    await deleteTotem(totem?.id ?? "", adminToken);
+    await deleteTotem(totem?.id ?? "", adminUser?.token ?? "");
     setIsLoading(false);
     setModalVisible(!modalVisible);
     onClose();

@@ -25,15 +25,18 @@ const MapScreen = () => {
   const { setIsLoading, isLoading } = useLoader();
   const { listTotem } = useTotem();
   const [totems, setTotems] = useState<TotemType[]>([]);
-  const { navigate, addListener } = useNavigate();
-  const { signOut: signOutAdmin } = useAuth();
-  const { signOut: signOutGuest } = useGuest();
+  const { reset, addListener, navigate } = useNavigate();
+  const { signOut: signOutAdmin, isAuthed } = useAuth();
   const { top } = useSafeAreaInsets();
 
   const _signOut = () => {
-    signOutGuest();
-    signOutAdmin();
-    navigate("Auth");
+    signOutAdmin()
+    reset({
+      index: 0, 
+      routes:[
+       { name: "Auth" }
+      ]
+    })
   };
 
   useEffect(() => {
@@ -125,12 +128,16 @@ const MapScreen = () => {
   if (position.latitude && position.longitude && !isLoading)
     return (
       <>
-        <FloattingButton
-          iconName="logout"
-          title="Sair"
-          style={{ ...styles.floattingButton, marginTop: top }}
-          onPress={_signOut}
-        />
+      {
+        isAuthed && (
+                <FloattingButton
+                      iconName="logout"
+                      title="Sair"
+                      style={{ ...styles.floattingButton, marginTop: top }}
+                      onPress={_signOut}
+                      />
+          )
+      }
         <MapView
           provider={PROVIDER_GOOGLE}
           onRegionChangeComplete={setZoom}

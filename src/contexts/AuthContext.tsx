@@ -1,71 +1,72 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { firebaseAuthInstance } from "_/config/firebaseConfig";
 import { signInWithCredential, getAuth, OAuthCredential } from "firebase/auth";
 import { ILocalStorageService } from "_/services/LocalStorageService";
 import { ASYNC_STORAGE } from "_/constants/asyncStorage";
 import { usePersistentState } from "_/hooks/usePersistentState";
+import { AuthCredentials, IAuthService } from "_/services/AuthService";
+import { ServerError } from "_/adapters/https/error";
 
 interface AuthContextProps {
   children: JSX.Element;
   localStorage: ILocalStorageService;
+  authService: IAuthService
 }
 
+
 interface AuthContextParams {
-  isAuthed?: string;
+  isAuthed?: boolean;
   isCheckingAuth: boolean;
-  email: string;
-  adminLogin: (credential: OAuthCredential) => Promise<void>;
+  signIn: (credential: AuthCredentials) => Promise<void>;
   signOut: () => void;
-  adminToken: string;
+  adminUser?: AdminUser
+  error?: Error
 }
 
 const AuthContext = React.createContext<AuthContextParams>(
   {} as AuthContextParams
 );
 
-const AuthContextProvider = ({ children, localStorage }: AuthContextProps) => {
-  const [adminToken, setAdminToken] = useState("");
-  const [email, setEmail] = useState("");
+const AuthContextProvider = ({ children, authService }: AuthContextProps) => {
 
-  const { setPersistentState, value, isCheckingState } = usePersistentState(
-    ASYNC_STORAGE.AUTH_USER,
-    localStorage
-  );
-
-  const adminLogin = async (credential: OAuthCredential) => {
-    await validateUserOnGoogle(credential);
-  };
-
-  const validateUserOnGoogle = async (credential?: OAuthCredential) => {
-    try {
-      if (credential) {
-        await signInWithCredential(firebaseAuthInstance, credential);
-
-        const auth = getAuth();
-        const user = auth.currentUser;
-        const token = await user?.getIdToken();
-        if (user?.email) setEmail(user.email);
-        if (token) setAdminToken(token);
-        setPersistentState(true);
-      }
-    } catch (e) {
-      console.error(e);
+  const [isCheckingAuth, setIsChekingAuth] = useState(true);
+  const [adminUser, setAdminUser] = useState<AdminUser>(); 
+  const [error, setError] = useState<Error>()
+  
+  useEffect(() => {
+    authService.checkAuthenticated().then((user) => {
+      console.log()
+      setAdminUser(user)
+      setIsChekingAuth(false)
     }
-  };
+    )
+  }, [])
+
+  const signIn = async (credentials: AuthCredentials) => {
+    try {
+      const adminUser = await authService.signIn(credentials)
+      setAdminUser(adminUser)
+    } catch(error){
+      console.error(error)
+      if(error instanceof Error) setError(error)
+      setError(new ServerError())
+    }
+  }
 
   const signOut = () => {
-    setPersistentState(false);
+    authService.logout()
+    setAdminUser(undefined)
   };
 
   return (
     <AuthContext.Provider
       value={{
-        email,
-        adminLogin,
-        isCheckingAuth: isCheckingState,
-        isAuthed: value as string | undefined,
-        adminToken,
+        adminUser,
+        signIn,
+        isCheckingAuth,
+        isAuthed: !!adminUser,
         signOut,
+        error,
       }}
     >
       {children}

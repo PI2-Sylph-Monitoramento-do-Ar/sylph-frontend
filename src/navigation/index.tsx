@@ -1,11 +1,11 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { AuthRoute } from "./auth";
 import { MainRoute } from "./main";
-import { useAuth } from "_/hooks/useAuth";
-import { useAuthPrompt } from "_/hooks/useAuthPrompt";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import AuthScreen from "_/screens/AuthScreen";
+import { useAuth } from "_/hooks/useAuth";
+import { View } from "react-native";
+import { Text } from "_/components";
 
 const Stack = createNativeStackNavigator();
 
@@ -15,10 +15,15 @@ export type AppStackParams = {
 };
 
 export const Navigation = () => {
+
+  const { isAuthed, isCheckingAuth } = useAuth()
+
+  if(isCheckingAuth) return <View />
+  
   return (
     <NavigationContainer<AppStackParams>>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Auth" component={AuthScreen} />
+      <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName={isAuthed ? "Main" : "Auth"}>
+        <Stack.Screen name="Auth" component={AuthRoute} />       
         <Stack.Screen name="Main" component={MainRoute} />
       </Stack.Navigator>
     </NavigationContainer>
