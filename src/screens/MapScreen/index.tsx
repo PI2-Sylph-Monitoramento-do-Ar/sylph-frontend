@@ -30,7 +30,7 @@ const MapScreen = () => {
   const { top } = useSafeAreaInsets();
 
   const _signOut = () => {
-    signOutAdmin()
+    if(isAuthed) signOutAdmin()
     reset({
       index: 0, 
       routes:[
@@ -128,16 +128,13 @@ const MapScreen = () => {
   if (position.latitude && position.longitude && !isLoading)
     return (
       <>
-      {
-        isAuthed && (
                 <FloattingButton
                       iconName="logout"
                       title="Sair"
                       style={{ ...styles.floattingButton, marginTop: top }}
                       onPress={_signOut}
                       />
-          )
-      }
+          
         <MapView
           provider={PROVIDER_GOOGLE}
           onRegionChangeComplete={setZoom}
