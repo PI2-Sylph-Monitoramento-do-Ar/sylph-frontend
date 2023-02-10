@@ -28,7 +28,7 @@ export default function QrCodeReader() {
   }, []);
 
   const handleBarCodeScanned = async ({ type, data }:{type: string, data: string}) => {
-        
+
     if(scanned) return
 
     setScanned(true);
@@ -50,7 +50,8 @@ export default function QrCodeReader() {
     if(loading) return <ActivityIndicator />
     if(scanned) return <Button title='Escanear novamente' onPress={() => setScanned(false)}/>
     return (
-      <Camera
+      <Camera 
+            ratio='1:1'
             type={CameraType.back}
             barCodeScannerSettings={{
               barCodeTypes: [BarCodeScanner.Constants.BarCodeType.pdf417, 2048],
