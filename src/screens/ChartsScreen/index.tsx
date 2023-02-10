@@ -68,7 +68,7 @@ const ChartsScreen = ({ measureName, id, title }: IChartsScreen) => {
       >
         <LineChart
           data={hourlyValues}
-          title="Média por hora"
+          title="Valores pontuais"
           timeOfMeasures="hourly"
           style={{ alignSelf: "center", marginBottom: SIZES.MARGING_XX_LARGE }}
         />

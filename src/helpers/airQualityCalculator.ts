@@ -1,13 +1,19 @@
 import { getCarbonMonoxideValues } from "./getCarbonMonoxideValues";
 import { getNitrogenDioxideValues } from "./getNitrogenDioxideValues";
+import { getOzone } from "./getOzone";
 import { getParticlesValues } from "./getParticlesValues";
 
-export type PolluterType = "nitrogeDioxide" | "particles" | "carbonMonoxide";
+export type PolluterType =
+  | "nitrogeDioxide"
+  | "particles"
+  | "carbonMonoxide"
+  | "ozone";
 
 export const POLLUTERS_VALUES = [
   "nitrogeDioxide",
   "particles",
   "carbonMonoxide",
+  "ozone",
 ] as PolluterType[];
 
 export const airQualityCalculator = (value: number, polluter: PolluterType) => {
@@ -37,6 +43,8 @@ const polluterTableValues = (polluter: PolluterType) => {
       return getCarbonMonoxideValues;
     case "nitrogeDioxide":
       return getNitrogenDioxideValues;
+    case "nitrogeDioxide":
+      return getOzone;
     default:
       return getParticlesValues;
   }
