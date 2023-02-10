@@ -20,6 +20,7 @@ export interface LineChartData {
   timeOfMeasures?: time;
   style?: ViewStyle;
   title: string;
+  useSecondaryColor?: boolean;
 }
 
 type time = "hourly" | "daily" | "weekly";
@@ -29,7 +30,7 @@ interface DataType {
   y: number;
 }
 
-const LineChart = ({ timeOfMeasures, data, title, style }: LineChartData) => {
+const LineChart = ({ timeOfMeasures, data, title, style, useSecondaryColor = false }: LineChartData) => {
   const interpolation =
     timeOfMeasures === "hourly" || !timeOfMeasures ? undefined : "natural";
 
@@ -59,19 +60,19 @@ const LineChart = ({ timeOfMeasures, data, title, style }: LineChartData) => {
         <VictoryLine
           interpolation={interpolation}
           style={{
-            data: { stroke: COLORS.GREY_PRIMARY },
+            data: { stroke: useSecondaryColor? COLORS.COLOR_QUALITY_1 : COLORS.GREY_PRIMARY },
           }}
           data={data}
         />
         <VictoryArea
           interpolation={interpolation}
-          style={{ data: { fill: COLORS.GREY_SECONDARY } }}
+          style={{ data: { fill: useSecondaryColor? COLORS.COLOR_QUALITY_1_OPPACITY : COLORS.GREY_SECONDARY } }}
           data={data}
         />
         <VictoryScatter
           data={data}
           size={5}
-          style={{ data: { fill: COLORS.BLACK_WITH_OPACITY } }}
+          style={{ data: { fill: useSecondaryColor? COLORS.COLOR_QUALITY_0_OPPACITY : COLORS.BLACK_WITH_OPACITY } }}
         />
       </VictoryChart>
     );

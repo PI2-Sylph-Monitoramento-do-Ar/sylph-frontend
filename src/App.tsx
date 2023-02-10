@@ -13,10 +13,12 @@ import { HttpsAdapter } from "./adapters/https/HttpsAdapter";
 import { URL } from "./constants/secrets";
 import { MeasureService } from "./services/MeasureService";
 import { MeasureContextProvider } from "./contexts/MeasureContext";
+import { PrevisionContextProvider } from "./contexts/PrevisionContext";
 import { LoaderContextProvider } from "./contexts/LoaderContext";
 import { LocalStorageService } from "./services/LocalStorageService";
 import { GuestContextProvider } from "./contexts/GuestContext";
 import { AuthService } from "./services/AuthService";
+import { PrevisionService } from "./services/PrevisionService";
 
 export default function App() {
   const isFontLoaded = useFonts();
@@ -29,6 +31,7 @@ export default function App() {
   const api = new HttpsAdapter(URL);
   const totemService = new TotemService(api);
   const measureService = new MeasureService(api);
+  const previsionService = new PrevisionService(api);
 
   const authService = new AuthService()
 
@@ -44,6 +47,7 @@ export default function App() {
             <AuthContextProvider localStorage={localStorage} authService={authService}>
               <GuestContextProvider localStorage={localStorage}>
                 <LocationContextProvider>
+                  <PrevisionContextProvider previsionService={previsionService}>
                   <MeasureContextProvider measureService={measureService}>
                     <TotemContextProvider totemService={totemService}>
                       <GestureHandlerRootView style={{ flex: 1 }}>
@@ -51,6 +55,7 @@ export default function App() {
                       </GestureHandlerRootView>
                     </TotemContextProvider>
                   </MeasureContextProvider>
+                  </PrevisionContextProvider>
                 </LocationContextProvider>
               </GuestContextProvider>
             </AuthContextProvider>
