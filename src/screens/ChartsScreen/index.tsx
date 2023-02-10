@@ -43,7 +43,7 @@ const ChartsScreen = ({ measureName, id, title }: IChartsScreen) => {
       .then((measuresData) => {
         if (measuresData) {
           const graphValues = mapMeasuresToGraph(measuresData, measureName);
-          setHourlyValues(getValuesFromToday(graphValues));
+          setHourlyValues(getValuesFromToday(graphValues).reverse());
           setDailyValues(getValuesFromWeeks(graphValues));
           setWeeklyValues(getValuesFromWeeks(graphValues, true));
         }
