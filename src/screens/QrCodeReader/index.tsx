@@ -40,10 +40,10 @@ export default function QrCodeReader() {
   }
 
   if (hasPermission === null) {
-    return <Text>Requesting for camera permission</Text>;
+    return <Text>Aguardando permissão</Text>;
   }
   if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
+    return <Text>Sem acesso a camera</Text>;
   }
 
   const renderCameraComponent = () => {
