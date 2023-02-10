@@ -5,7 +5,7 @@ export const mapPrevisionsToGraph = (
   prevision: PrevisionDto
 ): GraphValues[] => {
   const date = new Date()
-  const _previsions = prevision.previsions.map((value, i) => {
+  const _previsions = prevision.previsions.map((value) => {
     date.setHours(date.getHours()+1)
     return { x: date.toISOString(), y: value };
   });

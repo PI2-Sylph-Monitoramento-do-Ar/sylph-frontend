@@ -15,11 +15,11 @@ export class PrevisionService implements IPrevisionService {
   async listPrevision(totemId?: string) {
     const _totemId = totemId ? `?totem_id=${totemId}` : "";
 
-    const measures = await this.api.get<PrevisionDto>(
+    const previsions = await this.api.get<PrevisionDto>(
       `/previsions${_totemId}`
     );
 
-    return measures;
+    return previsions;
   }
 
 }

@@ -16,6 +16,8 @@ import { useNavigate } from "_/hooks/useNavigate";
 import { MeasurementDtoKeys } from "_/types/dto/measurement";
 
 import styles from "./styles";
+import { usePrevision } from "_/hooks/usePrevision";
+import { mapPrevisionsToGraph } from "_/helpers/mapPrevisionToGraph";
 
 export interface GraphValues {
   x: string;
@@ -35,7 +37,16 @@ const ChartsScreen = ({ measureName, id, title }: IChartsScreen) => {
   const [hourlyValues, setHourlyValues] = useState<any>([]);
   const [dailyValues, setDailyValues] = useState<any>([]);
   const [weeklyValues, setWeeklyValues] = useState<any>([]);
+  const [previsionValues, setPrevisionValues] = useState<any>([]);
   const { listMeasures, downloadCsv } = useMeasure();
+  const {listPrevisions} = usePrevision()
+
+  const handleError = () => {
+    alert("Não foi possível recuperar dados do servidor");
+    setIsLoading(false);
+    goBack();
+  }
+
 
   useEffect(() => {
     setIsLoading(true);
@@ -46,14 +57,25 @@ const ChartsScreen = ({ measureName, id, title }: IChartsScreen) => {
           setHourlyValues(getValuesFromToday(graphValues).reverse());
           setDailyValues(getValuesFromWeeks(graphValues));
           setWeeklyValues(getValuesFromWeeks(graphValues, true));
+          setIsLoading(false);
         }
-        setIsLoading(false);
       })
       .catch(() => {
-        alert("Não foi possível recuperar dados do servidor");
-        setIsLoading(false);
-        goBack();
+        handleError()
       });
+      if(title == 'Temperatura'){
+        setIsLoading(true);
+        listPrevisions(id)
+        .then(data => {
+          if(data){
+            const previsionValue = mapPrevisionsToGraph(data)
+            setPrevisionValues(getValuesFromToday(previsionValue))
+          }
+        setIsLoading(false);
+        }).catch(() => {
+          handleError()
+        })
+      }
   }, []);
 
   const handleExportData = async () => {
@@ -71,6 +93,14 @@ const ChartsScreen = ({ measureName, id, title }: IChartsScreen) => {
           title="Valores pontuais"
           timeOfMeasures="hourly"
           style={{ alignSelf: "center", marginBottom: SIZES.MARGING_XX_LARGE }}
+        />
+
+      <LineChart
+          data={previsionValues}
+          title="Previsão para próximas horas"
+          timeOfMeasures="hourly"
+          style={{ alignSelf: "center", marginBottom: SIZES.MARGING_XX_LARGE }}
+          useSecondaryColor
         />
         <LineChart
           data={dailyValues}
