@@ -35,10 +35,10 @@ export class TotemService implements ITotemService {
   }
 
   async listTotem(totemId?: string) {
-    const _totemId = totemId || ''
+    const _totemId = totemId || "";
     const totems = await this.api.get<Array<TotemDTO>>(`/totems/${_totemId}`);
     let mostRecentValues: Array<TotemType> = [];
-    const _totems = Array.isArray(totems) ? totems : [totems]
+    const _totems = Array.isArray(totems) ? totems : [totems];
     if (totems) {
       for (const totem of _totems) {
         const totemProps = await this.getTotemProps(totem!);
@@ -109,6 +109,7 @@ export class TotemService implements ITotemService {
       const carbonMonoxideValues: number[] = [];
       const nitrogenDioxideValues: number[] = [];
       const particlesOnAirValues: number[] = [];
+      const ozoneValues: number[] = [];
 
       const _measures = measures.slice(-TOTAL_OF_MEASURES_IN_24H);
 
@@ -117,6 +118,8 @@ export class TotemService implements ITotemService {
           ...totemProps,
           ...this.mapEdgeValues(totemProps, measure),
         };
+
+        if (measure.ozone_level) ozoneValues.push(measure?.ozone_level);
 
         if (measure.carbon_monoxide_level)
           carbonMonoxideValues.push(measure?.carbon_monoxide_level);
@@ -154,10 +157,13 @@ export class TotemService implements ITotemService {
         "particles"
       );
 
+      const ozoneFinal = this.getAirQuality(ozoneValues, "ozone");
+
       totemProps.airQuality = Math.min(
         nitrogenFinal.qualityLevel,
         particlesFinal.qualityLevel,
-        carbonFinal.qualityLevel
+        carbonFinal.qualityLevel,
+        ozoneFinal.qualityLevel
       );
       return totemProps;
     }
@@ -184,7 +190,12 @@ export class TotemService implements ITotemService {
   };
 
   private getAirQuality = (values: number[], polluterType: PolluterType) => {
-    const average = values.reduce((a, b) => a + b, 0) / values.length;
-    return airQualityCalculator(average, polluterType);
+    if (values.length > 0) {
+      const average = values.reduce((a, b) => a + b, 0) / values.length;
+      return airQualityCalculator(average, polluterType);
+    }
+    return {
+      qualityLevel: 6,
+    };
   };
 }

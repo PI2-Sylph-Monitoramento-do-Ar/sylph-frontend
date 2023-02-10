@@ -32,6 +32,7 @@ const TotemScreen = ({ totemInfo }: IMoreInfoScreen) => {
         valueName: "pressure",
         title: "Pressão",
         iconName: "cloud",
+        dataType: "hPa",
       },
       {
         valueName: "temperature",
@@ -46,7 +47,7 @@ const TotemScreen = ({ totemInfo }: IMoreInfoScreen) => {
         dataType: "ppm",
       },
       {
-        valueName: "ozone-level",
+        valueName: "ozone_level",
         title: "O3",
         iconName: "device-thermostat",
         dataType: "ppm",
