@@ -27,17 +27,16 @@ export default function QrCodeReader() {
   }, []);
 
   const handleBarCodeScanned = async ({ type, data }:{type: string, data: string}) => {
-    setScanned(true);
     const {mac_address} = JSON.parse(data) as {mac_address: string}
     const response = await listTotem(mac_address)
     navigate('MoreInfo', response[0])
   };
 
   if (hasPermission === null) {
-    return <Text>Requesting for camera permission</Text>;
+    return <Text>Aguardando permissão</Text>;
   }
   if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
+    return <Text>Sem acesso a camera</Text>;
   }
 
   return (
@@ -45,7 +44,7 @@ export default function QrCodeReader() {
         <Text style={styles.title}>Escaneie o QR Code no totem</Text>
         <View style={styles.qrcode}>
             <BarCodeScanner
-                onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+                onBarCodeScanned={handleBarCodeScanned}
                 style={[StyleSheet.absoluteFillObject, {borderRadius: SIZES.RADIUS_REGULAR}]}
             />
         </View>
